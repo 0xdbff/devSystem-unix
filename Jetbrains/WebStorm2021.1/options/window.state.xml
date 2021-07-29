@@ -1,0 +1,28 @@
+<application>
+  <component name="DimensionService">
+    <size key="GridCell.Tab.0.left.0.0.2560.1440" width="2540" height="428" />
+    <size key="GridCell.Tab.0.center.0.0.2560.1440" width="2540" height="428" />
+    <size key="GridCell.Tab.0.right.0.0.2560.1440" width="2540" height="428" />
+    <size key="GridCell.Tab.0.bottom.0.0.2560.1440" width="2540" height="428" />
+  </component>
+  <component name="WindowManager">
+    <frame x="0" y="-17" width="2560" height="1457" extendedState="6" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
+    </layout>
+  </component>
+  <component name="WindowStateApplicationService">
+    <state x="1280" y="592" width="800" height="592" key="WELCOME_SCREEN" timestamp="1625662055618">
+      <screen x="0" y="20" width="2560" height="1420" />
+    </state>
+    <state x="1280" y="580" width="800" height="600" key="WELCOME_SCREEN/0.0.2560.1440" timestamp="1622913982665" />
+    <state x="1280" y="592" width="800" height="592" key="WELCOME_SCREEN/0.20.2560.1420" timestamp="1625662055618" />
+    <state x="1280" y="592" width="800" height="591" key="WELCOME_SCREEN/0.22.2560.1418" timestamp="1624408999459" />
+    <state x="1280" y="594" width="800" height="590" key="WELCOME_SCREEN/0.24.2560.1416" timestamp="1622984733891" />
+  </component>
+</application>

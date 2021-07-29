@@ -156,7 +156,7 @@ font:
   # spacing.
   offset:
     x: 0
-    y: 0
+    y: 1
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increasing `x` moves the glyph to the
@@ -174,13 +174,12 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
 
-
-
 # Colors (Material Theme)
 colors:
   # Default colors
   primary:
-    background: '0x22272E'
+    #a good one'0x202226'
+    background: '0x22272e'
     foreground: '0xffffff'
 
   # Normal colors
@@ -196,7 +195,7 @@ colors:
 
   # Bright colors
   bright:
-    black:   '0x3d3d3d'
+    black:   '0x3c3f41'
     red:     '0xac1e1e'
     green:   '0x00ba5a'
     yellow:  '0xffdb6f'

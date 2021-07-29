@@ -1,0 +1,77 @@
+<project version="4">
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" />
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="untitled3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="untitled3" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1081000" />
+  </component>
+  <component name="ToolWindowManager">
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info id="Structure" order="1" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info id="Commit" order="3" />
+      <window_info id="Pull Requests" order="4" />
+      <window_info id="Learn" order="5" />
+      <window_info id="npm" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="0" />
+      <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="2" />
+      <window_info anchor="bottom" id="Run" order="3" weight="0.32984582" />
+      <window_info anchor="bottom" id="TODO" order="4" />
+      <window_info anchor="bottom" id="Problems View" order="5" />
+      <window_info anchor="bottom" id="Debug" order="6" weight="0.4" />
+      <window_info anchor="bottom" id="Internal Method Tracing" order="7" />
+      <window_info anchor="bottom" id="Inspection" order="8" weight="0.4" />
+      <window_info anchor="bottom" id="File Transfer" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Flow" order="11" />
+      <window_info anchor="bottom" id="TypeScript" order="12" />
+      <window_info anchor="bottom" id="Services" order="13" show_stripe_button="false" />
+    </layout>
+    <recentWindows>
+      <value>Run</value>
+      <value>Project</value>
+    </recentWindows>
+  </component>
+  <component name="Trusted.Project.Settings" hasCheckedIfOldProject="true" trusted="YES" />
+  <component name="WindowStateProjectService">
+    <state width="1684" height="271" key="GridCell.Tab.0.bottom" timestamp="1624458679444">
+      <screen x="0" y="22" width="2560" height="1418" />
+    </state>
+    <state width="1684" height="271" key="GridCell.Tab.0.bottom/0.22.2560.1418@0.22.2560.1418" timestamp="1624458679444" />
+    <state width="1684" height="271" key="GridCell.Tab.0.center" timestamp="1624458679444">
+      <screen x="0" y="22" width="2560" height="1418" />
+    </state>
+    <state width="1684" height="271" key="GridCell.Tab.0.center/0.22.2560.1418@0.22.2560.1418" timestamp="1624458679444" />
+    <state width="1684" height="271" key="GridCell.Tab.0.left" timestamp="1624458679444">
+      <screen x="0" y="22" width="2560" height="1418" />
+    </state>
+    <state width="1684" height="271" key="GridCell.Tab.0.left/0.22.2560.1418@0.22.2560.1418" timestamp="1624458679444" />
+    <state width="1684" height="271" key="GridCell.Tab.0.right" timestamp="1624458679444">
+      <screen x="0" y="22" width="2560" height="1418" />
+    </state>
+    <state width="1684" height="271" key="GridCell.Tab.0.right/0.22.2560.1418@0.22.2560.1418" timestamp="1624458679444" />
+  </component>
+</project>

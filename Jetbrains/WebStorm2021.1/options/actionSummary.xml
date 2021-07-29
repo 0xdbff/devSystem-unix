@@ -1,0 +1,82 @@
+<application>
+  <component name="ActionsLocalSummary">
+    <e n="CWMHostShowPopupAction">
+      <i c="3" l="1624409392791" />
+    </e>
+    <e n="EditorBackSpace">
+      <i c="35" l="1627561967350" />
+    </e>
+    <e n="EditorCopy">
+      <i c="5" l="1624410528889" />
+    </e>
+    <e n="EditorDeleteToWordStart">
+      <i c="3" l="1625662178505" />
+    </e>
+    <e n="EditorEnter">
+      <i c="6" l="1627475512863" />
+    </e>
+    <e n="EditorRight">
+      <i c="126" l="1624409071502" />
+    </e>
+    <e n="GetJoinLinkAction">
+      <i c="1" l="1624409379498" />
+    </e>
+    <e n="HideActiveWindow">
+      <i c="1" l="1627475540350" />
+    </e>
+    <e n="NewProject">
+      <i c="4" l="1624410760007" />
+    </e>
+    <e n="Run">
+      <i c="17" l="1624458666756" />
+    </e>
+    <e n="SettingsEntryPoint">
+      <i c="1" l="1625662272990" />
+    </e>
+    <e n="ShowSettings">
+      <i c="3" l="1627475393058" />
+    </e>
+    <e n="Start.Use.Vcs">
+      <i c="1" l="1625663182079" />
+    </e>
+    <e n="Stop">
+      <i c="6" l="1624458675748" />
+    </e>
+    <e n="ToggleLineBreakpoint">
+      <i c="2" l="1624409113829" />
+    </e>
+    <e n="com.intellij.codeInsight.daemon.NavigateAction">
+      <i c="20" l="1624409438219" />
+    </e>
+    <e n="com.intellij.ide.ReopenProjectAction">
+      <i c="3" l="1624458657493" />
+    </e>
+    <e n="com.intellij.javascript.nodejs.packageJson.notification.PackageJsonGetDependenciesAction">
+      <i c="2" l="1625662126484" />
+    </e>
+    <e n="com.intellij.openapi.actionSystem.EmptyAction$MyDelegatingAction">
+      <i c="55" l="1627561968967" />
+    </e>
+    <e n="com.intellij.openapi.fileEditor.impl.tabActions.CloseTab">
+      <i c="3" l="1627475365444" />
+    </e>
+    <e n="com.intellij.openapi.ui.DialogWrapper$4">
+      <i c="1" l="1625663518466" />
+    </e>
+    <e n="com.intellij.openapi.wm.impl.ToolWindowHeader$HideAction">
+      <i c="2" l="1625946227530" />
+    </e>
+    <e n="com.intellij.openapi.wm.impl.welcomeScreen.ActionGroupPanelWrapper$5">
+      <i c="2" l="1625662085181" />
+    </e>
+    <e n="com.maddyhome.idea.vim.group.NotificationService$OpenIdeaVimRcAction">
+      <i c="2" l="1625946192956" />
+    </e>
+    <e n="com.maddyhome.idea.vim.group.NotificationService$notifyAboutShortcutConflict$2">
+      <i c="1" l="1625662194342" />
+    </e>
+    <e n="editRunConfigurations">
+      <i c="5" l="1624458576290" />
+    </e>
+  </component>
+</application>

@@ -1,0 +1,58 @@
+<application>
+  <component name="NodeJsLocalInterpreters">
+    <local-interpreter path="/usr/bin/node">
+      <version-cache version="16.4.2" last-modified="1625543175000" />
+    </local-interpreter>
+  </component>
+  <component name="ProjectPluginTrackerManager">
+    <trackers>
+      <map>
+        <entry key="1tSRx2L9vJsLXzA7UVPRV5eheHx">
+          <value>
+            <ProjectPluginTracker />
+          </value>
+        </entry>
+        <entry key="1u24vCsfAka6gVye3qo80LDiLjp">
+          <value>
+            <ProjectPluginTracker />
+          </value>
+        </entry>
+        <entry key="1vDgG7yQsYVxzLXvLK9X90EgmRb">
+          <value>
+            <ProjectPluginTracker />
+          </value>
+        </entry>
+      </map>
+    </trackers>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ExpandBeforeRunStepsPanel" value="true" />
+    <property name="ExpandRunDashboardTypesPanel" value="false" />
+    <property name="NonModalCommitCustomization.IsApplied" value="true" />
+    <property name="appcds.runOnSecondStart" value="CL-211.7442.42-3f20b5ee35544dd5e419936c5231619b9ae35469d6d216c08e41a121b6b474e7" />
+    <property name="ask.about.ctrl.y.shortcut.v2" value="true" />
+    <property name="build.toolwindow.Sync.selection.state" value="com.intellij.build.BuildTreeConsoleView" />
+    <property name="clion.initialConfigPerformed" value="true" />
+    <property name="evlsprt3.211" value="18" />
+    <property name="experimentalFeature.editor.reader.mode" value="false" />
+    <property name="file.chooser.recent.files" value="$USER_HOME$/dev/crypto_api" />
+    <property name="file.gist.reindex.count" value="10" />
+    <property name="fileTypeChangedCounter" value="3" />
+    <property name="fileTypeDetectors" value="com.intellij.database.vfs.DbStorageFileType$Detector:com.intellij.ide.scratch.ScratchFileServiceImpl$Detector:com.intellij.javascript.debugger.sourcemap.SourceMapFileType$MyFileTypeDetector:com.jetbrains.cidr.lang.OCHeaderFileTypeDetector" />
+    <property name="got.it.tooltip.cwm.invitation.notification" value="1" />
+    <property name="ide.updates.previous.build.number" value="CL-211.7442.42" />
+    <property name="ideavim.statistics.timestamp" value="1626109830542" />
+    <property name="lastSeenTip" value="neue-TabInEditorClose.html" />
+    <property name="lastTimeTipsWereShown" value="1626101981244" />
+    <property name="last_opened_file_path" value="$USER_HOME$/dev/crypto_api" />
+    <property name="log.trace.categories" value="#com.jetbrains.rdserver.requests&#10;#com.jetbrains.rd.ide.document&#10;#com.jetbrains.rdserver.document&#10;#com.jetbrains.rdserver.editors&#10;#com.jetbrains.rdserver.actions" />
+    <property name="org.rust.lang.LAST_UPDATE" value="1626102088891" />
+    <property name="org.rust.lang.LAST_VERSION" value="0.4.150.3968-211" />
+    <property name="seenTips" value="neue-find_usages.html,neue-QuickDocOnMouseMove.html,neue-ChangeSignature.html,neue-TabInEditorClose.html" />
+    <property name="tasks.pass.word.conversion.enforced" value="true" />
+    <property name="ts.lib.d.ts.version" value="4.2.2" />
+  </component>
+  <component name="ToolbarSettingsService">
+    <option name="NEW_TOOLBAR_SETTINGS" value="OLD_NAVBAR" />
+  </component>
+</application>
