@@ -29,8 +29,6 @@ Plug 'itchyny/lightline.vim'
 Plug 'machakann/vim-highlightedyank'
 " Only display relative numbers in places that make sense
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
-" Additional color schemes
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
 " Coloriser for color codes and things
 Plug 'norcalli/nvim-colorizer.lua'
 
@@ -277,7 +275,7 @@ config.metals.setup({
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     vim.lsp.diagnostic.on_publish_diagnostics, {
         virtual_text = {
-            prefix = '⋈',
+            prefix = '>',
         },
         signs = true,
         update_in_insert = false,
@@ -295,13 +293,13 @@ vim.lsp.handlers['workspace/symbol'] = require'lsputil.symbols'.workspace_handle
 
 status.register_progress()
 status.config({
-    status_symbol = 'λ',
+    status_symbol = 'ȸ',
     current_function = false,
     indicator_errors = '●',
     indicator_warnings = '◉',
     indicator_info = '◎',
     indicator_hint = '○',
-    indicator_ok = '◌',
+    indicator_ok = 'Ok',
     spinner_frames = { '◜', '◝', '◞', '◟' },
     -- spinner_frames = { '○', '◔', '◑', '◕', '●' },
 })
@@ -339,7 +337,7 @@ augroup lspcolors | au!
     au ColorScheme * hi! LspDiagnosticsDefaultHint guifg=#5c6370
     au ColorScheme * hi! LspDiagnosticsDefaultInformation guifg=#5c6370
     au ColorScheme * hi! LspDiagnosticsDefaultWarning guifg=#e5c07b
-    au ColorScheme * hi! LspDiagnosticsDefaultError guifg=#e06c75
+    au ColorScheme * hi! LspDiagnosticsDefaultError guifg=#f23235
     " Customise some of the symbols used
     sign define LspDiagnosticsSignError text=●
     sign define LspDiagnosticsSignWarning text=◉
@@ -560,10 +558,10 @@ if (match($TERM, "-256color") != -1) && (match($TERM, "screen-256color") == -1)
 endif
 " set background=dark
 " let base16colorspace=256
-colorscheme onehalfdark
-" syntax on
-" hi Normal ctermbg=NONE
-hi Normal guibg=NONE ctermbg=NONE
+colorscheme db_onehalfdark
+syntax on
+hi Normal ctermbg=NONE
+" hi Normal guibg=NONE ctermbg=NONE
 
 " Text Editing
 " ------------
@@ -709,4 +707,4 @@ nnoremap <C-H> <C-W><C-H>
 " Run make from the current directory
 noremap M :make<cr>
 " Run make from the directory containing the current file
-noremap MM :!cd "%:p:h" \| make<cr>
+norema p MM :!cd "%:p:h" \| make<cr>
