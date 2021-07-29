@@ -1,4 +1,4 @@
-///Use this function on alacritty default shell, script syntax for zsh or bash, place it on /home/user/bashrc or zshrc Then change transparency on /home/user/.config/alacritty/alacritty.yml Its a kwinScript so kde plasma desktop will be nedded
+use this function on alacritty's default shell, script syntax for zsh or bash, place it on bashrc or zshrc (/home/user/->), Then change transparency on alacritty's config file (/home/user/.config/alacritty/alacritty.yml) Its a kwinScript so kde plasma desktop will be nedded!
 
 if [[ $(ps --no-header -p $PPID -o comm) =~ '^alacritty$' ]]; then
         for wid in $(xdotool search --pid $PPID); do
