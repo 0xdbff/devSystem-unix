@@ -1,4 +1,4 @@
 # config_files
-my configuration files for development
+Configuration files for development
 
-Absolute paths for Gnu/Linux are on the folders
+Absolute paths for GNU/Linux are on the folders
