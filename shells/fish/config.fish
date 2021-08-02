@@ -1,21 +1,22 @@
- 
 starship init fish | source
 
 abbr -a yr 'cal -y'
 abbr -a c cargo
 abbr -a f fg
-abbr -a t tmux
+abbr -a sus suspend
+abbr -a tmd 'tmux new -s dev@db'
+abbr -a tmn 'tmux new'
+abbr -a tma 'tmux attach -t'
+abbr -a tmad 'tmux attach -t dev@db'
 abbr -a ct 'cargo t'
+abbr -a cdd 'cd ~/dev/'
+abbr -a cds 'cd ~/sh/'
+abbr -a rsh '~/sh/'
 abbr -a cr 'cargo run'
 abbr -a crr 'cargo run --release'
 abbr -a cb 'cargo build'
-abbr -a td './target/debug/'
-abbr -a tr './target/release/'
-
-
 abbr -a nv 'nvidia-settings'
 
-#abbr -a e 'nano ./'
 abbr -a t touch
 abbr -a d 'rm -r'
 abbr -a z zsh
@@ -34,12 +35,12 @@ abbr -a ks 'keybase chat send'
 abbr -a kr 'keybase chat read'
 abbr -a kl 'keybase chat list'
 abbr -a pr 'gh pr create -t (git show -s --format=%s HEAD) -b (git show -s --format=%B HEAD | tail -n+3)'
-complete --command aurman --wraps pacman
+complete --command yay --wraps pacman
 
 
-if command -v aurman > /dev/null
-	abbr -a p 'aurman'
-	abbr -a up 'aurman -Syu'
+if command -v yay > /dev/null
+	abbr -a p 'yay -S'
+	abbr -a up 'yay -Syu'
 else
 	abbr -a p 'sudo pacman -S'
 	abbr -a up 'sudo pacman -Syu'
