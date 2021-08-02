@@ -1,0 +1,4 @@
+[Desktop Entry]
+Icon=inode-directory
+Type=Link
+URL[$e]=file:$HOME/.config/
