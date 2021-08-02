@@ -1,3 +1,4 @@
-[submodule "zsh_abbr"]
-	path = zsh_abbr
-	url = ./shells/zsh/zsh_abbr/
+ 
+[submodule "shells/zsh/zsh_abbr"]
+	path = shells/zsh/zsh_abbr
+	url = https://github.com/olets/zsh-abbr
