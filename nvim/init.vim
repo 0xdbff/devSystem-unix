@@ -29,6 +29,8 @@ Plug 'itchyny/lightline.vim'
 Plug 'machakann/vim-highlightedyank'
 " Only display relative numbers in places that make sense
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
+" Additional color schemes
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
 " Coloriser for color codes and things
 Plug 'norcalli/nvim-colorizer.lua'
 
@@ -46,7 +48,7 @@ Plug 'easymotion/vim-easymotion'
 " Change working directory to the project root when opening a file
 Plug 'airblade/vim-rooter'
 " Fuzzy file finder
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 " Git
@@ -560,8 +562,8 @@ endif
 " let base16colorspace=256
 colorscheme db_onehalfdark
 syntax on
-hi Normal ctermbg=NONE
-" hi Normal guibg=NONE ctermbg=NONE
+"hi Normal ctermbg=NONE
+hi Normal guibg=NONE ctermbg=NONE
 
 " Text Editing
 " ------------

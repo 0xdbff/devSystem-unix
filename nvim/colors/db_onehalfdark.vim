@@ -15,8 +15,8 @@ set background=dark
 highlight clear
 syntax reset
 
-let g:colors_name="onehalfdark"
-let colors_name="onehalfdark"
+let g:colors_name="db_onehalfdark"
+let colors_name="db_onehalfdark"
 
 
 let s:black       = { "gui": "#192125", "cterm": "236" }
