@@ -30,7 +30,7 @@ cp -rf ~/.tmux.conf ~/dev/devConfig_files_GNU-Linux/tmux/
 cp -rf ~/.config/starship.toml ~/dev/devConfig_files_GNU-Linux/shells/
 cp -rf ~/.config/zsh/ ~/dev/devConfig_files_GNU-Linux/shells/
 cp -rf ~/.config/fish/ ~/dev/devConfig_files_GNU-Linux/shells/
-cp -rf ~/.vscode/* ~/dev/devConfig_files_GNU-Linux/vsCode
+cp -rf ~/.vscode/* ~/dev/devConfig_files_GNU-Linux/vsCode/
 
 echo "Config files backed up on --> $backup_path"
 
