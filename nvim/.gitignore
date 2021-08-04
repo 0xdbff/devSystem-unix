@@ -1,2 +1,4 @@
 .netrwhist
 plugged/
+colors/
+!colors/db_onehalfdark.vim
