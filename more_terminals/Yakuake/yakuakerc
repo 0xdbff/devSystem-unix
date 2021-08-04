@@ -2,6 +2,7 @@
 Frames=0
 
 [Appearance]
+BackgroundColor=19,19,19
 HideSkinBorders=true
 Translucency=true
 

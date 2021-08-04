@@ -6,11 +6,14 @@ SETUVAR _fish_abbr_ais:aws\x20ec2\x20describe\x2dinstances\x20\x7c\x20jq\x20\x27
 SETUVAR _fish_abbr_amz:env\x20AWS_SECRET_ACCESS_KEY\x3d\x28pass\x20www/aws\x2dsecret\x2dkey\x20\x7c\x20head\x20\x2dn1\x29
 SETUVAR _fish_abbr_c:cargo
 SETUVAR _fish_abbr_cb:cargo\x20build
-SETUVAR _fish_abbr_cdd:cd\x20\x7e/dev/
-SETUVAR _fish_abbr_cds:cd\x20\x7e/sh/
+SETUVAR _fish_abbr_cdd:/home/db/dev
+SETUVAR _fish_abbr_cdl:/home/db/logs
+SETUVAR _fish_abbr_cds:/home/db/sh
+SETUVAR _fish_abbr_cdss:/home/db/sss
 SETUVAR _fish_abbr_cl:clear
 SETUVAR _fish_abbr_cr:cargo\x20run
 SETUVAR _fish_abbr_crr:cargo\x20run\x20\x2d\x2drelease
+SETUVAR _fish_abbr_css:/home/db/sss
 SETUVAR _fish_abbr_ct:cargo\x20t
 SETUVAR _fish_abbr_d:rm\x20\x2dr
 SETUVAR _fish_abbr_e:exit
@@ -33,7 +36,7 @@ SETUVAR _fish_abbr_nova:env\x20OS_PASSWORD\x3d\x28pass\x20www/mit\x2dopenstack\x
 SETUVAR _fish_abbr_nv:nvidia\x2dsettings
 SETUVAR _fish_abbr_o:xdg\x2dopen
 SETUVAR _fish_abbr_p:yay\x20\x2dS
-SETUVAR _fish_abbr_pr:gh\x20pr\x20create\x20\x2dt\x20\x28git\x20show\x20\x2ds\x20\x2d\x2dformat\x3d\x25s\x20HEAD\x29\x20\x2db\x20\x28git\x20show\x20\x2ds\x20\x2d\x2dformat\x3d\x25B\x20HEAD\x20\x7c\x20tail\x20\x2dn\x2b3\x29
+SETUVAR _fish_abbr_pr:gh\x20pr\x20create\x20\x2dt\x20\x28git\x20show\x20\x2ds\x20\x2d\x2dformat\x3d\x25s\x20HEAD\x29\x20\x2db\x20\x28git\x20show\x20\x2ds\x20\x2d\x2dformat\x3d\x25B\x20HEAD\x20\x7c\x20tail\x20\x2dn\x2b3\x29A
 SETUVAR _fish_abbr_rsh:\x7e/sh/
 SETUVAR _fish_abbr_sus:suspend
 SETUVAR _fish_abbr_t:touch

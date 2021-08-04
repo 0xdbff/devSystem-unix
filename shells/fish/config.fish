@@ -1,25 +1,63 @@
+#change to system's package manager
+set package_manager sudo pacman 
+#if yay is installed, will be default after setup
+set install_args -S
+set update_args -Syu
+
+if not command -v starship > /dev/null
+    if $package_manager $install_args starship
+    else 
+        echo "installing starship from source"
+
+    end
+end
+
 starship init fish | source
 
-abbr -a yr 'cal -y'
-abbr -a c cargo
+#main-util shortcuts
 abbr -a f fg
+abbr -a z zsh
+abbr -a t touch
 abbr -a sus suspend
-abbr -a tmd 'tmux new -s dev@db'
+abbr -a nv 'nvidia-settings'
+abbr -a d 'rm -r'
+
+#make working dirs if not found
+if not test -d ~/dev
+    mkdir ~/dev
+end #quick access to development dir
+    abbr -a cdd ~/dev
+if not test -d ~/sh
+    mkdir ~/sh
+end #quick access to user scripts dir
+    abbr -a cds ~/sh
+if not test -d ~/logs
+    mkdir ~/logs
+end #quick access logs performed by user
+    abbr -a cdl ~/logs
+
+#quick development setup if not found
+#if command -v nvim and alacritty
+    #    echo "fine"
+
+
+#shutdown..supend..rr..cli_graphical-><-mode
+abbr -a yr 'cal -y'
+
+abbr -a c cargo
+abbr -a cb 'cargo build'
+abbr -a crr 'cargo run --release'
+abbr -a cr 'cargo run'
+abbr -a ct 'cargo t'
+
+#tmux commands
 abbr -a tmn 'tmux new'
+abbr -a tmd 'tmux new -s dev@db'
 abbr -a tma 'tmux attach -t'
 abbr -a tmad 'tmux attach -t dev@db'
-abbr -a ct 'cargo t'
-abbr -a cdd 'cd ~/dev/'
-abbr -a cds 'cd ~/sh/'
-abbr -a rsh '~/sh/'
-abbr -a cr 'cargo run'
-abbr -a crr 'cargo run --release'
-abbr -a cb 'cargo build'
-abbr -a nv 'nvidia-settings'
+#if tmux not found, yay as arch package manager
 
-abbr -a t touch
-abbr -a d 'rm -r'
-abbr -a z zsh
+
 
 abbr -a n 'nvim .'
 
@@ -34,16 +72,16 @@ abbr -a gah 'git stash; and git pull --rebase; and git stash pop'
 abbr -a ks 'keybase chat send'
 abbr -a kr 'keybase chat read'
 abbr -a kl 'keybase chat list'
-abbr -a pr 'gh pr create -t (git show -s --format=%s HEAD) -b (git show -s --format=%B HEAD | tail -n+3)'
-complete --command yay --wraps pacman
+abbr -a pr 'gh pr create -t (git show -s --format=%s HEAD) -b (git show -s --format=%B HEAD | tail -n+3)'A
 
+complete --command yay --wraps pacman
 
 if command -v yay > /dev/null
 	abbr -a p 'yay -S'
 	abbr -a up 'yay -Syu'
 else
-	abbr -a p 'sudo pacman -S'
-	abbr -a up 'sudo pacman -Syu'
+	abbr -a p '$package_manager $'
+	abbr -a up '$package_manager $' 
 end
 
 if command -v exa > /dev/null
