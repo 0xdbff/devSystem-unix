@@ -335,9 +335,9 @@ autocmd CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *
 
 augroup lspcolors | au!
     " Customise some of the colours used for LSP things
-    au ColorScheme * hi! NormalFloat guibg=#3c4048
-    au ColorScheme * hi! LspDiagnosticsDefaultHint guifg=#5c6370
-    au ColorScheme * hi! LspDiagnosticsDefaultInformation guifg=#5c6370
+    au ColorScheme * hi! NormalFloat guibg=#262f33
+    au ColorScheme * hi! LspDiagnosticsDefaultHint guifg=#3c3f41
+    au ColorScheme * hi! LspDiagnosticsDefaultInformation guifg=#3c3f41
     au ColorScheme * hi! LspDiagnosticsDefaultWarning guifg=#e5c07b
     au ColorScheme * hi! LspDiagnosticsDefaultError guifg=#f23235
     " Customise some of the symbols used

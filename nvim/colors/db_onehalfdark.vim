@@ -19,8 +19,8 @@ let g:colors_name="db_onehalfdark"
 let colors_name="db_onehalfdark"
 
 
-let s:black       = { "gui": "#192125", "cterm": "236" }
-let s:red         = { "gui": "#e06c75", "cterm": "168" }
+let s:black       = { "gui": "#22272e", "cterm": "236" }
+let s:red         = { "gui": "#e05a70", "cterm": "168" }
 let s:green       = { "gui": "#98c379", "cterm": "114" }
 let s:yellow      = { "gui": "#e5c07b", "cterm": "180" }
 let s:blue        = { "gui": "#61afef", "cterm": "75"  }
@@ -86,10 +86,10 @@ call s:h("MoreMsg", s:fg, "", "")
 call s:h("WarningMsg", s:red, "", "")
 call s:h("Question", s:purple, "", "")
 
-call s:h("Pmenu", s:bg, s:fg, "")
-call s:h("PmenuSel", s:fg, s:blue, "")
+call s:h("Pmenu", s:fg, s:bg, "")
+call s:h("PmenuSel", s:bg, s:blue, "")
 call s:h("PmenuSbar", "", s:selection, "")
-call s:h("PmenuThumb", "", s:fg, "")
+call s:h("PmenuThumb", "", s:gutter_fg, "")
 
 call s:h("SpellBad", s:red, "", "")
 call s:h("SpellCap", s:yellow, "", "")
