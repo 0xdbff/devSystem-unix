@@ -14,6 +14,7 @@ end
 
 starship init fish | source
 
+#IF ANY ABBRV conflits with an important command, an issue would be appreciated
 #main-util shortcuts
 abbr -a f fg
 abbr -a z zsh
@@ -51,10 +52,76 @@ abbr -a cr 'cargo run'
 abbr -a ct 'cargo t'
 
 #tmux commands
-abbr -a tmn 'tmux new'
-abbr -a tmd 'tmux new -s dev@db'
-abbr -a tma 'tmux attach -t'
-abbr -a tmad 'tmux attach -t dev@db'
+#capital T to avoid coflicts
+abbr -a Tmn 'tmux new'
+abbr -a Tmnd 'tmux new -s dev@USER'
+abbr -a Tmny 'tmux new -s Yakuake@USER'
+abbr -a Tmnc 'tmux new -s cli@$USER'
+abbr -a Tma 'tmux attach -t'
+abbr -a Tmad 'tmux attach -t dev@USER'
+abbr -a Tmay 'tmux attach -t Yakuake@$USER'
+abbr -a Tmac 'tmux attach -a cli@&USER'
+abbr -a Tmk 'tmux kill-session -t'
+abbr -a Tmkd 'tmux kill-session -t dev@$USER'
+abbr -a Tmky 'tmux kill-session -t Yakuake@$USER'
+abbr -a Tmkc 'tmux kill-session -t cli@$USER'
+abbr -a Tmks 'tmux kill-server'
+abbr -a Tmd 'tmux detach'
+abbr -a Tm 'tmux'
+
+#Git Commands
+abbr -a g git
+abbr -a ga 'git add -p'
+abbr -a gaa 'git add -p .'
+abbr -a gaA 'git add -p -A'
+abbr -a grh 'git remote add origin_hub' #origin github, public stuff for copilot
+abbr -a grl 'git remote add origin_lab' #origin gitlab, public stuff
+abbr -a grll 'git remote add origin_dblab' #own gitlab server
+# add all remotes to a public repo
+# gitlab, personal gitlab && github
+function add_all_remotes $repo_name
+    if git remote add origin_lab https://gitlab.com/dev-db/$repo_name
+        if git remote add origin_hub 
+            if git remote add origin_dblab https
+                echo "all remotes are ready!"
+            else #only git lab failed at this stage
+                echo "db gitlab failed! or has no repo $repo_name"
+            end
+        else #no info on db_gitlab, gitlab worked, github failed
+            echo "github failed! or has no repo $repo_name"
+        end
+    else #if gitlab failed we can assume the other will as well
+        echo "gitlab failed! or has no repo $repo_name, aborting"
+    end
+end
+#git remote add all abbr
+abbr -a gra 'add_all_remotes'
+abbr -a gb 'git branch'
+abbr -a gch 'git checkout'
+abbr -a clo 'git clone'
+abbr -a gcl 'git clean'
+abbr -a gcm 'git commit -m "'
+abbr -a gfe 'git fetch'
+abbr -a gi 'git init'
+abbr -a gil 'git logs'
+abbr -a gm 'git merge'
+#push public repos to all remotes
+abbr -a gpa ' 
+if git push -u origin_lab
+    git push -u origin_hub
+    git push -u origin_dblab
+end'
+abbr -a gpp 'git push -u origin_dblab'
+abbr -a gp 'git push'
+
+
+
+
+abbr -a vimdiff 'nvim -d'
+abbr -a gah 'git stash; and git pull --rebase; and git stash pop'
+
+
+
 #if tmux not found, yay as arch package manager
 
 
@@ -72,7 +139,7 @@ abbr -a gah 'git stash; and git pull --rebase; and git stash pop'
 abbr -a ks 'keybase chat send'
 abbr -a kr 'keybase chat read'
 abbr -a kl 'keybase chat list'
-abbr -a pr 'gh pr create -t (git show -s --format=%s HEAD) -b (git show -s --format=%B HEAD | tail -n+3)'A
+abbr -a pr 'gh pr create -t (git show -s --format=%s HEAD) -b (git show -s --format=%B HEAD | tail -n+3)'
 
 complete --command yay --wraps pacman
 
@@ -80,8 +147,8 @@ if command -v yay > /dev/null
 	abbr -a p 'yay -S'
 	abbr -a up 'yay -Syu'
 else
-	abbr -a p '$package_manager $'
-	abbr -a up '$package_manager $' 
+	abbr -a p '$package_manager $install_args'
+	abbr -a up '$package_manager $update_args' 
 end
 
 if command -v exa > /dev/null
