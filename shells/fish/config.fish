@@ -12,6 +12,10 @@ if not command -v starship > /dev/null
     end
 end
 
+#powerline
+source /usr/lib/python3.9/site-packages/powerline/bindings/fish/powerline-setup.fish
+powerline-setup
+
 starship init fish | source
 
 #IF ANY ABBRV conflits with an important command, an issue would be appreciated
@@ -54,13 +58,13 @@ abbr -a ct 'cargo t'
 #tmux commands
 #capital T to avoid coflicts
 abbr -a Tmn 'tmux new'
-abbr -a Tmnd 'tmux new -s dev@USER'
-abbr -a Tmny 'tmux new -s Yakuake@USER'
+abbr -a Tmnd 'tmux new -s dev@$USER'
+abbr -a Tmny 'tmux new -s Yakuake@$USER'
 abbr -a Tmnc 'tmux new -s cli@$USER'
 abbr -a Tma 'tmux attach -t'
-abbr -a Tmad 'tmux attach -t dev@USER'
+abbr -a Tmad 'tmux attach -t dev@$USER'
 abbr -a Tmay 'tmux attach -t Yakuake@$USER'
-abbr -a Tmac 'tmux attach -a cli@&USER'
+abbr -a Tmac 'tmux attach -a cli@$USER'
 abbr -a Tmk 'tmux kill-session -t'
 abbr -a Tmkd 'tmux kill-session -t dev@$USER'
 abbr -a Tmky 'tmux kill-session -t Yakuake@$USER'

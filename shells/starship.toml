@@ -1,0 +1,17 @@
+[git_branch]
+format = " [$symbol]($style)"
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted](purple bold) '
+disabled = false
+
+[rust]
+format = " [«Rust» $symbol$version](red bold)"
+
+[package]
+format = " [» 📦 $version](208 bold) "
+

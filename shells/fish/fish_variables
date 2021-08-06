@@ -3,8 +3,8 @@
 SETUVAR __fish_initialized:3100
 SETUVAR _fish_abbr_Tm:tmux
 SETUVAR _fish_abbr_Tma:tmux\x20attach\x20\x2dt
-SETUVAR _fish_abbr_Tmac:tmux\x20attach\x20\x2da\x20cli\x40\x26USER
-SETUVAR _fish_abbr_Tmad:tmux\x20attach\x20\x2dt\x20dev\x40USER
+SETUVAR _fish_abbr_Tmac:tmux\x20attach\x20\x2da\x20cli\x40\x24USER
+SETUVAR _fish_abbr_Tmad:tmux\x20attach\x20\x2dt\x20dev\x40\x24USER
 SETUVAR _fish_abbr_Tmay:tmux\x20attach\x20\x2dt\x20Yakuake\x40\x24USER
 SETUVAR _fish_abbr_Tmd:tmux\x20detach
 SETUVAR _fish_abbr_Tmk:tmux\x20kill\x2dsession\x20\x2dt
@@ -14,8 +14,8 @@ SETUVAR _fish_abbr_Tmks:tmux\x20kill\x2dserver
 SETUVAR _fish_abbr_Tmky:tmux\x20kill\x2dsession\x20\x2dt\x20Yakuake\x40\x24USER
 SETUVAR _fish_abbr_Tmn:tmux\x20new
 SETUVAR _fish_abbr_Tmnc:tmux\x20new\x20\x2ds\x20cli\x40\x24USER
-SETUVAR _fish_abbr_Tmnd:tmux\x20new\x20\x2ds\x20dev\x40USER
-SETUVAR _fish_abbr_Tmny:tmux\x20new\x20\x2ds\x20Yakuake\x40USER
+SETUVAR _fish_abbr_Tmnd:tmux\x20new\x20\x2ds\x20dev\x40\x24USER
+SETUVAR _fish_abbr_Tmny:tmux\x20new\x20\x2ds\x20Yakuake\x40\x24USER
 SETUVAR _fish_abbr__2C_:\x2e/
 SETUVAR _fish_abbr_ais:aws\x20ec2\x20describe\x2dinstances\x20\x7c\x20jq\x20\x27\x2eReservations\x5b\x5d\x20\x7c\x20\x2eInstances\x5b\x5d\x20\x7c\x20\x7biid\x3a\x20\x2eInstanceId\x2c\x20type\x3a\x20\x2eInstanceType\x2c\x20key\x3a\x2eKeyName\x2c\x20state\x3a\x2eState\x2eName\x2c\x20host\x3a\x2ePublicDnsName\x7d\x27
 SETUVAR _fish_abbr_amz:env\x20AWS_SECRET_ACCESS_KEY\x3d\x28pass\x20www/aws\x2dsecret\x2dkey\x20\x7c\x20head\x20\x2dn1\x29
