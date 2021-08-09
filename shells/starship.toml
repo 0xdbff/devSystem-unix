@@ -10,7 +10,7 @@ format = '[+$added]($added_style)/[-$deleted](purple bold) '
 disabled = false
 
 [rust]
-format = " [«Rust» $symbol$version](red bold)"
+format = " [«Rust» $symbol$version](red bold) "
 
 [package]
 format = " [» 📦 $version](208 bold) "

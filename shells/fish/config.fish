@@ -8,7 +8,7 @@ if not command -v starship > /dev/null
     if $package_manager $install_args starship
     else 
         echo "installing starship from source"
-
+        #TODO
     end
 end
 
@@ -16,6 +16,7 @@ end
 source /usr/lib/python3.9/site-packages/powerline/bindings/fish/powerline-setup.fish
 powerline-setup
 
+#prompt
 starship init fish | source
 
 #IF ANY ABBRV conflits with an important command, an issue would be appreciated
@@ -25,13 +26,19 @@ abbr -a z zsh
 abbr -a t touch
 abbr -a sus suspend
 abbr -a nv 'nvidia-settings'
-abbr -a d 'rm -r'
+abbr -a d 'rm -rf'
 
+#Directories abbr
 #make working dirs if not found
 if not test -d ~/dev
     mkdir ~/dev
+    if not test -d ~/dev/bin
+        mkdir ~/dev/bin
+    end
 end #quick access to development dir
     abbr -a cdd ~/dev
+    #quick access dev or beta bins
+    abbr -a cdb ~/dev/bin 
 if not test -d ~/sh
     mkdir ~/sh
 end #quick access to user scripts dir
@@ -40,6 +47,17 @@ if not test -d ~/logs
     mkdir ~/logs
 end #quick access logs performed by user
     abbr -a cdl ~/logs
+#quick change to software installation dirs
+abbr -a cdlb ~/.local/bin
+abbr -a cdB /bin/
+#/opt/ better for "independent" software that doest not follow linux "rules",""
+abbr -a cdo /opt/
+abbr -a cdU /usr/
+abbr -a cdUb /usr/bin/
+abbr -a cdu /usr/local/
+abbr -a cdub /usr/local/bin/
+abbr -a cdul /usr/local/lib/
+abbr -a cdus /usr/local/src/
 
 #quick development setup if not found
 #if command -v nvim and alacritty
