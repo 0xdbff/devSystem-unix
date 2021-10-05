@@ -13,8 +13,8 @@ if not command -v starship > /dev/null
 end
 
 #powerline
-source /usr/lib/python3.9/site-packages/powerline/bindings/fish/powerline-setup.fish
-powerline-setup
+#source /opt/homebrew/lib/python3.9/site-packages/powerline/bindings/fish/powerline-setup.fish
+#powerline-setup
 
 #prompt
 starship init fish | source
@@ -75,66 +75,110 @@ abbr -a ct 'cargo t'
 
 #tmux commands
 #capital T to avoid coflicts
-abbr -a Tmn 'tmux new'
+abbr -a Tmn  'tmux new'
 abbr -a Tmnd 'tmux new -s dev@$USER'
 abbr -a Tmny 'tmux new -s Yakuake@$USER'
 abbr -a Tmnc 'tmux new -s cli@$USER'
-abbr -a Tma 'tmux attach -t'
+abbr -a Tma  'tmux attach -t'
 abbr -a Tmad 'tmux attach -t dev@$USER'
 abbr -a Tmay 'tmux attach -t Yakuake@$USER'
 abbr -a Tmac 'tmux attach -a cli@$USER'
-abbr -a Tmk 'tmux kill-session -t'
+abbr -a Tmk  'tmux kill-session -t'
 abbr -a Tmkd 'tmux kill-session -t dev@$USER'
 abbr -a Tmky 'tmux kill-session -t Yakuake@$USER'
 abbr -a Tmkc 'tmux kill-session -t cli@$USER'
 abbr -a Tmks 'tmux kill-server'
-abbr -a Tmd 'tmux detach'
-abbr -a Tm 'tmux'
+abbr -a Tmd  'tmux detach'
+abbr -a Tm   'tmux'
 
 #Git Commands
 abbr -a g git
 abbr -a ga 'git add -p'
-abbr -a gaa 'git add -p .'
-abbr -a gaA 'git add -p -A'
-abbr -a grh 'git remote add origin_hub' #origin github, public stuff for copilot
-abbr -a grl 'git remote add origin_lab' #origin gitlab, public stuff
-abbr -a grll 'git remote add origin_dblab' #own gitlab server
+abbr -a gaa 'git add -p *'
 # add all remotes to a public repo
 # gitlab, personal gitlab && github
-function add_all_remotes $repo_name
-    if git remote add origin_lab https://gitlab.com/dev-db/$repo_name
-        if git remote add origin_hub 
-            if git remote add origin_dblab https
-                echo "all remotes are ready!"
-            else #only git lab failed at this stage
-                echo "db gitlab failed! or has no repo $repo_name"
-            end
-        else #no info on db_gitlab, gitlab worked, github failed
-            echo "github failed! or has no repo $repo_name"
+function git_add_all_remotes $argv
+    if git remote add origin git@gitlab.com:dev-db/$argv.git
+        echo "origin added as remote under ssh git@gitlab.com:dev-db/$argv.git"
+        if git remote add origin_hub git@github.com:Db-Dev2002/$argv.git
+            echo "origin_hub added as remote under ssh git@github.com:Db-Dev2002/$argv.git"
+            #if git remote add origin_dblab #TODO
+            #echo "origin_dblab added as private remote under our own server ..."
+            echo ""
+            echo "all remotes are ready!"
+            #end
         end
-    else #if gitlab failed we can assume the other will as well
-        echo "gitlab failed! or has no repo $repo_name, aborting"
+        git push --set-upstream origin main 
     end
 end
-#git remote add all abbr
-abbr -a gra 'add_all_remotes'
-abbr -a gb 'git branch'
-abbr -a gch 'git checkout'
-abbr -a clo 'git clone'
-abbr -a gcl 'git clean'
-abbr -a gcm 'git commit -m "'
-abbr -a gfe 'git fetch'
-abbr -a gi 'git init'
-abbr -a gil 'git logs'
-abbr -a gm 'git merge'
+# add only gitlab & github
+function git_add_public_remotes $argv
+    if git remote add origin git@gitlab.com:dev-db/$argv.git
+        echo "origin added as remote under ssh git@gitlab.com:dev-db/$argv.git"
+        if git remote add origin_hub git@github.com:Db-Dev2002/$argv.git
+            echo "origin_hub added as remote under ssh git@github.com:Db-Dev2002/$argv.git"
+            echo ""
+            echo "public remotes are ready"
+        end
+        git push --set-upstream origin main
+    end
+end
+function git_delete_added_remotes
+    #test if the remote exists, then remove it
+    if git remote get-url origin 
+        if git remote remove origin
+            echo "remote origin removed"
+            echo ""
+        end
+    end
+    if git remote get-url origin_hub
+        if git remote remove origin_hub
+            echo "remote origin_hub removed"
+            echo ""
+        end
+    end
+    if git remote get-url origin_dblab
+        if git remote remove origin_dblab
+            echo "remote origin_dblab removed"
+            echo ""
+        end
+    end
+end
+function git_test_ssh
+    ssh -T git@gitlab.com
+    ssh -T git@github.com
+    #TODO private gitlab
+end 
+function git_add_ssh
+    ssh-add ~/.ssh/gitlab
+    ssh-add ~/.ssh/github
+    #TODO
+    if git_test_ssh
+        echo ""
+        echo "all set and ready for commits"
+    end
+end
+    
+abbr -a graa 'git_add_all_remotes'
+abbr -a grap 'git_add_public_remotes'
+abbr -a grd  'git_delete_added_remotes'
+abbr -a gas  'git_add_ssh'
+abbr -a gts  'git_test_ssh'
+abbr -a gb   'git branch'
+abbr -a gs   'git status'
+abbr -a gch  'git checkout'
+abbr -a gcb  'git checkout branch '
+abbr -a clo  'git clone'
+abbr -a gcl  'git clean'
+abbr -a gcm  'git commit -a -m "'
+abbr -a gfe  'git fetch'
+abbr -a gi   'git init'
+abbr -a gil  'git logs'
+abbr -a gm   'git merge'
 #push public repos to all remotes
-abbr -a gpa ' 
-if git push -u origin_lab
-    git push -u origin_hub
-    git push -u origin_dblab
-end'
-abbr -a gpp 'git push -u origin_dblab'
-abbr -a gp 'git push'
+abbr -a gpa  'git push -u origin & git push origin_hub && echo "git push origin_dblab not ready yet, TODO"'
+abbr -a gpp  'git push -u origin_dblab'
+abbr -a gp   'git push'
 
 
 
@@ -169,7 +213,7 @@ if command -v yay > /dev/null
 	abbr -a p 'yay -S'
 	abbr -a up 'yay -Syu'
 else
-	abbr -a p '$package_manager $install_args'
+        abbr -a p '$package_manager $install_args'
 	abbr -a up '$package_manager $update_args' 
 end
 
