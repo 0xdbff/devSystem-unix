@@ -1,17 +1,36 @@
+command_timeout = 1200000
+
+[[battery.display]]
+threshold = 20
+style = "bold red"
+
+[[battery.display]]
+threshold = 40
+style = "bold yellow"
+
+
 [git_branch]
-format = " [$symbol]($style)"
+format = "[$symbol$branch ]($style)"
+style =  "bold red"
+
+[git_commit]
+only_detached = false
+format = "[$hash$tag](green) "
+commit_hash_length = 8
+
 
 [git_status]
-format = '([$all_status$ahead_behind]($style) )'
+format = '( [$all_status$ahead_behind]($style) )'
 
 [git_metrics]
-added_style = "bold blue"
-format = '[+$added]($added_style)/[-$deleted](purple bold) '
+added_style = "bold green"
+deleted_style = "bold red"
+format = '[+$added]($added_style)|[-$deleted]($deleted_style)'
 disabled = false
 
-[rust]
-format = " [«Rust» $symbol$version](red bold) "
+#[rust]
+#format = " [using Rust $symbol$version](red bold) "
 
 [package]
-format = " [» 📦 $version](208 bold) "
+format = " [$version](208 bold) "
 
