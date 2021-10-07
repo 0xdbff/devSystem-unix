@@ -72,13 +72,13 @@ window:
   #
   # Values for `startup_mode` (macOS only):
   #   - SimpleFullscreen
-  startup_mode: Windowed
+  startup_mode: Maximized
 
   # Window title
-  #title: Alacritty
+  title: term Alacritty
 
   # Allow terminal applications to change Alacritty's window title.
-  #dynamic_title: true
+  dynamic_title: true
 
   # Window class (Linux/BSD only):
   #class:
@@ -111,7 +111,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: JetBrains Mono
+    family: Firacode Nerd Font
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -122,18 +122,18 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: JetBrains Mono
+    family: Firacode Nerd Font
 
     # The `style` can be specified to pick a specific face.
     style: Bold
-
+ 
   # Italic font face
   italic:
     # Font family
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: JetBrains Mono
+    family: Firacode Nerd Font
 
     # The `style` can be specified to pick a specific face.
     style: Italic
@@ -144,12 +144,12 @@ font:
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: JetBrains Mono
+    family: Firacode Nerd Font
     # The `style` can be specified to pick a specific face.
     style: Bold Italic
 
   # Point size
-  size: 9
+  size: 12
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
@@ -169,7 +169,7 @@ font:
   #
   # Thin strokes are suitable for retina displays, but for non-retina screens
   # it is recommended to set `use_thin_strokes` to `false`.
-  #use_thin_strokes: true
+  # use_thin_strokes: true
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
@@ -229,31 +229,55 @@ draw_bold_text_with_bright_colors: true
 #    cyan: '0x56b6c2'
 #    white: '0xdcdfe4'
 
+  #colors:
+  #primary:
+  # background: '#1f2022'
+  # foreground: '#f0f0f0'
+
+  #normal:
+  #  black:   '0x1F2229'
+  # red:     '0xEC0101'
+  # green:   '0x47D4B9'
+  # yellow:  '0xFF8A18'
+  # blue:    '0x277FFF'
+  #magenta: '0xD71655'
+      #  cyan:    '0x05A1F7'
+   # white:   '0xFFFFFF'
+
+  #bright:
+  # black:   '0x1F2229'
+  # red:     '0xD41919'
+  # green:   '0x5EBDAB'
+  # yellow:  '0xFEA44C'
+  # blue:    '0x367bf0'
+  # magenta: '0xBF2E5D'
+  # cyan:    '0x49AEE6'
+  # white:   '0xFFFFFF'
 colors:
   primary:
-    background: '#14181c'
-    foreground: '0xFAFAFA'
+    background: "0x191a1c"
+    foreground: "0xf0f0f0"
 
   normal:
-    black:   '0x1F2229'
-    red:     '0xEC0101'
-    green:   '0x47D4B9'
-    yellow:  '0xFF8A18'
-    blue:    '0x277FFF'
-    magenta: '0xD71655'
-    cyan:    '0x05A1F7'
-    white:   '0xFFFFFF'
-
+    black: "0x181819"
+    red: "0xfc5d7c"
+    green: "0x9ed072"
+    yellow: "0xe7c664"
+    blue: "0x76cce0"
+    magenta: "0xb39df3"
+    cyan: "0xf39660"
+    white: "0xe2e2e3"
 
   bright:
-    black:   '0x1F2229'
-    red:     '0xD41919'
-    green:   '0x5EBDAB'
-    yellow:  '0xFEA44C'
-    blue:    '0x367bf0'
-    magenta: '0xBF2E5D'
-    cyan:    '0x49AEE6'
-    white:   '0xFFFFFF'
+    black: "0x181819"
+    red: "0xfc5d7c"
+    green: "0x9ed072"
+    yellow: "0xe7c664"
+    blue: "0x76cce0"
+    magenta: "0xb39df3"
+    cyan: "0xf39660"
+    white: "0xe2e2e3"
+
 # Bell
 #
 # The bell is rung every time the BEL control character is received.
@@ -299,7 +323,7 @@ colors:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 1
+# background_opacity: 1
 
 #selection:
   # This string contains all characters that are used as separators for
@@ -361,8 +385,8 @@ cursor:
 #   - (macOS) /bin/bash --login
 #   - (Linux/BSD) user login shell
 #   - (Windows) powershell
-shell:
-  program: /usr/bin/fish
+#shell:
+#program: /opt/homebrew/bin/fish
 #  args:
 #    - --login
 
@@ -370,7 +394,7 @@ shell:
 #
 # Directory the shell is started in. If this is unset, or `None`, the working
 # directory of the parent process will be used.
-working_directory: /home/db/dev/
+#working_directory: /home/db/dev/
 
 # Send ESC (\x1b) before characters when alt is pressed.
 #alt_send_esc: true
