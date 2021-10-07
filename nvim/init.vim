@@ -30,6 +30,7 @@ Plug 'machakann/vim-highlightedyank'
 " Only display relative numbers in places that make sense
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Additional color schemes
+"Plug 'sainnhe/sonokai'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 " Coloriser for color codes and things
 Plug 'norcalli/nvim-colorizer.lua'
@@ -72,7 +73,7 @@ Plug 'nvim-lua/completion-nvim'
 Plug 'RishabhRD/popfix'
 Plug 'RishabhRD/nvim-lsputils'
 " Statusline component for LSP information
-Plug 'nerosnm/lsp-status.nvim', { 'branch': 'nerosnm/always-add-space' }
+Plug 'nerosnm/lsp-status.nvim'
 
 " Syntactic language support
 " --------------------------
@@ -295,7 +296,7 @@ vim.lsp.handlers['workspace/symbol'] = require'lsputil.symbols'.workspace_handle
 
 status.register_progress()
 status.config({
-    status_symbol = 'ȸ',
+    status_symbol = 'db',
     current_function = false,
     indicator_errors = '●',
     indicator_warnings = '◉',
@@ -562,7 +563,7 @@ endif
 " let base16colorspace=256
 colorscheme db_onehalfdark
 syntax on
-"hi Normal ctermbg=NONE
+" hi Normal ctermbg=NONE
 hi Normal guibg=NONE ctermbg=NONE
 
 " Text Editing
@@ -694,6 +695,30 @@ nnoremap <leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 " Toggle search highlighting
 nmap <silent> <leader>/ :noh<cr>
 
+nnoremap <C-j> <Esc>
+inoremap <C-j> <Esc>
+vnoremap <C-j> <Esc>
+snoremap <C-j> <Esc>
+xnoremap <C-j> <Esc>
+cnoremap <C-j> <C-c>
+onoremap <C-j> <Esc>
+lnoremap <C-j> <Esc>
+tnoremap <C-j> <Esc>
+
+nnoremap <C-k> <Esc>
+inoremap <C-k> <Esc>
+vnoremap <C-k> <Esc>
+snoremap <C-k> <Esc>
+xnoremap <C-k> <Esc>
+cnoremap <C-k> <C-c>
+onoremap <C-k> <Esc>
+lnoremap <C-k> <Esc>
+tnoremap <C-k> <Esc>
+
+"jump to start and end of a file
+map <silent> <leader>h ^
+map <silent> <leader>l $
+
 " Create splits with <leader>s and a direction
 nmap <silent> <leader>sh :leftabove vnew<cr>
 nmap <silent> <leader>sl :rightbelow vnew<cr>
@@ -709,4 +734,4 @@ nnoremap <C-H> <C-W><C-H>
 " Run make from the current directory
 noremap M :make<cr>
 " Run make from the directory containing the current file
-norema p MM :!cd "%:p:h" \| make<cr>
+noremap p MM :!cd "%:p:h" \| make<cr>

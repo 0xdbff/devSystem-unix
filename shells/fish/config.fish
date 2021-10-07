@@ -31,22 +31,25 @@ abbr -a d 'rm -rf'
 #Directories abbr
 #make working dirs if not found
 if not test -d ~/dev
-    mkdir ~/dev
-    if not test -d ~/dev/bin
-        mkdir ~/dev/bin
-    end
-end #quick access to development dir
-    abbr -a cdd ~/dev
-    #quick access dev or beta bins
-    abbr -a cdb ~/dev/bin 
+        mkdir ~/dev
+        if not test -d ~/dev/bin
+                mkdir ~/dev/bin
+        end
+end 
+#quick access to development dir
+abbr -a cdd ~/dev
+#quick access dev or beta bins
+abbr -a cdb ~/dev/bin 
 if not test -d ~/sh
-    mkdir ~/sh
-end #quick access to user scripts dir
-    abbr -a cds ~/sh
+        mkdir ~/sh
+end 
+#quick access to user scripts dir
+abbr -a cds ~/sh
 if not test -d ~/logs
-    mkdir ~/logs
-end #quick access logs performed by user
-    abbr -a cdl ~/logs
+        mkdir ~/logs
+end 
+#quick access logs performed by user
+abbr -a cdl ~/logs
 #quick change to software installation dirs
 abbr -a cdlb ~/.local/bin
 abbr -a cdB /bin/
@@ -95,70 +98,92 @@ abbr -a Tm   'tmux'
 abbr -a g git
 abbr -a ga 'git add -p'
 abbr -a gaa 'git add -p *'
-# add all remotes to a public repo
-# gitlab, personal gitlab && github
-function git_add_all_remotes $argv
-    if git remote add origin git@gitlab.com:dev-db/$argv.git
-        echo "origin added as remote under ssh git@gitlab.com:dev-db/$argv.git"
-        if git remote add origin_hub git@github.com:Db-Dev2002/$argv.git
-            echo "origin_hub added as remote under ssh git@github.com:Db-Dev2002/$argv.git"
-            #if git remote add origin_dblab #TODO
-            #echo "origin_dblab added as private remote under our own server ..."
-            echo ""
-            echo "all remotes are ready!"
-            #end
-        end
-        git push --set-upstream origin main 
-    end
-end
-# add only gitlab & github
-function git_add_public_remotes $argv
-    if git remote add origin git@gitlab.com:dev-db/$argv.git
-        echo "origin added as remote under ssh git@gitlab.com:dev-db/$argv.git"
-        if git remote add origin_hub git@github.com:Db-Dev2002/$argv.git
-            echo "origin_hub added as remote under ssh git@github.com:Db-Dev2002/$argv.git"
-            echo ""
-            echo "public remotes are ready"
-        end
-        git push --set-upstream origin main
-    end
-end
-function git_delete_added_remotes
-    #test if the remote exists, then remove it
-    if git remote get-url origin 
-        if git remote remove origin
-            echo "remote origin removed"
-            echo ""
-        end
-    end
-    if git remote get-url origin_hub
-        if git remote remove origin_hub
-            echo "remote origin_hub removed"
-            echo ""
-        end
-    end
-    if git remote get-url origin_dblab
-        if git remote remove origin_dblab
-            echo "remote origin_dblab removed"
-            echo ""
-        end
-    end
-end
+
 function git_test_ssh
     ssh -T git@gitlab.com
     ssh -T git@github.com
     #TODO private gitlab
-end 
+end
+
 function git_add_ssh
     ssh-add ~/.ssh/gitlab
     ssh-add ~/.ssh/github
     #TODO
     if git_test_ssh
-        echo ""
-        echo "all set and ready for commits"
+            echo ""
+            echo "all set and ready for commits"
     end
 end
-    
+
+# add all remotes to a public repo
+# gitlab, personal gitlab && github
+function git_add_all_remotes $argv
+    # add url remotes
+    if git remote add origin git@gitlab.com:dev-db/$argv.git
+            echo "origin added as remote under ssh git@gitlab.com:dev-db/$argv.git"
+
+            if git remote add origin_hub git@github.com:Db-Dev2002/$argv.git
+                    echo "origin_hub added as remote under ssh git@github.com:Db-Dev2002/$argv.git"
+                    
+                    #if git remote add dblab #TODO
+                            echo ""
+                            echo "public remotes are ready"
+                            echo ""
+
+                            git push --set-upstream origin main
+                    #   else
+                    #       echo "dblab remote not added"
+                    #end
+                else 
+                    echo "github remote not added"
+            end
+        else
+            echo "gitlab remote not added"
+    end
+end
+
+# add only gitlab & github
+function git_add_public_remotes $argv
+    # add url remotes
+    if git remote add origin git@gitlab.com:dev-db/$argv.git
+            echo "gitlab added as remote under ssh git@gitlab.com:dev-db/$argv.git"
+
+            if git remote add origin_hub git@github.com:Db-Dev2002/$argv.git
+                    echo "github added as remote under ssh git@github.com:Db-Dev2002/$argv.git"
+                    echo ""
+                    echo "public remotes are ready"
+                    echo ""
+                    
+                    git push --set-upstream origin main
+                else 
+                    echo "github remote not added"
+            end
+        else
+            echo "gitlab remote not added"
+    end
+end
+
+function git_delete_added_remotes
+    #test if the remote exists, then remove it
+    if git remote get-url origin &> /dev/null 
+            if git remote remove origin
+                    echo "remote gitlab removed"
+            end
+    end
+    if git remote get-url origin_hub &> /dev/null
+            if git remote remove origin_hub
+                    echo "remote github removed"
+            end
+    end
+    if git remote get-url origin_db &> /dev/null
+            if git remote remove origin_db
+                    echo "remote dblab removed"
+            end
+    end
+end
+
+
+abbr -a gpa 'git push -u origin & git push origin_hub main'
 abbr -a graa 'git_add_all_remotes'
 abbr -a grap 'git_add_public_remotes'
 abbr -a grd  'git_delete_added_remotes'
@@ -176,7 +201,6 @@ abbr -a gi   'git init'
 abbr -a gil  'git logs'
 abbr -a gm   'git merge'
 #push public repos to all remotes
-abbr -a gpa  'git push -u origin & git push origin_hub && echo "git push origin_dblab not ready yet, TODO"'
 abbr -a gpp  'git push -u origin_dblab'
 abbr -a gp   'git push'
 
@@ -212,7 +236,7 @@ complete --command yay --wraps pacman
 if command -v yay > /dev/null
 	abbr -a p 'yay -S'
 	abbr -a up 'yay -Syu'
-else
+    else
         abbr -a p '$package_manager $install_args'
 	abbr -a up '$package_manager $update_args' 
 end
@@ -222,7 +246,7 @@ if command -v exa > /dev/null
 	abbr -a ls 'exa'
 	abbr -a ll 'exa -l'
 	abbr -a lll 'exa -la'
-else
+    else
 	abbr -a l 'ls'
 	abbr -a ll 'ls -l'
 	abbr -a lll 'ls -la'
