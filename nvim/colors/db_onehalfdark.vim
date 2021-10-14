@@ -19,24 +19,24 @@ let g:colors_name="db_onehalfdark"
 let colors_name="db_onehalfdark"
 
 
-let s:black       = { "gui": "#22272e", "cterm": "236" }
+let s:black       = { "gui": "#17191c", "cterm": "236" }
 let s:red         = { "gui": "#e05a70", "cterm": "168" }
-let s:green       = { "gui": "#98c379", "cterm": "114" }
-let s:yellow      = { "gui": "#e5c07b", "cterm": "180" }
-let s:blue        = { "gui": "#61afef", "cterm": "75"  }
-let s:purple      = { "gui": "#c678dd", "cterm": "176" }
-let s:cyan        = { "gui": "#56b6c2", "cterm": "73"  }
+let s:green       = { "gui": "#9ed072", "cterm": "114" }
+let s:yellow      = { "gui": "#e7c664", "cterm": "180" }
+let s:blue        = { "gui": "#76cce0", "cterm": "75"  }
+let s:purple      = { "gui": "#b39df3", "cterm": "176" }
+let s:cyan        = { "gui": "#f39660", "cterm": "73"  }
 let s:white       = { "gui": "#dcdfe4", "cterm": "188" }
 
 let s:fg          = s:white
 let s:bg          = s:black
 
 let s:comment_fg  = { "gui": "#5c6370", "cterm": "241" }
-let s:gutter_bg   = { "gui": "#121212", "cterm": "236" }
+let s:gutter_bg   = { "gui": "#17191c", "cterm": "236" }
 let s:gutter_fg   = { "gui": "#919baa", "cterm": "247" }
 let s:non_text    = { "gui": "#3c3f41", "cterm": "239" }
 
-let s:cursor_line = { "gui": "#282c34", "cterm": "237" }
+let s:cursor_line = { "gui": "#2a2a2a", "cterm": "237" }
 let s:color_col   = { "gui": "#3c3f41", "cterm": "237" }
 
 let s:selection   = { "gui": "#3c3f41", "cterm": "239" }
