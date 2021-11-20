@@ -31,7 +31,7 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Additional color schemes
 "Plug 'sainnhe/sonokai'
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
+" Plug 'sonph/onehalf', {'rtp': 'vim/'}
 " Coloriser for color codes and things
 Plug 'norcalli/nvim-colorizer.lua'
 
@@ -73,7 +73,7 @@ Plug 'nvim-lua/completion-nvim'
 Plug 'RishabhRD/popfix'
 Plug 'RishabhRD/nvim-lsputils'
 " Statusline component for LSP information
-Plug 'nerosnm/lsp-status.nvim'
+Plug 'nvim-lua/lsp-status.nvim'
 
 " Syntactic language support
 " --------------------------
@@ -116,7 +116,7 @@ call plug#end()
 set noshowmode
 " Set a colour scheme and add a custom filename pattern.
 let g:lightline = {
-    \ 'colorscheme': 'onehalfdark',
+    \ 'colorscheme': 'powerlineish',
     \ 'active': {
     \     'left': [
     \         [ 'mode', 'paste' ],
@@ -189,6 +189,8 @@ map <C-p> :Files<CR>
 nmap <leader>; :Buffers<CR>
 " Run a Rg search with <leader>s
 noremap <leader>s :Rg
+" Run FZF from the home dir with <leader>p
+map <leader>[ :FZF ~<CR>
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
@@ -240,11 +242,6 @@ end
 
 config.rust_analyzer.setup({
     on_attach = on_attach,
-    on_init = function(client)
-        client.config.flags = {
-            allow_incremental_sync = false;
-        }
-    end,
     capabilities = status.capabilities,
     settings = {
         ["rust-analyzer"] = {
@@ -380,7 +377,7 @@ let g:completion_enable_auto_paren = 1
 " rust.vim
 " --------
 " Turn on automatic formatting on save using nightly rustfmt $rustup run nightly rustfmt
-"let g:rustfmt_command = 'cargo fmt'
+" let g:rustfmt_command = 'cargo fmt'
 let g:rustfmt_autosave = 1
 
 " vimtex
@@ -457,6 +454,11 @@ augroup END
 augroup cpp | au!
     au Filetype cpp setlocal shiftwidth=2 softtabstop=2
     au BufNewFile,BufRead *.cpp,*.hpp :ClangFormatAutoEnable
+augroup END
+
+augroup c | au!
+    au Filetype c setlocal shiftwidth=2 softtabstop=2
+    au BufNewFile,BufRead *.c,*.h :ClangFormatAutoEnable
 augroup END
 
 " LaTeX
@@ -734,4 +736,4 @@ nnoremap <C-H> <C-W><C-H>
 " Run make from the current directory
 noremap M :make<cr>
 " Run make from the directory containing the current file
-noremap p MM :!cd "%:p:h" \| make<cr>
+noremap m MM :!cd "%:p:h" \| make<cr>
