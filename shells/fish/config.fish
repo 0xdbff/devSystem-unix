@@ -182,6 +182,9 @@ function git_delete_added_remotes
     end
 end
 
+# add to .gitignore on the current path
+function atgi $argv
+
 
 abbr -a gpa 'git push -u origin & git push origin_hub main'
 abbr -a graa 'git_add_all_remotes'
