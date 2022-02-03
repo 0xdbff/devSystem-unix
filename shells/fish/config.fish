@@ -26,7 +26,8 @@ abbr -a z zsh
 abbr -a t touch
 abbr -a sus suspend
 abbr -a nv 'nvidia-settings'
-abbr -a d 'rm -rf'
+abbr -a d 'rm'
+abbr -a dd 'rm -rf'
 
 #Directories abbr
 #make working dirs if not found
@@ -183,8 +184,24 @@ function git_delete_added_remotes
 end
 
 # add to .gitignore on the current path
-function atgi $argv
+# function atgi $argv
 
+function mkcd 
+    if test -d $argv
+            echo "dir already exits"
+            cd ./$argv
+            exit 0
+    else 
+            if mkdir -p $argv
+                    cd ./$argv
+            else
+                    echo "mkdir failed"
+            end
+    end
+end 
+
+abbr -a mkd 'mkdir -p' 
+# abbr -a mkdp 'mkdir -p -m a=rwx'
 
 abbr -a gpa 'git push -u origin & git push origin_hub main'
 abbr -a graa 'git_add_all_remotes'
@@ -207,17 +224,10 @@ abbr -a gm   'git merge'
 abbr -a gpp  'git push -u origin_dblab'
 abbr -a gp   'git push'
 
-
-
-
 abbr -a vimdiff 'nvim -d'
 abbr -a gah 'git stash; and git pull --rebase; and git stash pop'
 
-
-
 #if tmux not found, yay as arch package manager
-
-
 
 abbr -a n 'nvim .'
 
@@ -262,8 +272,8 @@ end
 
 function fish_greeting
 	echo
-	echo -e (uname -ro | awk '{print " \\\\e[1mOS: \\\\e[0;32m"$0"\\\\e[0m"}')
-	echo -e (uptime -p | sed 's/^up //' | awk '{print " \\\\e[1mUptime: \\\\e[0;32m"$0"\\\\e[0m"}')
+	echo -e (uname -rs | awk '{print " \\\\e[1mOS: \\\\e[0;32m"$0"\\\\e[0m"}')
+	echo -e (uptime  | sed 's/^up //' | awk '{print " \\\\e[1mUptime: \\\\e[0;32m"$0"\\\\e[0m"}')
 	echo -e (uname -n | awk '{print " \\\\e[1mHostname: \\\\e[0;32m"$0"\\\\e[0m"}')
 	echo
 	echo -ne (\
