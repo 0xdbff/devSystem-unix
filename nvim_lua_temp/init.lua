@@ -1,4 +1,4 @@
--- use space as a the leader key
+-- use space as the leader key
 vim.g.mapleader = ' '
 
 -- packer path
@@ -32,8 +32,26 @@ require('packer').startup(function()
   use 'jeffkreeftmeijer/vim-numbertoggle'
   -- Automatic tags management
   use 'ludovicchabant/vim-gutentags'
+  -- EasyMotion provides a much simpler way to use some motions in vim
+  use 'easymotion/vim-easymotion'
+
+  use{ "nvim-lua/popup.nvim" }
+  use{ "nvim-lua/plenary.nvim" }
 
   ------ Telescope
+  use "nvim-telescope/telescope.nvim"
+  use {
+	"nvim-telescope/telescope-fzf-native.nvim", 
+	run = "make" 
+  }
+  use "nvim-telescope/telescope-rs.nvim"
+  use "nvim-telescope/telescope-fzf-writer.nvim"
+  use "nvim-telescope/telescope-github.nvim"
+  use "nvim-telescope/telescope-symbols.nvim"
+  use "nvim-telescope/telescope-hop.nvim"
+  use "nvim-telescope/telescope-file-browser.nvim"
+  use "nvim-telescope/telescope-ui-select.nvim"
+  use "nvim-telescope/telescope-smart-history.nvim"
 
   ------ UI settings
   -- select files, grep results, open buffers...
@@ -48,7 +66,10 @@ require('packer').startup(function()
   -- Add indentation guides even on blank lines
   use 'lukas-reineke/indent-blankline.nvim'
   -- Add git related info in the signs columns and popups
-  use {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'} }
+  use {
+	'lewis6991/gitsigns.nvim', 
+	requires = {'nvim-lua/plenary.nvim'} 
+  }
   -- Highlight, edit, and navigate code using a fast incremental parsing library
   use 'nvim-treesitter/nvim-treesitter'
   -- Additional textobjects for treesitter
@@ -86,10 +107,8 @@ end)
 
 --Set highlight on search
 vim.o.hlsearch = false
-
 --Make line numbers default
 vim.wo.number = true
-
 --Enable mouse mode
 vim.o.mouse = 'a'
 --Set colorscheme
@@ -124,27 +143,38 @@ vim.o.termguicolors = true
 -- Load the configuration set above and apply the colorscheme
 -- nightfox.load()
 
+--require('telescope').setup({
+--  defaults = {
+--    layout_config = { ivy },
+--    -- other defaults configuration here
+--  },
+--  -- other configuration values here
+--  extensions = {
+--    fzf = {
+--      fuzzy = true,                    -- false will only do exact matching
+--      override_generic_sorter = true,  -- override the generic sorter
+--      override_file_sorter = true,     -- override the file sorter
+--      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+--    }                                  -- the default case_mode is "smart_case"
+--  }
+--})
+
 require('telescope').setup({
-  defaults = {
-    layout_config = {
-      vertical = { width = 0.5 }
-      -- other layout configuration here
+    defaults = { 
+        file_ignore_patterns = {"node_modules", "/dist"},
+        layout_strategy = 'flex'
     },
-    -- other defaults configuration here
-  },
-  -- other configuration values here
-  extensions = {
-    fzf = {
-      fuzzy = true,                    -- false will only do exact matching
-      override_generic_sorter = true,  -- override the generic sorter
-      override_file_sorter = true,     -- override the file sorter
-      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-    }                                  -- the default case_mode is "smart_case"
-  }
+    extensions = {
+        frecency = {
+            show_scores = false,
+            show_unindexed = true,
+            ignore_patterns = {"*.git/*", "*/tmp/*", "*/node_modules/*"},
+        }
+    }
 })
 
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
-require('telescope').load_extension('fzf')
+-- require('telescope').load_extension('fzf')
 
 vim.cmd [[colorscheme onedark]]
