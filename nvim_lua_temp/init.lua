@@ -1,3 +1,6 @@
+-- use space as a the leader key
+vim.g.mapleader = ' '
+
 -- packer path
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 
@@ -17,7 +20,7 @@ local use = require('packer').use
 require('packer').startup(function()
   -- Package manager
   use 'wbthomason/packer.nvim'
-  --
+
   ------ Utils
   -- Git integration
   use 'tpope/vim-fugitive'
@@ -29,7 +32,9 @@ require('packer').startup(function()
   use 'jeffkreeftmeijer/vim-numbertoggle'
   -- Automatic tags management
   use 'ludovicchabant/vim-gutentags'
-  --
+
+  ------ Telescope
+
   ------ UI settings
   -- select files, grep results, open buffers...
   use {'nvim-telescope/telescope.nvim', requires = {'nvim-lua/plenary.nvim'} }
@@ -48,7 +53,23 @@ require('packer').startup(function()
   use 'nvim-treesitter/nvim-treesitter'
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
-  --
+  -- color codes highlighter
+  use "norcalli/nvim-colorizer.lua"
+  -- ansi escape codes(colors) ft
+  use {
+    "norcalli/nvim-terminal.lua",
+    config = function()
+      require("terminal").setup()
+    end,
+  }
+  -- Make comments appear IN YO FACE
+  use {
+    "tjdevries/vim-inyoface",
+    config = function()
+      vim.api.nvim_set_keymap("n", "<leader>cc", "<Plug>(InYoFace_Toggle)", {})
+    end,
+  }
+
   ------ LSP settings 
   -- Collection of configurations for built-in LSP client
   use 'neovim/nvim-lspconfig'
@@ -102,4 +123,28 @@ vim.o.termguicolors = true
 -- print(vim.inspect(require('nightfox.colors').init()))
 -- Load the configuration set above and apply the colorscheme
 -- nightfox.load()
+
+require('telescope').setup({
+  defaults = {
+    layout_config = {
+      vertical = { width = 0.5 }
+      -- other layout configuration here
+    },
+    -- other defaults configuration here
+  },
+  -- other configuration values here
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+    }                                  -- the default case_mode is "smart_case"
+  }
+})
+
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+require('telescope').load_extension('fzf')
+
 vim.cmd [[colorscheme onedark]]
