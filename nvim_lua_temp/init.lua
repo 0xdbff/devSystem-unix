@@ -162,7 +162,12 @@ vim.o.termguicolors = true
 require('telescope').setup({
     defaults = { 
         file_ignore_patterns = {"node_modules", "/dist"},
-        layout_strategy = 'flex'
+	layout_strategy = "bottom_pane",
+    		layout_config = {
+      		height = 0.26,
+		preview_cutoff = 120
+      		-- preview_width = 0.55,
+    	},
     },
     extensions = {
         frecency = {
