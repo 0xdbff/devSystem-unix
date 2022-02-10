@@ -31,7 +31,7 @@ require('packer').startup(function()
   -- Relative lines on current buf(normal mode) only
   use 'jeffkreeftmeijer/vim-numbertoggle'
   -- Automatic tags management
-  use 'ludovicchabant/vim-gutentags'
+  -- use 'ludovicchabant/vim-gutentags'
   -- EasyMotion provides a much simpler way to use some motions in vim
   use 'easymotion/vim-easymotion'
 
@@ -54,9 +54,6 @@ require('packer').startup(function()
   use "nvim-telescope/telescope-smart-history.nvim"
 
   ------ UI settings
-  -- select files, grep results, open buffers...
-  use {'nvim-telescope/telescope.nvim', requires = {'nvim-lua/plenary.nvim'} }
-  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   -- Colorshemes
   use 'mjlbach/onedark.nvim'
   -- use 'navarasu/onedark.nvim'
@@ -88,11 +85,11 @@ require('packer').startup(function()
   }
   -- Make comments appear IN YO FACE
   use {
-    "tjdevries/vim-inyoface",
-    config = function()
-      vim.api.nvim_set_keymap("n", "<leader>cc", "<Plug>(InYoFace_Toggle)<CR>")
-    end,
-  }
+      "tjdevries/vim-inyoface",
+      config = function()
+        vim.api.nvim_set_keymap("n", "<leader>cc", "<Plug>(InYoFace_Toggle) <CR>", {})
+      end,
+  }  
 
   ------ LSP settings 
   -- Collection of configurations for built-in LSP client
@@ -161,7 +158,7 @@ require'nvim-treesitter.configs'.setup({
   },
 })
 
-require('comment').setup()
+require('Comment').setup()
 
 require('lualine').setup({
 	theme = 'onedark'
@@ -170,5 +167,55 @@ require('lualine').setup({
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
 -- require('telescope').load_extension('fzf')
+
+local cmp = require'cmp'
+
+cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      end,
+    },
+    mapping = {
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'luasnip' }, -- For luasnip users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+  -- Setup lspconfig.
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  require('lspconfig')['rust-analyzer'].setup {
+    capabilities = capabilities
+  }
 
 vim.cmd [[colorscheme onedark]]
