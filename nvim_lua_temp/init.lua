@@ -33,7 +33,7 @@ require('packer').startup(function()
   -- Automatic tags management
   -- use 'ludovicchabant/vim-gutentags'
   -- EasyMotion provides a much simpler way to use some motions in vim
-  use 'easymotion/vim-easymotion'
+  -- use 'easymotion/vim-easymotion'
 
   use{ "nvim-lua/popup.nvim" }
   use{ "nvim-lua/plenary.nvim" }
@@ -52,6 +52,8 @@ require('packer').startup(function()
   use "nvim-telescope/telescope-file-browser.nvim"
   use "nvim-telescope/telescope-ui-select.nvim"
   use "nvim-telescope/telescope-smart-history.nvim"
+
+  use "rhysd/vim-clang-format"
 
   ------ UI settings
   -- Colorshemes
@@ -113,6 +115,47 @@ vim.wo.number = true
 vim.o.mouse = 'a'
 --Set colorscheme
 vim.o.termguicolors = true
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = 'menuone,noselect'
+
+vim.cmd[[ let g:completion_enable_auto_paren = 1 ]]
+vim.cmd[[ let g:rustfmt_autosave = 1 ]]
+vim.cmd[[ let g:clang_format#code_style = 'llvm' ]]
+
+-- Easier Moving between splits
+vim.cmd[[ nnoremap <C-J> <C-W><C-J> ]]
+vim.cmd[[ nnoremap <C-K> <C-W><C-K> ]]
+vim.cmd[[ nnoremap <C-L> <C-W><C-L> ]]
+vim.cmd[[ nnoremap <C-H> <C-W><C-H> ]]
+
+-- Make windows to be basically the same size
+vim.cmd[[ nnoremap <leader>= <C-w>= ]]
+
+vim.cmd[[ 
+augroup c | au!
+    au Filetype c setlocal shiftwidth=2 softtabstop=2
+    au BufNewFile,BufRead *.c,*.h :ClangFormatAutoEnable
+augroup END
+]]
+
+-- Copy and paste to/from system clipboard
+vim.cmd[[ vmap <leader>y "+y ]]
+vim.cmd[[ vmap <leader>d "+d ]]
+vim.cmd[[ nmap <leader>p "+p ]]
+vim.cmd[[ nmap <leader>P "+P ]]
+vim.cmd[[ vmap <leader>p "+p ]]
+vim.cmd[[ vmap <leader>P "+P ]]
+
+-- i like things fast
+vim.o.updatetime = 100
+vim.o.timeoutlen = 260
+
+-- better comments
+vim.o.textwidth = 80
+
+-- quick save with <leader> w
+-- vim.cmd[[ nmap <leader>w :w<CR> ]]
+vim.api.nvim_set_keymap('n','<leader>w', '<cmd>w<CR>', {} )
 
 require('telescope').setup({
     defaults = {
@@ -198,7 +241,7 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
--- Enable the following language servers
+-- Enable the following language servers, quick setup default settings
 local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -286,6 +329,5 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
 
 vim.cmd [[colorscheme onedark]]
