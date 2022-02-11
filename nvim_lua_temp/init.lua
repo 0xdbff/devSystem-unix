@@ -108,9 +108,19 @@ require('packer').startup(function()
 end)
 
 --Set highlight on search
-vim.o.hlsearch = false
---Make line numbers default
-vim.wo.number = true
+vim.o.hlsearch = true
+vim.o.tabstop = 8
+vim.o.shiftwidth = 4
+vim.o.softtabstop = 4
+-- Split to righ and bottom of the screen
+vim.o.splitright = true
+vim.o.splitbelow = true
+vim.o.wildmenu = true
+vim.colorcolumn = true
+vim.o.expandtab = true
+vim.o.autoindent = true
+-- Make line numbers default
+vim.o.number = true
 --Enable mouse mode
 vim.o.mouse = 'a'
 --Set colorscheme
@@ -133,7 +143,7 @@ vim.cmd[[ nnoremap <leader>= <C-w>= ]]
 
 vim.cmd[[ 
 augroup c | au!
-    au Filetype c setlocal shiftwidth=2 softtabstop=2
+    au Filetype c setlocal shiftwidth=4 softtabstop=4
     au BufNewFile,BufRead *.c,*.h :ClangFormatAutoEnable
 augroup END
 ]]
