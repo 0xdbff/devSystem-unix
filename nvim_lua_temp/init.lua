@@ -92,6 +92,31 @@ require('packer').startup(function()
         vim.api.nvim_set_keymap("n", "<leader>cc", "<Plug>(InYoFace_Toggle) <CR>", {})
       end,
   }
+  -- languages
+  use 'rust-lang/rust.vim'
+  use 'cespare/vim-toml'
+  use 'lervag/vimtex'
+  use 'dag/vim-fish'
+  use 'LnL7/vim-nix'
+  use 'plasticboy/vim-markdown'
+  use 'rust-lang/rust.vim'
+  use 'cespare/vim-toml'
+  use 'lervag/vimtex'
+  use 'dag/vim-fish'
+  use 'LnL7/vim-nix'
+  use 'plasticboy/vim-markdown'
+  use 'keith/swift.vim'
+  use 'pangloss/vim-javascript'
+  use 'maxmellon/vim-jsx-pretty'
+  use 'neovimhaskell/haskell-vim'
+  use 'elmcast/elm-vim'
+  use 'gleam-lang/gleam.vim'
+  use 'tikhomirov/vim-glsl'
+  use 'godlygeek/tabular'
+  use 'google/vim-maktaba'
+  use 'mhartington/formatter.nvim'
+
+  use 'ciaranm/securemodelines'
 
   ------ LSP settings
   -- Collection of configurations for built-in LSP client
@@ -109,7 +134,7 @@ end)
 
 --Set highlight on search
 vim.o.hlsearch = true
-vim.o.tabstop = 8
+vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.softtabstop = 4
 -- Split to righ and bottom of the screen
@@ -162,7 +187,9 @@ vim.o.timeoutlen = 260
 
 -- better comments
 vim.o.textwidth = 80
-
+vim.cmd[[
+let g:rustfmt_autosave = 1
+]]
 -- quick save with <leader> w
 -- vim.cmd[[ nmap <leader>w :w<CR> ]]
 vim.api.nvim_set_keymap('n','<leader>w', '<cmd>w<CR>', {} )
@@ -207,14 +234,14 @@ require'nvim-treesitter.configs'.setup({
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
+        additional_vim_regex_highlighting = false,
   },
 })
 
 require('Comment').setup()
 
 require('lualine').setup({
-	theme = 'onedark'
+    theme = 'onedark'
 })
 
 -- To get fzf loaded and working with telescope, you need to call
@@ -295,6 +322,22 @@ lspconfig.sumneko_lua.setup {
 
 -- luasnip setup
 local luasnip = require 'luasnip'
+
+require"lspconfig".efm.setup {
+    init_options = {documentFormatting = true},
+    filetypes = {"lua"},
+    settings = {
+        rootMarkers = {".git/"},
+        languages = {
+            lua = {
+                {
+                    formatCommand = "lua-format -i --no-keep-simple-function-one-line --no-break-after-operator --column-limit=150 --break-after-table-lb",
+                    formatStdin = true
+                }
+            }
+        }
+    }
+}
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
