@@ -61,7 +61,7 @@ window:
   # Values for `decorations` (macOS only):
   #     - transparent: Title bar, transparent background and title bar buttons
   #     - buttonless: Title bar, transparent background and no title bar buttons
-  decorations: none
+  decorations: buttonless
 
   # Startup Mode (changes require restart)
   #
@@ -111,10 +111,10 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: Firacode Nerd Font
+    family: FiraCode Nerd Font Mono
 
     # The `style` can be specified to pick a specific face.
-    style: Regular
+    style: Retina
 
   # Bold font face
   bold:
@@ -122,10 +122,10 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Firacode Nerd Font
+    family: FiraCode Nerd Font Mono
 
     # The `style` can be specified to pick a specific face.
-    style: Bold
+    style: Retina
  
   # Italic font face
   italic:
@@ -133,7 +133,7 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Firacode Nerd Font
+    family: menlo
 
     # The `style` can be specified to pick a specific face.
     style: Italic
@@ -144,7 +144,7 @@ font:
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Firacode Nerd Font
+    family: menlo
     # The `style` can be specified to pick a specific face.
     style: Bold Italic
 
@@ -255,28 +255,53 @@ draw_bold_text_with_bright_colors: true
   # white:   '0xFFFFFF'
 colors:
   primary:
-    background: "0x191a1c"
-    foreground: "0xf0f0f0"
+    background: '0x282c34'
+    foreground: '0xdcdfe4'
 
   normal:
-    black: "0x181819"
-    red: "0xfc5d7c"
-    green: "0x9ed072"
-    yellow: "0xe7c664"
-    blue: "0x76cce0"
-    magenta: "0xb39df3"
-    cyan: "0xf39660"
-    white: "0xe2e2e3"
+    black: '0x282c34'
+    red: '0xe06c75'
+    green: '0x98c379'
+    yellow: '0xe5c07b'
+    blue: '0x61afef'
+    magenta: '0xc678dd'
+    cyan: '0x56b6c2'
+    white: '0xdcdfe4'
 
   bright:
-    black: "0x181819"
-    red: "0xfc5d7c"
-    green: "0x9ed072"
-    yellow: "0xe7c664"
-    blue: "0x76cce0"
-    magenta: "0xb39df3"
-    cyan: "0xf39660"
-    white: "0xe2e2e3"
+    black: '0x282c34'
+    red: '0xe06c75'
+    green: '0x98c379'
+    yellow: '0xe5c07b'
+    blue: '0x61afef'
+    magenta: '0xc678dd'
+    cyan: '0x56b6c2'
+    white: '0xdcdfe4'
+
+      #colors:
+      #  primary:
+      #    background: "#212325"
+      #    foreground: "0xf0f0f0"
+      #
+      #  normal:
+      #    black: "0x181819"
+      #    red: "0xfc5d7c"
+      #    green: "0x9ed072"
+      #    yellow: "0xe7c664"
+      #    blue: "0x76cce0"
+      #    magenta: "0xb39df3"
+      #    cyan: "0xf39660"
+      #    white: "0xe2e2e3"
+      #
+      #  bright:
+      #    black: "0x181819"
+      #    red: "0xfc5d7c"
+      #    green: "0x9ed072"
+      #    yellow: "0xe7c664"
+      #    blue: "0x76cce0"
+      #    magenta: "0xb39df3"
+      #    cyan: "0xf39660"
+      #    white: "0xe2e2e3"
 
 # Bell
 #
@@ -685,10 +710,10 @@ key_bindings:
   #- { key: E,      mods: Control,       mode: Vi|~Search, action: ScrollLineDown          }
   #- { key: G,                           mode: Vi|~Search, action: ScrollToTop             }
   #- { key: G,      mods: Shift,         mode: Vi|~Search, action: ScrollToBottom          }
-  #- { key: B,      mods: Control,       mode: Vi|~Search, action: ScrollPageUp            }
-  #- { key: F,      mods: Control,       mode: Vi|~Search, action: ScrollPageDown          }
-  #- { key: U,      mods: Control,       mode: Vi|~Search, action: ScrollHalfPageUp        }
-  #- { key: D,      mods: Control,       mode: Vi|~Search, action: ScrollHalfPageDown      }
+  - { key: B,      mods: Control,       mode: Vi|~Search, action: ScrollPageUp            }
+  - { key: F,      mods: Control,       mode: Vi|~Search, action: ScrollPageDown          }
+  - { key: U,      mods: Control,       mode: Vi|~Search, action: ScrollHalfPageUp        }
+  - { key: D,      mods: Control,       mode: Vi|~Search, action: ScrollHalfPageDown      }
   #- { key: Y,                           mode: Vi|~Search, action: Copy                    }
   #- { key: Y,                           mode: Vi|~Search, action: ClearSelection          }
   #- { key: Copy,                        mode: Vi|~Search, action: ClearSelection          }
