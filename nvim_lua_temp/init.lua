@@ -52,7 +52,8 @@ require('packer').startup(function()
   use "nvim-telescope/telescope-file-browser.nvim"
   use "nvim-telescope/telescope-ui-select.nvim"
   use "nvim-telescope/telescope-smart-history.nvim"
-
+  -- a generic formatter
+  use 'mhartington/formatter.nvim'
 
   ------ UI settings
   -- Colorshemes
@@ -81,37 +82,35 @@ require('packer').startup(function()
   use {
     "norcalli/nvim-terminal.lua",
     config = function()
-      require("terminal").setup()
+        require("terminal").setup()
     end,
   }
   -- Make comments appear IN YO FACE
   use {
-      "tjdevries/vim-inyoface",
-      config = function()
+    "tjdevries/vim-inyoface",
+    config = function()
         vim.api.nvim_set_keymap("n", "<leader>cc", "<Plug>(InYoFace_Toggle) <CR>", {})
-      end,
+    end,
   }
-  -- languages that benefit from plugins 
+  -- languages that benefit from plugins
   use 'rust-lang/rust.vim'
   use 'lervag/vimtex'
   use 'plasticboy/vim-markdown'
   use 'keith/swift.vim'
-  -- use 'pangloss/vim-javascript'
-  -- use 'maxmellon/vim-jsx-pretty'
   use 'neovimhaskell/haskell-vim'
   use 'elmcast/elm-vim'
-  -- use 'gleam-lang/gleam.vim'
   use 'tikhomirov/vim-glsl'
   use 'godlygeek/tabular'
-  -- use 'google/vim-maktaba'
-  -- use 'mhartington/formatter.nvim'
-  -- use 'ciaranm/securemodelines'
   -- clang autoformat
-  use "rhysd/vim-clang-format"
+  use 'rhysd/vim-clang-format'
+  -- Ts Utils
+  use 'jose-elias-alvarez/nvim-lsp-ts-utils'
 
   ------ LSP settings
   -- Collection of configurations for built-in LSP client
   use 'neovim/nvim-lspconfig'
+  -- rust inlay hints
+  use 'nvim-lua/lsp_extensions.nvim'
   -- Autocomplete plugins
   use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-buffer'
@@ -164,6 +163,16 @@ augroup c | au!
 augroup END
 ]]
 
+vim.cmd [[
+augroup rust | au!
+    " Set the text width in Rust files to 80, for comment wrapping.
+    au Filetype rust setlocal textwidth=80
+    autocmd BufNewFile,BufRead,BufEnter,BufWinEnter,TabEnter,BufWritePost *.rs
+    \ lua require'lsp_extensions'.inlay_hints{ prefix = '▷ ', highlight = "Comment",
+    \ enabled = { "TypeHint", "ChainingHint", "ParameterHint" } }
+augroup END
+]]
+
 -- Copy and paste to/from system clipboard
 vim.cmd[[ vmap <leader>y "+y ]]
 vim.cmd[[ vmap <leader>d "+d ]]
@@ -178,9 +187,6 @@ vim.o.timeoutlen = 260
 
 -- better comments
 vim.o.textwidth = 80
-vim.cmd[[
-let g:rustfmt_autosave = 1
-]]
 -- quick save with <leader> w
 -- vim.cmd[[ nmap <leader>w :w<CR> ]]
 vim.api.nvim_set_keymap('n','<leader>w', '<cmd>w<CR>', {} )
@@ -225,7 +231,7 @@ require'nvim-treesitter.configs'.setup({
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
+    additional_vim_regex_highlighting = false,
   },
 })
 
@@ -285,12 +291,12 @@ for _, lsp in ipairs(servers) do
   }
 end
 
--- Example custom server
 -- Make runtime files discoverable to the server
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
 
+-- Lua
 lspconfig.sumneko_lua.setup {
   on_attach = on_attach,
   capabilities = capabilities,
@@ -320,7 +326,6 @@ lspconfig.sumneko_lua.setup {
 
 -- luasnip setup
 local luasnip = require 'luasnip'
-
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
