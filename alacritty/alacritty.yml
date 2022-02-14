@@ -61,7 +61,7 @@ window:
   # Values for `decorations` (macOS only):
   #     - transparent: Title bar, transparent background and title bar buttons
   #     - buttonless: Title bar, transparent background and no title bar buttons
-  decorations: buttonless
+  decorations: none
 
   # Startup Mode (changes require restart)
   #
@@ -133,7 +133,7 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: menlo
+    family: Iosekva nerd font
 
     # The `style` can be specified to pick a specific face.
     style: Italic
@@ -144,12 +144,13 @@ font:
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: menlo
+    family: Iosekva Term
+
     # The `style` can be specified to pick a specific face.
-    style: Bold Italic
+    style: Medium Italic
 
   # Point size
-  size: 12
+  size: 9
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
@@ -710,10 +711,10 @@ key_bindings:
   #- { key: E,      mods: Control,       mode: Vi|~Search, action: ScrollLineDown          }
   #- { key: G,                           mode: Vi|~Search, action: ScrollToTop             }
   #- { key: G,      mods: Shift,         mode: Vi|~Search, action: ScrollToBottom          }
-  - { key: B,      mods: Control,       mode: Vi|~Search, action: ScrollPageUp            }
-  - { key: F,      mods: Control,       mode: Vi|~Search, action: ScrollPageDown          }
-  - { key: U,      mods: Control,       mode: Vi|~Search, action: ScrollHalfPageUp        }
-  - { key: D,      mods: Control,       mode: Vi|~Search, action: ScrollHalfPageDown      }
+  #- { key: B,      mods: Control,       mode: Vi|~Search, action: ScrollPageUp            }
+  #- { key: F,      mods: Control,       mode: Vi|~Search, action: ScrollPageDown          }
+  #- { key: U,      mods: Control,       mode: Vi|~Search, action: ScrollHalfPageUp        }
+  #- { key: D,      mods: Control,       mode: Vi|~Search, action: ScrollHalfPageDown      }
   #- { key: Y,                           mode: Vi|~Search, action: Copy                    }
   #- { key: Y,                           mode: Vi|~Search, action: ClearSelection          }
   #- { key: Copy,                        mode: Vi|~Search, action: ClearSelection          }
