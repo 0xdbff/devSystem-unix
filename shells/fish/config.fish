@@ -4,7 +4,7 @@ set package_manager sudo pacman
 set install_args -S
 set update_args -Syu
 
-if not command -v starship > /dev/null
+if not command -v starship &> /dev/null
     if $package_manager $install_args starship
     else 
         echo "installing starship from source"
@@ -29,7 +29,7 @@ abbr -a nv 'nvidia-settings'
 abbr -a d 'rm'
 abbr -a dd 'rm -rf'
 
-#Directories abbr
+#Directories abbr and setup
 #make working dirs if not found
 if not test -d ~/dev
         mkdir ~/dev
@@ -77,10 +77,11 @@ abbr -a crr 'cargo run --release'
 abbr -a cr 'cargo run'
 abbr -a ct 'cargo t'
 
+set RE (uname -r)
+
 #tmux commands
-#capital T to avoid coflicts
-abbr -a Tmn  'tmux new'
-abbr -a Tmnd 'tmux new -s dev@$USER'
+abbr -a Tmn  'tmux new -s'
+abbr -a Tmnd 'tmux new -s dev@Darwin-$RE'
 abbr -a Tmny 'tmux new -s Yakuake@$USER'
 abbr -a Tmnc 'tmux new -s cli@$USER'
 abbr -a Tma  'tmux attach -t'
@@ -92,8 +93,6 @@ abbr -a Tmkd 'tmux kill-session -t dev@$USER'
 abbr -a Tmky 'tmux kill-session -t Yakuake@$USER'
 abbr -a Tmkc 'tmux kill-session -t cli@$USER'
 abbr -a Tmks 'tmux kill-server'
-abbr -a Tmd  'tmux detach'
-abbr -a Tm   'tmux'
 
 #Git Commands
 abbr -a g git
@@ -118,7 +117,7 @@ end
 
 # add all remotes to a public repo
 # gitlab, personal gitlab && github
-function git_add_all_remotes $argv
+function git_add_all_remotes
     # add url remotes
     if git remote add origin git@gitlab.com:dev-db/$argv.git
             echo "origin added as remote under ssh git@gitlab.com:dev-db/$argv.git"
@@ -144,7 +143,7 @@ function git_add_all_remotes $argv
 end
 
 # add only gitlab & github
-function git_add_public_remotes $argv
+function git_add_public_remotes
     # add url remotes
     if git remote add origin git@gitlab.com:dev-db/$argv.git
             echo "gitlab added as remote under ssh git@gitlab.com:dev-db/$argv.git"
@@ -203,7 +202,6 @@ end
 abbr -a mkd 'mkdir -p' 
 # abbr -a mkdp 'mkdir -p -m a=rwx'
 
-abbr -a gpa 'git push -u origin & git push origin_hub main'
 abbr -a graa 'git_add_all_remotes'
 abbr -a grap 'git_add_public_remotes'
 abbr -a grd  'git_delete_added_remotes'
@@ -221,6 +219,7 @@ abbr -a gi   'git init'
 abbr -a gil  'git logs'
 abbr -a gm   'git merge'
 #push public repos to all remotes
+abbr -a gpa 'git push -u origin & git push origin_hub main'
 abbr -a gpp  'git push -u origin_dblab'
 abbr -a gp   'git push'
 
@@ -244,7 +243,7 @@ abbr -a kr 'keybase chat read'
 abbr -a kl 'keybase chat list'
 abbr -a pr 'gh pr create -t (git show -s --format=%s HEAD) -b (git show -s --format=%B HEAD | tail -n+3)'
 
-complete --command yay --wraps pacman
+# complete --command yay --wraps pacman
 
 if command -v yay > /dev/null
 	abbr -a p 'yay -S'
@@ -255,14 +254,17 @@ if command -v yay > /dev/null
 end
 
 if command -v exa > /dev/null
-	abbr -a l 'exa'
-	abbr -a ls 'exa'
-	abbr -a ll 'exa -l'
-	abbr -a lll 'exa -la'
+        alias Ltg  'exa -laFTS --no-permissions --octal-permissions --group-directories-first --time-style iso'
+        alias Lt   'exa -laFTS -I .git --no-permissions --octal-permissions --group-directories-first --time-style iso'
+        alias L    'exa -laFS --no-permissions --octal-permissions --group-directories-first --time-style iso'
+        alias llt  'exa -1aFT --group-directories-first'
+        alias ll   'exa -1aF --group-directories-first'
+        alias lt   'exa -1FT --group-directories-first'
+        alias l    'exa -1F --group-directories-first'
     else
-	abbr -a l 'ls'
+	abbr -a l  'ls'
 	abbr -a ll 'ls -l'
-	abbr -a lll 'ls -la'
+	abbr -a L  'ls -la'
 end
 
 if test -f /usr/share/autojump/autojump.fish;
