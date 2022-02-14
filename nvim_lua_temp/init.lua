@@ -53,7 +53,6 @@ require('packer').startup(function()
   use "nvim-telescope/telescope-ui-select.nvim"
   use "nvim-telescope/telescope-smart-history.nvim"
 
-  use "rhysd/vim-clang-format"
 
   ------ UI settings
   -- Colorshemes
@@ -92,31 +91,23 @@ require('packer').startup(function()
         vim.api.nvim_set_keymap("n", "<leader>cc", "<Plug>(InYoFace_Toggle) <CR>", {})
       end,
   }
-  -- languages
+  -- languages that benefit from plugins 
   use 'rust-lang/rust.vim'
-  use 'cespare/vim-toml'
   use 'lervag/vimtex'
-  use 'dag/vim-fish'
-  use 'LnL7/vim-nix'
-  use 'plasticboy/vim-markdown'
-  use 'rust-lang/rust.vim'
-  use 'cespare/vim-toml'
-  use 'lervag/vimtex'
-  use 'dag/vim-fish'
-  use 'LnL7/vim-nix'
   use 'plasticboy/vim-markdown'
   use 'keith/swift.vim'
-  use 'pangloss/vim-javascript'
-  use 'maxmellon/vim-jsx-pretty'
+  -- use 'pangloss/vim-javascript'
+  -- use 'maxmellon/vim-jsx-pretty'
   use 'neovimhaskell/haskell-vim'
   use 'elmcast/elm-vim'
-  use 'gleam-lang/gleam.vim'
+  -- use 'gleam-lang/gleam.vim'
   use 'tikhomirov/vim-glsl'
   use 'godlygeek/tabular'
-  use 'google/vim-maktaba'
-  use 'mhartington/formatter.nvim'
-
-  use 'ciaranm/securemodelines'
+  -- use 'google/vim-maktaba'
+  -- use 'mhartington/formatter.nvim'
+  -- use 'ciaranm/securemodelines'
+  -- clang autoformat
+  use "rhysd/vim-clang-format"
 
   ------ LSP settings
   -- Collection of configurations for built-in LSP client
@@ -153,7 +144,7 @@ vim.o.termguicolors = true
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
-vim.cmd[[ let g:completion_enable_auto_paren = 1 ]]
+-- vim.cmd[[ let g:completion_enable_auto_paren = 1 ]]
 vim.cmd[[ let g:rustfmt_autosave = 1 ]]
 vim.cmd[[ let g:clang_format#code_style = 'llvm' ]]
 
@@ -246,7 +237,14 @@ require('lualine').setup({
 
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
--- require('telescope').load_extension('fzf')
+require('telescope').load_extension('fzf')
+
+local tb = "<cmd>lua require('telescope.builtin')."
+vim.api.nvim_set_keymap('n','<leader>ff', tb..'find_files()<cr>',{})
+vim.api.nvim_set_keymap('n','<leader>fg', tb..'live_grep()<cr>',{})
+vim.api.nvim_set_keymap('n','<leader>fb', tb..'buffer()<cr>',{})
+vim.api.nvim_set_keymap('n','<leader>fh', tb..'help_tags()<cr>',{})
+vim.api.nvim_set_keymap('n','<leader>la', tb .. 'lsp_code_actions(require("telescope.themes").get_cursor())<cr>',{})
 
 -- Diagnostic keymaps
 vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
@@ -323,21 +321,6 @@ lspconfig.sumneko_lua.setup {
 -- luasnip setup
 local luasnip = require 'luasnip'
 
-require"lspconfig".efm.setup {
-    init_options = {documentFormatting = true},
-    filetypes = {"lua"},
-    settings = {
-        rootMarkers = {".git/"},
-        languages = {
-            lua = {
-                {
-                    formatCommand = "lua-format -i --no-keep-simple-function-one-line --no-break-after-operator --column-limit=150 --break-after-table-lb",
-                    formatStdin = true
-                }
-            }
-        }
-    }
-}
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
