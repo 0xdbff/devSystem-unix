@@ -315,11 +315,11 @@ vim.o.updatetime = 100
 vim.o.timeoutlen = 260
 
 -- undo dir
-vim.o.undodir = '~/.local/share/nvim/did'
+vim.o.undodir = '/home/db/dev/.temp/nvim/did'
 vim.o.undofile = true
 
 -- Set the number of lines to keep visible above and below the cursor at the top and bottom of the
--- screen, i have a big high-res(4k) monitor, adapt according to your needs
+-- screen
 vim.o.scrolloff = 16
 -- vim.o.nowrap = true
 
