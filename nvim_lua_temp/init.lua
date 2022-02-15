@@ -34,9 +34,14 @@ require('packer').startup(function()
   -- use 'ludovicchabant/vim-gutentags'
   -- EasyMotion provides a much simpler way to use some motions in vim
   -- use 'easymotion/vim-easymotion'
-
+  -- a generic formatter
+  use 'mhartington/formatter.nvim'
+  use 'godlygeek/tabular'
+  --
   use{ "nvim-lua/popup.nvim" }
   use{ "nvim-lua/plenary.nvim" }
+  -- debugging
+  use 'mfussenegger/nvim-dap'
 
   ------ Telescope
   use "nvim-telescope/telescope.nvim"
@@ -52,8 +57,6 @@ require('packer').startup(function()
   use "nvim-telescope/telescope-file-browser.nvim"
   use "nvim-telescope/telescope-ui-select.nvim"
   use "nvim-telescope/telescope-smart-history.nvim"
-  -- a generic formatter
-  use 'mhartington/formatter.nvim'
 
   ------ UI settings
   -- Colorshemes
@@ -100,17 +103,23 @@ require('packer').startup(function()
   use 'neovimhaskell/haskell-vim'
   use 'elmcast/elm-vim'
   use 'tikhomirov/vim-glsl'
-  use 'godlygeek/tabular'
-  -- clang autoformat
+  -- languages Utils
   use 'rhysd/vim-clang-format'
-  -- Ts Utils
   use 'jose-elias-alvarez/nvim-lsp-ts-utils'
+  use 'simrat39/rust-tools.nvim'
+  -- rust crates management
+  use {
+    'saecki/crates.nvim',
+    tag = 'v0.1.0',
+    requires = { 'nvim-lua/plenary.nvim' },
+    config = function()
+        require('crates').setup()
+    end,
+  }
 
   ------ LSP settings
   -- Collection of configurations for built-in LSP client
   use 'neovim/nvim-lspconfig'
-  -- rust inlay hints
-  use 'nvim-lua/lsp_extensions.nvim'
   -- Autocomplete plugins
   use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-buffer'
@@ -167,11 +176,131 @@ vim.cmd [[
 augroup rust | au!
     " Set the text width in Rust files to 80, for comment wrapping.
     au Filetype rust setlocal textwidth=80
-    autocmd BufNewFile,BufRead,BufEnter,BufWinEnter,TabEnter,BufWritePost *.rs
-    \ lua require'lsp_extensions'.inlay_hints{ prefix = '▷ ', highlight = "Comment",
-    \ enabled = { "TypeHint", "ChainingHint", "ParameterHint" } }
+    " au BufNewFile,BufRead *.rs :require('rust-tools').setup({})
 augroup END
 ]]
+
+require('rust-tools').setup({})
+
+-- require("rust-tools").setup({
+--     tools = { -- rust-tools options
+--         -- Automatically set inlay hints (type hints)
+--         autoSetHints = true,
+--
+--         -- Whether to show hover actions inside the hover window
+--         -- This overrides the default hover handler 
+--         hover_with_actions = true,
+--
+--         -- how to execute terminal commands
+--         -- options right now: termopen / quickfix
+--         executor = require("rust-tools/executors").termopen,
+--
+--         runnables = {
+--             -- whether to use telescope for selection menu or not
+--             use_telescope = true
+--
+--             -- rest of the opts are forwarded to telescope
+--         },
+--
+--         debuggables = {
+--             -- whether to use telescope for selection menu or not
+--             use_telescope = true
+--
+--             -- rest of the opts are forwarded to telescope
+--         },
+--
+--         -- These apply to the default RustSetInlayHints command
+--         inlay_hints = {
+--
+--             -- Only show inlay hints for the current line
+--             only_current_line = false,
+--
+--             -- Event which triggers a refersh of the inlay hints.
+--             -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
+--             -- not that this may cause  higher CPU usage.
+--             -- This option is only respected when only_current_line and
+--             -- autoSetHints both are true.
+--             only_current_line_autocmd = "CursorHold",
+--
+--             -- wheter to show parameter hints with the inlay hints or not
+--             show_parameter_hints = true,
+--
+--             -- whether to show variable name before type hints with the inlay hints or not
+--             show_variable_name = false,
+--
+--             -- prefix for parameter hints
+--             parameter_hints_prefix = "<- ",
+--
+--             -- prefix for all the other hints (type, chaining)
+--             other_hints_prefix = "=> ",
+--
+--             -- whether to align to the length of the longest line in the file
+--             max_len_align = false,
+--
+--             -- padding from the left if max_len_align is true
+--             max_len_align_padding = 1,
+--
+--             -- whether to align to the extreme right or not
+--             right_align = false,
+--
+--             -- padding from the right if right_align is true
+--             right_align_padding = 7,
+--
+--             -- The color of the hints
+--             highlight = "Comment",
+--         },
+--         hover_actions = {
+--             -- the border that is used for the hover window
+--             -- see vim.api.nvim_open_win()
+--             border = {
+--                 {"╭", "FloatBorder"}, {"─", "FloatBorder"},
+--                 {"╮", "FloatBorder"}, {"│", "FloatBorder"},
+--                 {"╯", "FloatBorder"}, {"─", "FloatBorder"},
+--                 {"╰", "FloatBorder"}, {"│", "FloatBorder"}
+--             },
+--             -- whether the hover action window gets automatically focused
+--             auto_focus = false
+--         },
+--         -- settings for showing the crate graph based on graphviz and the dot
+--         -- command
+--         crate_graph = {
+--             -- Backend used for displaying the graph
+--             -- see: https://graphviz.org/docs/outputs/
+--             -- default: x11
+--             backend = "x11",
+--             -- where to store the output, nil for no output stored (relative
+--             -- path from pwd)
+--             -- default: nil
+--             output = nil,
+--             -- command to pipe the output to, nil for no piping
+--             pipe = nil,
+--             -- NOTE: Be careful when using pipe and output together
+--             -- true for all crates.io and external crates, false only the local
+--             -- crates
+--             -- default: true
+--             full = true,
+--         }
+--     },
+--     -- all the opts to send to nvim-lspconfig
+--     -- these override the defaults set by rust-tools.nvim
+--     -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
+--     server = {
+--         -- standalone file support
+--         -- setting it to false may improve startup time
+--         standalone = false,
+--     }, -- rust-analyer options
+--
+--     -- debugging stuff
+--     dap = {
+--         adapter = {
+--             ype = 'executable',
+--             command = 'lldb-vscode',
+--             name = "rt_lldb"
+--         }
+--     }
+-- })
+--
+-- require('rust-tools.inlay_hints').set_inlay_hints()
 
 -- Copy and paste to/from system clipboard
 vim.cmd[[ vmap <leader>y "+y ]]
@@ -184,6 +313,15 @@ vim.cmd[[ vmap <leader>P "+P ]]
 -- i like things fast
 vim.o.updatetime = 100
 vim.o.timeoutlen = 260
+
+-- undo dir
+vim.o.undodir = '~/.local/share/nvim/did'
+vim.o.undofile = true
+
+-- Set the number of lines to keep visible above and below the cursor at the top and bottom of the
+-- screen, i have a big high-res(4k) monitor, adapt according to your needs
+vim.o.scrolloff = 16
+-- vim.o.nowrap = true
 
 -- better comments
 vim.o.textwidth = 80
