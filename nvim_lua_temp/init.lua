@@ -1,4 +1,4 @@
--- use space as the leader key
+
 vim.g.mapleader = ' '
 
 -- packer path
@@ -49,18 +49,18 @@ require('packer').startup(function()
 	"nvim-telescope/telescope-fzf-native.nvim",
 	run = "make"
   }
-  use "nvim-telescope/telescope-rs.nvim"
-  use "nvim-telescope/telescope-fzf-writer.nvim"
-  use "nvim-telescope/telescope-github.nvim"
-  use "nvim-telescope/telescope-symbols.nvim"
-  use "nvim-telescope/telescope-hop.nvim"
-  use "nvim-telescope/telescope-file-browser.nvim"
-  use "nvim-telescope/telescope-ui-select.nvim"
-  use "nvim-telescope/telescope-smart-history.nvim"
+  -- use "nvim-telescope/telescope-rs.nvim"
+  -- use "nvim-telescope/telescope-fzf-writer.nvim"
+  -- use "nvim-telescope/telescope-github.nvim"
+  -- use "nvim-telescope/telescope-symbols.nvim"
+  -- use "nvim-telescope/telescope-hop.nvim"
+  -- use "nvim-telescope/telescope-file-browser.nvim"
+  -- use "nvim-telescope/telescope-ui-select.nvim"
+  -- use "nvim-telescope/telescope-smart-history.nvim"
 
   ------ UI settings
   -- Colorshemes
-  use 'mjlbach/onedark.nvim'
+  -- use 'mjlbach/onedark.nvim'
   -- use 'navarasu/onedark.nvim'
   use 'EdenEast/nightfox.nvim'
   -- Status line
@@ -106,7 +106,7 @@ require('packer').startup(function()
   -- languages Utils
   use 'rhysd/vim-clang-format'
   use 'jose-elias-alvarez/nvim-lsp-ts-utils'
-  use 'simrat39/rust-tools.nvim'
+  -- use 'simrat39/rust-tools.nvim'
   -- rust crates management
   use {
     'saecki/crates.nvim',
@@ -172,15 +172,14 @@ augroup c | au!
 augroup END
 ]]
 
-vim.cmd [[
-augroup rust | au!
-    " Set the text width in Rust files to 80, for comment wrapping.
-    au Filetype rust setlocal textwidth=80
-    " au BufNewFile,BufRead *.rs :require('rust-tools').setup({})
-augroup END
-]]
+-- vim.cmd [[
+-- augroup rust | au!
+--     " Set the text width in Rust files to 80, for comment wrapping.
+--     au Filetype rust setlocal textwidth=80
+--     " au BufNewFile,BufRead *.rs :require('rust-tools').setup({})
+-- augroup END
+-- ]]
 
-require('rust-tools').setup({})
 
 -- require("rust-tools").setup({
 --     tools = { -- rust-tools options
@@ -188,7 +187,7 @@ require('rust-tools').setup({})
 --         autoSetHints = true,
 --
 --         -- Whether to show hover actions inside the hover window
---         -- This overrides the default hover handler 
+--         -- This overrides the default hover handler
 --         hover_with_actions = true,
 --
 --         -- how to execute terminal commands
@@ -318,9 +317,9 @@ vim.o.timeoutlen = 260
 vim.o.undodir = '/home/db/dev/.temp/nvim/did'
 vim.o.undofile = true
 
--- Set the number of lines to keep visible above and below the cursor at the top and bottom of the
--- screen
-vim.o.scrolloff = 16
+-- Set the number of lines to keep visible above and below the cursor at the
+-- top and bottom of the screen
+vim.o.scrolloff = 12
 -- vim.o.nowrap = true
 
 -- better comments
@@ -400,19 +399,20 @@ vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<
 local lspconfig = require 'lspconfig'
 local on_attach = function(_, bufnr)
   local opts = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
+  local lspkeymap = vim.api.nvim_buf_set_keymap
+  lspkeymap(bufnr, 'n', 'gD'         , '<cmd>lua vim.lsp.buf.declaration()<CR>'                                , opts)
+  lspkeymap(bufnr, 'n', 'gd'         , '<cmd>lua vim.lsp.buf.definition()<CR>'                                 , opts)
+  lspkeymap(bufnr, 'n', 'K'          , '<cmd>lua vim.lsp.buf.hover()<CR>'                                      , opts)
+  lspkeymap(bufnr, 'n', 'gi'         , '<cmd>lua vim.lsp.buf.implementation()<CR>'                             , opts)
+  lspkeymap(bufnr, 'n', '<C-k>'      , '<cmd>lua vim.lsp.buf.signature_help()<CR>'                             , opts)
+  lspkeymap(bufnr, 'n', '<leader>wa' , '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>'                       , opts)
+  lspkeymap(bufnr, 'n', '<leader>wr' , '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>'                    , opts)
+  lspkeymap(bufnr, 'n', '<leader>wl' , '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>' , opts)
+  lspkeymap(bufnr, 'n', '<leader>D'  , '<cmd>lua vim.lsp.buf.type_definition()<CR>'                            , opts)
+  lspkeymap(bufnr, 'n', '<leader>rn' , '<cmd>lua vim.lsp.buf.rename()<CR>'                                     , opts)
+  lspkeymap(bufnr, 'n', 'gr'         , '<cmd>lua vim.lsp.buf.references()<CR>'                                 , opts)
+  lspkeymap(bufnr, 'n', '<leader>ca' , '<cmd>lua vim.lsp.buf.code_action()<CR>'                                , opts)
+  lspkeymap(bufnr, 'n', '<leader>so' , [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]]    , opts)
   vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 end
 
@@ -421,13 +421,19 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable the following language servers, quick setup default settings
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+local servers = { 'clangd', 'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities,
   }
 end
+
+-- Rust
+lspconfig.rust_analyzer.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
 
 -- Make runtime files discoverable to the server
 local runtime_path = vim.split(package.path, ';')
@@ -509,4 +515,36 @@ cmp.setup {
   },
 }
 
-vim.cmd [[colorscheme onedark]]
+-- require('rust-tools').setup({})
+-- require('rust-tools.inlay_hints').set_inlay_hints()
+-- require'rust-tools.open_cargo_toml'.open_cargo_toml()
+
+-- Colorscheme
+local dbfox = require('nightfox')
+
+-- This function set the configuration of nightfox. If a value is not passed in the setup function
+-- it will be taken from the default configuration above
+dbfox.setup({
+  fox = "nightfox", -- change the colorscheme to use nordfox
+  styles = {
+    comments = "italic", -- change style of comments to be italic
+    -- keywords = "bold", -- change style of keywords to be bold
+    functions = "italic" -- styles can be a comma separated list
+  },
+  -- inverse = {
+  --   match_paren = true, -- inverse the highlighting of match_parens
+  -- },
+  -- colors = {
+  --   red = "#FF000", -- Override the red color for MAX POWER
+  --   bg_alt = "#000000",
+  -- },
+  -- hlgroups = {
+  --   TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
+  --   LspCodeLens = { bg = "#000000", style = "italic" },
+  -- }
+})
+
+-- Load the configuration set above and apply the colorscheme
+dbfox.load()
+
+-- vim.cmd [[colorscheme onedark]]
