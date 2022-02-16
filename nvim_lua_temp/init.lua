@@ -62,7 +62,7 @@ require('packer').startup(function()
   -- Colorshemes
   -- use 'mjlbach/onedark.nvim'
   -- use 'navarasu/onedark.nvim'
-  use 'EdenEast/nightfox.nvim'
+  use 'Db-dev2002/dbfox.nvim'
   -- Status line
   use {
     'nvim-lualine/lualine.nvim',
@@ -80,7 +80,12 @@ require('packer').startup(function()
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   -- color codes highlighter
-  use "norcalli/nvim-colorizer.lua"
+  use{
+    "norcalli/nvim-colorizer.lua",
+    config = function ()
+        require("colorizer").setup()
+    end,
+  }
   -- ansi escape codes(colors) ft
   use {
     "norcalli/nvim-terminal.lua",
@@ -117,7 +122,7 @@ require('packer').startup(function()
     end,
   }
 
-  ------ LSP settings
+  ------ LSP plugins
   -- Collection of configurations for built-in LSP client
   use 'neovim/nvim-lspconfig'
   -- Autocomplete plugins
@@ -525,7 +530,7 @@ local dbfox = require('nightfox')
 -- This function set the configuration of nightfox. If a value is not passed in the setup function
 -- it will be taken from the default configuration above
 dbfox.setup({
-  fox = "nightfox", -- change the colorscheme to use nordfox
+  fox = "dbfox", -- change the colorscheme to use nordfox
   styles = {
     comments = "italic", -- change style of comments to be italic
     -- keywords = "bold", -- change style of keywords to be bold
@@ -534,10 +539,9 @@ dbfox.setup({
   -- inverse = {
   --   match_paren = true, -- inverse the highlighting of match_parens
   -- },
-  -- colors = {
-  --   red = "#FF000", -- Override the red color for MAX POWER
-  --   bg_alt = "#000000",
-  -- },
+  colors = {
+      bg = '#23272e'
+  },
   -- hlgroups = {
   --   TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
   --   LspCodeLens = { bg = "#000000", style = "italic" },
