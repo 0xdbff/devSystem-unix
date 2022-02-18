@@ -38,10 +38,13 @@ require('packer').startup(function()
   use 'mhartington/formatter.nvim'
   use 'godlygeek/tabular'
   --
-  use{ "nvim-lua/popup.nvim" }
-  use{ "nvim-lua/plenary.nvim" }
+  use 'nvim-lua/popup.nvim'
+  use 'nvim-lua/plenary.nvim'
   -- debugging
   use 'mfussenegger/nvim-dap'
+  -- better terminal support
+  use 'akinsho/toggleterm.nvim'
+
 
   ------ Telescope
   use "nvim-telescope/telescope.nvim"
@@ -326,7 +329,7 @@ vim.o.undofile = true
 -- top and bottom of the screen
 vim.o.scrolloff = 12
 -- vim.o.nowrap = true
-
+vim.o.termguicolors = true
 -- better comments
 vim.o.textwidth = 80
 -- quick save with <leader> w
@@ -379,9 +382,6 @@ require'nvim-treesitter.configs'.setup({
 
 require('Comment').setup()
 
-require('lualine').setup({
-    theme = 'onedark'
-})
 
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
@@ -435,7 +435,7 @@ for _, lsp in ipairs(servers) do
 end
 
 -- Rust
-lspconfig.rust_analyzer.setup{
+lspconfig.rust_analyzer.setup {
     on_attach = on_attach,
     capabilities = capabilities,
 }
@@ -520,13 +520,36 @@ cmp.setup {
   },
 }
 
+require("toggleterm").setup {
+  -- -- size can be a number or function which is passed the current terminal
+  -- size = 20 | function(term)
+  --   if term.direction == "horizontal" then
+  --     return 15
+  --   elseif term.direction == "vertical" then
+  --     return vim.o.columns * 0.4
+  --   end
+  -- end,
+  open_mapping = [[<c-\>]],
+  hide_numbers = true, -- hide the number column in toggleterm buffers
+  shade_filetypes = {},
+  shade_terminals = true,
+  shading_factor = 1, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+  start_in_insert = true,
+  insert_mappings = true, -- whether or not the open mapping applies in insert mode
+  terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
+  persist_size = true,
+  direction = 'vertical',
+  size = 50,
+  close_on_exit = true, -- close the terminal window when the process exits
+  shell = "/usr/bin/env fish", -- change the default shell
+}
+
 -- require('rust-tools').setup({})
 -- require('rust-tools.inlay_hints').set_inlay_hints()
 -- require'rust-tools.open_cargo_toml'.open_cargo_toml()
 
 -- Colorscheme
 local dbfox = require('nightfox')
-
 -- This function set the configuration of nightfox. If a value is not passed in the setup function
 -- it will be taken from the default configuration above
 dbfox.setup({
@@ -539,9 +562,9 @@ dbfox.setup({
   -- inverse = {
   --   match_paren = true, -- inverse the highlighting of match_parens
   -- },
-  colors = {
-      bg = '#23272e'
-  },
+  -- colors = {
+  --     bg = '#23272e'
+  -- },
   -- hlgroups = {
   --   TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
   --   LspCodeLens = { bg = "#000000", style = "italic" },
@@ -551,4 +574,7 @@ dbfox.setup({
 -- Load the configuration set above and apply the colorscheme
 dbfox.load()
 
+require('lualine').setup({
+    theme = 'dbfox'
+})
 -- vim.cmd [[colorscheme onedark]]
