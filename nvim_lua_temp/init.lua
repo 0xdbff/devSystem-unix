@@ -105,7 +105,7 @@ require('packer').startup(function()
   }
   -- languages that benefit from plugins
   use 'rust-lang/rust.vim'
-  use 'lervag/vimtex'
+  -- use 'lervag/vimtex'
   use 'plasticboy/vim-markdown'
   use 'keith/swift.vim'
   use 'neovimhaskell/haskell-vim'
@@ -169,6 +169,29 @@ vim.cmd[[ nnoremap <C-J> <C-W><C-J> ]]
 vim.cmd[[ nnoremap <C-K> <C-W><C-K> ]]
 vim.cmd[[ nnoremap <C-L> <C-W><C-L> ]]
 vim.cmd[[ nnoremap <C-H> <C-W><C-H> ]]
+-- #23272e
+--
+vim.opt.list = true
+-- vim.opt.listchars:append("space:⋅")
+-- vim.opt.listchars:append("eol:↴")
+
+----- indent guidelines
+vim.cmd [[highlight IndentBlank_bar guifg=#27333f gui=nocombine]]
+-- vim.cmd [[highlight IndentBlank_bar guibg=#21252D gui=nocombine]]
+-- vim.cmd [[highlight IndentBlank_dot guifg=#515869 gui=nocombine]]
+-- vim.cmd [[highlight IndentBlank_dot guibg=#21252D gui=nocombine]]
+
+require("indent_blankline").setup {
+    -- space_char_blankline = "",
+    -- show_current_context = true,
+    -- show_current_context_start = true,
+    char_highlight_list = {
+        "IndentBlank_bar",
+    },
+    -- space_char_highlight_list = {
+    --     "IndentBlank_dot",
+    -- },
+}
 
 -- Make windows to be basically the same size
 vim.cmd[[ nnoremap <leader>= <C-w>= ]]
@@ -356,28 +379,27 @@ require('telescope').setup({
 })
 
 require'nvim-treesitter.configs'.setup({
-  -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-  ensure_installed = "maintained",
+    -- One of "all", "maintained" (parsers with maintainers), or a list of languages
+    ensure_installed = "maintained",
 
-  -- Install languages synchronously (only applied to `ensure_installed`)
-  sync_install = false,
+    -- Install languages synchronously (only applied to `ensure_installed`)
+    sync_install = false,
+    -- List of parsers to ignore installing
+    ignore_install = { "javascript" },
 
-  -- List of parsers to ignore installing
-  ignore_install = { "javascript" },
+    highlight = {
+        -- `false` will disable the whole extension
+        enable = true,
 
-  highlight = {
-    -- `false` will disable the whole extension
-    enable = true,
+        -- list of language that will be disabled
+        -- disable = { "c", "rust" },
 
-    -- list of language that will be disabled
-    disable = { "c", "rust" },
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false,
+    },
 })
 
 require('Comment').setup()
@@ -447,30 +469,30 @@ table.insert(runtime_path, 'lua/?/init.lua')
 
 -- Lua
 lspconfig.sumneko_lua.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = { 'vim' },
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file('', true),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = 'LuaJIT',
+                -- Setup your lua path
+                path = runtime_path,
+            },
+            diagnostics = {
+             -- Get the language server to recognize the `vim` global
+                globals = { 'vim' },
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = vim.api.nvim_get_runtime_file('', true),
+            },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = {
+                enable = false,
+            },
+        },
     },
-  },
 }
 
 -- luasnip setup

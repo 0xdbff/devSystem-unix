@@ -190,7 +190,7 @@ function mkcd
             echo "dir already exits"
             cd ./$argv
             exit 0
-    else 
+        else
             if mkdir -p $argv
                     cd ./$argv
             else
