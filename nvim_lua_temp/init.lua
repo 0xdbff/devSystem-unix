@@ -4,6 +4,10 @@ vim.g.mapleader = ' '
 -- packer path
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 
+-- map locals
+local nmo = {noremap = true, silent = true}
+local nvim_keymap = vim.api.nvim_set_keymap
+
 -- Install packer
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
@@ -63,16 +67,17 @@ require('packer').startup(function()
 
   ------ UI settings
   -- Colorshemes
-  -- use 'mjlbach/onedark.nvim'
+  use 'mjlbach/onedark.nvim'
   -- use 'navarasu/onedark.nvim'
   use 'Db-dev2002/dbfox.nvim'
+  use 'Db-dev2002/sonokai'
   -- Status line
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
   -- Add indentation guides even on blank lines
-  use 'lukas-reineke/indent-blankline.nvim'
+  -- use 'lukas-reineke/indent-blankline.nvim'
   -- Add git related info in the signs columns and popups
   use {
 	'lewis6991/gitsigns.nvim',
@@ -169,29 +174,28 @@ vim.cmd[[ nnoremap <C-J> <C-W><C-J> ]]
 vim.cmd[[ nnoremap <C-K> <C-W><C-K> ]]
 vim.cmd[[ nnoremap <C-L> <C-W><C-L> ]]
 vim.cmd[[ nnoremap <C-H> <C-W><C-H> ]]
--- #23272e
+
+-- vim.opt.list = true
+-- vim.opt.listchars:append("space:⋅")
+-- -- vim.opt.listchars:append("eol:↴")
 --
-vim.opt.list = true
-vim.opt.listchars:append("space:⋅")
--- vim.opt.listchars:append("eol:↴")
-
------ indent guidelines
-vim.cmd [[highlight IndentBlank_bar guifg=#27333f gui=nocombine]]
--- vim.cmd [[highlight IndentBlank_bar guibg=#21252D gui=nocombine]]
-vim.cmd [[highlight IndentBlank_dot guifg=#313845 gui=nocombine]]
--- vim.cmd [[highlight IndentBlank_dot guibg=#21252D gui=nocombine]]
-
-require("indent_blankline").setup {
-    -- space_char_blankline = "",
-    -- show_current_context = true,
-    -- show_current_context_start = true,
-    char_highlight_list = {
-        "IndentBlank_bar",
-    },
-    space_char_highlight_list = {
-        "IndentBlank_dot",
-    },
-}
+-- ----- indent guidelines
+-- vim.cmd [[highlight IndentBlank_bar guifg=#27333f gui=nocombine]]
+-- -- vim.cmd [[highlight IndentBlank_bar guibg=#22262e gui=nocombine]]
+-- vim.cmd [[highlight IndentBlank_dot guifg=#313845 gui=nocombine]]
+-- -- vim.cmd [[highlight IndentBlank_dot guibg=#22262e gui=nocombine]]
+--
+-- require("indent_blankline").setup {
+--     -- space_char_blankline = "",
+--     -- show_current_context = true,
+--     -- show_current_context_start = true,
+--     char_highlight_list = {
+--         "IndentBlank_bar",
+--     },
+--     space_char_highlight_list = {
+--         "IndentBlank_dot",
+--     },
+-- }
 
 -- Make windows to be basically the same size
 vim.cmd[[ nnoremap <leader>= <C-w>= ]]
@@ -350,14 +354,29 @@ vim.o.undofile = true
 
 -- Set the number of lines to keep visible above and below the cursor at the
 -- top and bottom of the screen
-vim.o.scrolloff = 12
+vim.o.scrolloff = 8
 -- vim.o.nowrap = true
 vim.o.termguicolors = true
 -- better comments
 vim.o.textwidth = 80
+vim.o.colorcolumn = '101'
+
+vim.cmd[[ set nowrap ]]
+vim.cmd[[ nnoremap <leader><leader> <c-^> ]]
+vim.cmd[[ nmap <silent> <leader>/ :noh<cr> ]]
+
+-- quick switch buffers
+nvim_keymap('n', '<leader><leader>', '<c-^>' , nmo)
+-- reset highlight
+nvim_keymap('n', '<leader>/', '<cmd>noh<cr>' , nmo)
+
+-- create new files adjacent to current working dir
+nvim_keymap('n', '<leader>e', '<cmd>:e <C-R>=expand("%:p:h") . "/" <CR>', nmo)
+nvim_keymap('n', '<leader>te', '<cmd>:tabe <C-R>=expand("%:p:h") . "/" <CR>', nmo)
+
 -- quick save with <leader> w
 -- vim.cmd[[ nmap <leader>w :w<CR> ]]
-vim.api.nvim_set_keymap('n','<leader>w', '<cmd>w<CR>', {} )
+-- vim.api.nvim_set_keymap('n','<leader>w', '<cmd>w<CR>', {} )
 
 require('telescope').setup({
     defaults = {
@@ -410,36 +429,35 @@ require('Comment').setup()
 require('telescope').load_extension('fzf')
 
 local tb = "<cmd>lua require('telescope.builtin')."
-vim.api.nvim_set_keymap('n','<leader>ff', tb..'find_files()<cr>',{})
-vim.api.nvim_set_keymap('n','<leader>fg', tb..'live_grep()<cr>',{})
-vim.api.nvim_set_keymap('n','<leader>fb', tb..'buffer()<cr>',{})
-vim.api.nvim_set_keymap('n','<leader>fh', tb..'help_tags()<cr>',{})
-vim.api.nvim_set_keymap('n','<leader>la', tb .. 'lsp_code_actions(require("telescope.themes").get_cursor())<cr>',{})
+nvim_keymap('n','<leader>ff', tb..'find_files()<cr>',{})
+nvim_keymap('n','<leader>fg', tb..'live_grep()<cr>',{})
+nvim_keymap('n','<leader>fb', tb..'buffer()<cr>',{})
+nvim_keymap('n','<leader>fh', tb..'help_tags()<cr>',{})
+nvim_keymap('n','<leader>la', tb .. 'lsp_code_actions(require("telescope.themes").get_cursor())<cr>',{})
 
 -- Diagnostic keymaps
-vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', { noremap = true, silent = true })
+nvim_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', nmo)
+nvim_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', nmo)
+nvim_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', nmo)
+nvim_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', nmo)
 
 -- LSP settings
 local lspconfig = require 'lspconfig'
 local on_attach = function(_, bufnr)
-  local opts = { noremap = true, silent = true }
   local lspkeymap = vim.api.nvim_buf_set_keymap
-  lspkeymap(bufnr, 'n', 'gD'         , '<cmd>lua vim.lsp.buf.declaration()<CR>'                                , opts)
-  lspkeymap(bufnr, 'n', 'gd'         , '<cmd>lua vim.lsp.buf.definition()<CR>'                                 , opts)
-  lspkeymap(bufnr, 'n', 'K'          , '<cmd>lua vim.lsp.buf.hover()<CR>'                                      , opts)
-  lspkeymap(bufnr, 'n', 'gi'         , '<cmd>lua vim.lsp.buf.implementation()<CR>'                             , opts)
-  lspkeymap(bufnr, 'n', '<C-k>'      , '<cmd>lua vim.lsp.buf.signature_help()<CR>'                             , opts)
-  lspkeymap(bufnr, 'n', '<leader>wa' , '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>'                       , opts)
-  lspkeymap(bufnr, 'n', '<leader>wr' , '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>'                    , opts)
-  lspkeymap(bufnr, 'n', '<leader>wl' , '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>' , opts)
-  lspkeymap(bufnr, 'n', '<leader>D'  , '<cmd>lua vim.lsp.buf.type_definition()<CR>'                            , opts)
-  lspkeymap(bufnr, 'n', '<leader>rn' , '<cmd>lua vim.lsp.buf.rename()<CR>'                                     , opts)
-  lspkeymap(bufnr, 'n', 'gr'         , '<cmd>lua vim.lsp.buf.references()<CR>'                                 , opts)
-  lspkeymap(bufnr, 'n', '<leader>ca' , '<cmd>lua vim.lsp.buf.code_action()<CR>'                                , opts)
-  lspkeymap(bufnr, 'n', '<leader>so' , [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]]    , opts)
+  lspkeymap(bufnr, 'n', 'gD'         , '<cmd>lua vim.lsp.buf.declaration()<CR>'                                , nmo)
+  lspkeymap(bufnr, 'n', 'gd'         , '<cmd>lua vim.lsp.buf.definition()<CR>'                                 , nmo)
+  lspkeymap(bufnr, 'n', 'K'          , '<cmd>lua vim.lsp.buf.hover()<CR>'                                      , nmo)
+  lspkeymap(bufnr, 'n', 'gi'         , '<cmd>lua vim.lsp.buf.implementation()<CR>'                             , nmo)
+  lspkeymap(bufnr, 'n', '<C-k>'      , '<cmd>lua vim.lsp.buf.signature_help()<CR>'                             , nmo)
+  lspkeymap(bufnr, 'n', '<leader>wa' , '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>'                       , nmo)
+  lspkeymap(bufnr, 'n', '<leader>wr' , '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>'                    , nmo)
+  lspkeymap(bufnr, 'n', '<leader>wl' , '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>' , nmo)
+  lspkeymap(bufnr, 'n', '<leader>D'  , '<cmd>lua vim.lsp.buf.type_definition()<CR>'                            , nmo)
+  lspkeymap(bufnr, 'n', '<leader>rn' , '<cmd>lua vim.lsp.buf.rename()<CR>'                                     , nmo)
+  lspkeymap(bufnr, 'n', 'gr'         , '<cmd>lua vim.lsp.buf.references()<CR>'                                 , nmo)
+  lspkeymap(bufnr, 'n', '<leader>ca' , '<cmd>lua vim.lsp.buf.code_action()<CR>'                                , nmo)
+  lspkeymap(bufnr, 'n', '<leader>so' , [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]]    , nmo)
   vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 end
 
@@ -570,33 +588,33 @@ require("toggleterm").setup {
 -- require('rust-tools.inlay_hints').set_inlay_hints()
 -- require'rust-tools.open_cargo_toml'.open_cargo_toml()
 
--- Colorscheme
-local dbfox = require('nightfox')
--- This function set the configuration of nightfox. If a value is not passed in the setup function
--- it will be taken from the default configuration above
-dbfox.setup({
-  fox = "dbfox", -- change the colorscheme to use nordfox
-  styles = {
-    comments = "italic", -- change style of comments to be italic
-    -- keywords = "bold", -- change style of keywords to be bold
-    functions = "italic" -- styles can be a comma separated list
-  },
-  -- inverse = {
-  --   match_paren = true, -- inverse the highlighting of match_parens
-  -- },
-  -- colors = {
-  --     bg = '#23272e'
-  -- },
-  -- hlgroups = {
-  --   TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
-  --   LspCodeLens = { bg = "#000000", style = "italic" },
-  -- }
-})
-
--- Load the configuration set above and apply the colorscheme
-dbfox.load()
-
+-- -- Colorscheme
+-- local dbfox = require('nightfox')
+-- -- This function set the configuration of nightfox. If a value is not passed in the setup function
+-- -- it will be taken from the default configuration above
+-- dbfox.setup({
+--   fox = "dbfox", -- change the colorscheme to use nordfox
+--   styles = {
+--     comments = "italic", -- change style of comments to be italic
+--     -- keywords = "bold", -- change style of keywords to be bold
+--     functions = "italic" -- styles can be a comma separated list
+--   },
+--   -- inverse = {
+--   --   match_paren = true, -- inverse the highlighting of match_parens
+--   -- },
+--   -- colors = {
+--   --     bg = '#23272e'
+--   -- },
+--   -- hlgroups = {
+--   --   TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
+--   --   LspCodeLens = { bg = "#000000", style = "italic" },
+--   -- }
+-- })
+--
+-- -- Load the configuration set above and apply the colorscheme
+-- dbfox.load()
+--
 require('lualine').setup({
-    theme = 'dbfox'
+    theme = 'onedark'
 })
--- vim.cmd [[colorscheme onedark]]
+vim.cmd [[colorscheme onedark]]
