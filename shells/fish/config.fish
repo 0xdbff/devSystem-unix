@@ -262,9 +262,9 @@ if command -v exa > /dev/null
         alias lt   'exa -1FT --group-directories-first'
         alias l    'exa -1F --group-directories-first'
     else
-	abbr -a l  'ls'
-	abbr -a ll 'ls -l'
-	abbr -a L  'ls -la'
+	    abbr -a l  'ls'
+	    abbr -a ll 'ls -l'
+	    abbr -a L  'ls -la'
 end
 
 if test -f /usr/share/autojump/autojump.fish;

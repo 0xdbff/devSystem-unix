@@ -371,10 +371,16 @@ nvim_keymap('n', '<leader><leader>', '<c-^>' , nmo)
 nvim_keymap('n', '<leader>/', '<cmd>noh<cr>' , nmo)
 
 -- create new files adjacent to current working dir
-nvim_keymap('n',';w', '<cmd>w<CR>', {} )
 nvim_keymap('n', ';e', ':e <C-R>=expand("%:p:h") . "/" <CR>', {})
 nvim_keymap('n', ';te', ':tabe <C-R>=expand("%:p:h") . "/" <CR>', {})
+-- quick save with ;w
+nvim_keymap('n',';w', '<cmd>w<CR>', {} )
+-- quick suspend with ;s
 nvim_keymap('n', ';s', '<cmd>sus<CR>', {})
+-- !TODO improve
+nvim_keymap('n', ';cr', '<cmd>!cargo run<CR>', {})
+nvim_keymap('n', ';cb', '<cmd>!cargo build<CR>', {})
+nvim_keymap('n', ';cc', '<cmd>!cargo check<CR>', {})
 
 -- quick save with <leader> w
 -- vim.cmd[[ nmap <leader>w :w<CR> ]]
