@@ -365,7 +365,7 @@ local is_linux = (OS=='Linux')
 if (is_linux) then
     vim.o.undodir = '/home/db/dev/.temp/nvim/did'
 elseif (is_darwin) then
-    vim.o.undodir='Users/db/dev/.temp/nvim/did'
+    vim.o.undodir='/Users/db/dev/.temp/nvim/did'
 else
     -- TODO
 end
