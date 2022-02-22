@@ -445,19 +445,21 @@ nvim_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', nmo)
 local lspconfig = require 'lspconfig'
 local on_attach = function(_, bufnr)
   local lspkeymap = vim.api.nvim_buf_set_keymap
-  lspkeymap(bufnr, 'n', 'gD'         , '<cmd>lua vim.lsp.buf.declaration()<CR>'                                , nmo)
-  lspkeymap(bufnr, 'n', 'gd'         , '<cmd>lua vim.lsp.buf.definition()<CR>'                                 , nmo)
-  lspkeymap(bufnr, 'n', 'K'          , '<cmd>lua vim.lsp.buf.hover()<CR>'                                      , nmo)
-  lspkeymap(bufnr, 'n', 'gi'         , '<cmd>lua vim.lsp.buf.implementation()<CR>'                             , nmo)
-  lspkeymap(bufnr, 'n', '<C-k>'      , '<cmd>lua vim.lsp.buf.signature_help()<CR>'                             , nmo)
-  lspkeymap(bufnr, 'n', '<leader>wa' , '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>'                       , nmo)
-  lspkeymap(bufnr, 'n', '<leader>wr' , '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>'                    , nmo)
-  lspkeymap(bufnr, 'n', '<leader>wl' , '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>' , nmo)
-  lspkeymap(bufnr, 'n', '<leader>D'  , '<cmd>lua vim.lsp.buf.type_definition()<CR>'                            , nmo)
-  lspkeymap(bufnr, 'n', '<leader>rn' , '<cmd>lua vim.lsp.buf.rename()<CR>'                                     , nmo)
-  lspkeymap(bufnr, 'n', 'gr'         , '<cmd>lua vim.lsp.buf.references()<CR>'                                 , nmo)
-  lspkeymap(bufnr, 'n', '<leader>ca' , '<cmd>lua vim.lsp.buf.code_action()<CR>'                                , nmo)
-  lspkeymap(bufnr, 'n', '<leader>so' , [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]]    , nmo)
+  local lsp_cmd = '<cmd>lua vim.lsp.buf.'
+  local cmdl = '<cmd>lua'
+  lspkeymap(bufnr, 'n', 'gD'         , lsp_cmd..'declaration()<CR>'                                         , nmo)
+  lspkeymap(bufnr, 'n', 'gd'         , lsp_cmd..'definition()<CR>'                                          , nmo)
+  lspkeymap(bufnr, 'n', 'K'          , lsp_cmd..'hover()<CR>'                                               , nmo)
+  lspkeymap(bufnr, 'n', 'gi'         , lsp_cmd..'implementation()<CR>'                                      , nmo)
+  lspkeymap(bufnr, 'n', '<C-k>'      , lsp_cmd..'signature_help()<CR>'                                      , nmo)
+  lspkeymap(bufnr, 'n', '<leader>wa' , lsp_cmd..'add_workspace_folder()<CR>'                                , nmo)
+  lspkeymap(bufnr, 'n', '<leader>wr' , lsp_cmd..'remove_workspace_folder()<CR>'                             , nmo)
+  lspkeymap(bufnr, 'n', '<leader>wl' , cmdl..'print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>' , nmo)
+  lspkeymap(bufnr, 'n', '<leader>D'  , lsp_cmd..'type_definition()<CR>'                                     , nmo)
+  lspkeymap(bufnr, 'n', '<leader>rn' , lsp_cmd..'rename()<CR>'                                              , nmo)
+  lspkeymap(bufnr, 'n', 'gr'         , lsp_cmd..'references()<CR>'                                          , nmo)
+  lspkeymap(bufnr, 'n', '<leader>ca' , lsp_cmd..'code_action()<CR>'                                         , nmo)
+  lspkeymap(bufnr, 'n', '<leader>so' , [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]] , nmo)
   vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 end
 
