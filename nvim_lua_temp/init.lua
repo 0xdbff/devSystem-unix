@@ -47,7 +47,7 @@ require('packer').startup(function()
   -- debugging
   use 'mfussenegger/nvim-dap'
   -- better terminal support
-  use 'akinsho/toggleterm.nvim'
+  use 'Db-dev2002/toggleterm.nvim'
 
 
   ------ Telescope
@@ -182,7 +182,6 @@ vim.cmd[[ nnoremap <C-H> <C-W><C-H> ]]
 -- ----- indent guidelines
 -- vim.cmd [[highlight IndentBlank_bar guifg=#27333f gui=nocombine]]
 -- -- vim.cmd [[highlight IndentBlank_bar guibg=#22262e gui=nocombine]]
--- vim.cmd [[highlight IndentBlank_dot guifg=#313845 gui=nocombine]]
 -- -- vim.cmd [[highlight IndentBlank_dot guibg=#22262e gui=nocombine]]
 --
 -- require("indent_blankline").setup {
@@ -607,10 +606,22 @@ require("toggleterm").setup {
   terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
   persist_size = true,
   direction = 'vertical',
-  size = 50,
+  size = 100,
   close_on_exit = true, -- close the terminal window when the process exits
   shell = "/usr/bin/env fish", -- change the default shell
 }
+
+function Set_terminal_keymaps()
+  local opts = {noremap = true}
+  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
+  -- vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
+  -- vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
+  -- vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
+  -- vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+end
+
+-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+vim.cmd('autocmd! TermOpen term://* lua Set_terminal_keymaps()')
 
 -- require('rust-tools').setup({})
 -- require('rust-tools.inlay_hints').set_inlay_hints()
@@ -645,4 +656,5 @@ require("toggleterm").setup {
 require('lualine').setup({
     theme = 'onedark'
 })
+
 vim.cmd [[colorscheme onedark]]
