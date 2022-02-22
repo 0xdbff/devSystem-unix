@@ -172,13 +172,13 @@ vim.cmd[[ nnoremap <C-H> <C-W><C-H> ]]
 -- #23272e
 --
 vim.opt.list = true
--- vim.opt.listchars:append("space:⋅")
+vim.opt.listchars:append("space:⋅")
 -- vim.opt.listchars:append("eol:↴")
 
 ----- indent guidelines
 vim.cmd [[highlight IndentBlank_bar guifg=#27333f gui=nocombine]]
 -- vim.cmd [[highlight IndentBlank_bar guibg=#21252D gui=nocombine]]
--- vim.cmd [[highlight IndentBlank_dot guifg=#515869 gui=nocombine]]
+vim.cmd [[highlight IndentBlank_dot guifg=#313845 gui=nocombine]]
 -- vim.cmd [[highlight IndentBlank_dot guibg=#21252D gui=nocombine]]
 
 require("indent_blankline").setup {
@@ -188,9 +188,9 @@ require("indent_blankline").setup {
     char_highlight_list = {
         "IndentBlank_bar",
     },
-    -- space_char_highlight_list = {
-    --     "IndentBlank_dot",
-    -- },
+    space_char_highlight_list = {
+        "IndentBlank_dot",
+    },
 }
 
 -- Make windows to be basically the same size
