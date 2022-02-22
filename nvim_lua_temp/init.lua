@@ -348,10 +348,29 @@ vim.cmd[[ vmap <leader>P "+P ]]
 vim.o.updatetime = 100
 vim.o.timeoutlen = 260
 
--- undo dir
-vim.o.undodir = '/home/db/dev/.temp/nvim/did'
-vim.o.undofile = true
+function Getos()
+    local os_name = io.popen("uname -s 2>/dev/null","r")
+    if os_name then
+       return os_name:read()
+    end
 
+    return "not supported"
+end
+
+OS = Getos()
+local is_darwin = (OS=='Darwin')
+local is_linux = (OS=='Linux')
+
+-- undo dir
+if (is_linux) then
+    vim.o.undodir = '/home/db/dev/.temp/nvim/did'
+elseif (is_darwin) then
+    vim.o.undodir='Users/db/dev/.temp/nvim/did'
+else
+    -- TODO
+end
+
+vim.o.undofile = true
 -- Set the number of lines to keep visible above and below the cursor at the
 -- top and bottom of the screen
 vim.o.scrolloff = 8
