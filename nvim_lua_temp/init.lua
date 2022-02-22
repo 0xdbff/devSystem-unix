@@ -359,7 +359,7 @@ vim.o.scrolloff = 8
 vim.o.termguicolors = true
 -- better comments
 vim.o.textwidth = 80
-vim.o.colorcolumn = '101'
+vim.o.colorcolumn = '102'
 
 vim.cmd[[ set nowrap ]]
 vim.cmd[[ nnoremap <leader><leader> <c-^> ]]
@@ -371,12 +371,13 @@ nvim_keymap('n', '<leader><leader>', '<c-^>' , nmo)
 nvim_keymap('n', '<leader>/', '<cmd>noh<cr>' , nmo)
 
 -- create new files adjacent to current working dir
-nvim_keymap('n', '<leader>e', '<cmd>:e <C-R>=expand("%:p:h") . "/" <CR>', nmo)
-nvim_keymap('n', '<leader>te', '<cmd>:tabe <C-R>=expand("%:p:h") . "/" <CR>', nmo)
+nvim_keymap('n',';w', '<cmd>w<CR>', {} )
+nvim_keymap('n', ';e', ':e <C-R>=expand("%:p:h") . "/" <CR>', {})
+nvim_keymap('n', ';te', ':tabe <C-R>=expand("%:p:h") . "/" <CR>', {})
+nvim_keymap('n', ';s', '<cmd>sus<CR>', {})
 
 -- quick save with <leader> w
 -- vim.cmd[[ nmap <leader>w :w<CR> ]]
--- vim.api.nvim_set_keymap('n','<leader>w', '<cmd>w<CR>', {} )
 
 require('telescope').setup({
     defaults = {
