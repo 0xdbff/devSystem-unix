@@ -49,7 +49,6 @@ require('packer').startup(function()
   -- better terminal support
   use 'Db-dev2002/toggleterm.nvim'
 
-
   ------ Telescope
   use "nvim-telescope/telescope.nvim"
   use {
@@ -67,17 +66,18 @@ require('packer').startup(function()
 
   ------ UI settings
   -- Colorshemes
-  use 'mjlbach/onedark.nvim'
-  -- use 'navarasu/onedark.nvim'
+  -- use 'mjlbach/onedark.nvim'
+  use 'navarasu/onedark.nvim'
   use 'Db-dev2002/dbfox.nvim'
   use 'Db-dev2002/sonokai'
+  -- use 'Th3Whit3Wolf/onebuddy'
   -- Status line
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
   -- Add indentation guides even on blank lines
-  -- use 'lukas-reineke/indent-blankline.nvim'
+  use 'lukas-reineke/indent-blankline.nvim'
   -- Add git related info in the signs columns and popups
   use {
 	'lewis6991/gitsigns.nvim',
@@ -175,26 +175,6 @@ vim.cmd[[ nnoremap <C-K> <C-W><C-K> ]]
 vim.cmd[[ nnoremap <C-L> <C-W><C-L> ]]
 vim.cmd[[ nnoremap <C-H> <C-W><C-H> ]]
 
--- vim.opt.list = true
--- vim.opt.listchars:append("space:⋅")
--- -- vim.opt.listchars:append("eol:↴")
---
--- ----- indent guidelines
--- vim.cmd [[highlight IndentBlank_bar guifg=#27333f gui=nocombine]]
--- -- vim.cmd [[highlight IndentBlank_bar guibg=#22262e gui=nocombine]]
--- -- vim.cmd [[highlight IndentBlank_dot guibg=#22262e gui=nocombine]]
---
--- require("indent_blankline").setup {
---     -- space_char_blankline = "",
---     -- show_current_context = true,
---     -- show_current_context_start = true,
---     char_highlight_list = {
---         "IndentBlank_bar",
---     },
---     space_char_highlight_list = {
---         "IndentBlank_dot",
---     },
--- }
 
 -- Make windows to be basically the same size
 vim.cmd[[ nnoremap <leader>= <C-w>= ]]
@@ -377,7 +357,7 @@ vim.o.scrolloff = 8
 vim.o.termguicolors = true
 -- better comments
 vim.o.textwidth = 80
-vim.o.colorcolumn = '102'
+vim.o.colorcolumn = '100'
 
 vim.cmd[[ set nowrap ]]
 vim.cmd[[ nnoremap <leader><leader> <c-^> ]]
@@ -407,9 +387,10 @@ nvim_keymap('n', ';cc', '<cmd>!cargo check<CR>', {})
 require('telescope').setup({
     defaults = {
         file_ignore_patterns = {"node_modules", "/dist"},
-	layout_strategy = "bottom_pane",
+	layout_strategy = "horizontal",
     		layout_config = {
-      		height = 0.26,
+      		height = 0.6,
+            width= 0.6,
 		preview_cutoff = 120
       		-- preview_width = 0.55,
     	},
@@ -653,9 +634,63 @@ vim.cmd('autocmd! TermOpen term://* lua Set_terminal_keymaps()')
 --
 -- -- Load the configuration set above and apply the colorscheme
 -- dbfox.load()
---
+-- --
 require('lualine').setup({
     theme = 'onedark'
 })
 
-vim.cmd [[colorscheme onedark]]
+require('onedark').setup  {
+    -- Main options --
+    style = 'dark', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+    transparent = false,  -- Show/hide background
+    term_colors = true, -- Change terminal color as per the selected theme style
+    ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
+    -- toggle theme style ---
+    toggle_style_key = '<leader>ts', -- Default keybinding to toggle
+    toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
+
+    -- Change code style ---
+    -- Options are italic, bold, underline, none
+    -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
+    code_style = {
+        comments = 'Italic',
+        keywords = 'none',
+        functions = 'none',
+        strings = 'italic',
+        variables = 'none'
+    },
+
+    -- Custom Highlights --
+    colors = {}, -- Override default colors
+    highlights = {}, -- Override highlight groups
+
+    -- Plugins Config --
+    diagnostics = {
+        darker = false, -- darker colors for diagnostic
+        undercurl = true,   -- use undercurl instead of underline for diagnostics
+        background = false,    -- use background color for virtual text
+    },
+}
+require('onedark').load()
+
+vim.opt.list = true
+-- vim.opt.listchars:append("space:⋅")
+-- vim.opt.listchars:append("eol:↴")
+
+----- indent guidelines
+vim.cmd [[highlight IndentBlank_bar guifg=#303742 gui=nocombine]]
+vim.cmd [[highlight IndentBlank_bar guibg=#282c34 gui=nocombine]]
+-- vim.cmd [[highlight IndentBlank_dot guifg=#313844 gui=nocombine]]
+-- vim.cmd [[highlight IndentBlank_dot guibg=#282c34 gui=nocombine]]
+
+require("indent_blankline").setup {
+    -- space_char_blankline = "",
+    -- show_current_context = true,
+    -- show_current_context_start = true,
+    char_highlight_list = {
+        "IndentBlank_bar",
+    },
+    -- space_char_highlight_list = {
+    --     "IndentBlank_dot",
+    -- },
+}
