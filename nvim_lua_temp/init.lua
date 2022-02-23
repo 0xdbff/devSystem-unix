@@ -394,10 +394,11 @@ nvim_keymap('n', ';te', ':tabe <C-R>=expand("%:p:h") . "/" <CR>', {})
 -- quick save with ;w
 nvim_keymap('n',';w', '<cmd>w<CR>', {} )
 -- quick suspend with ;s
-nvim_keymap('n', ';s', '<cmd>sus<CR>', {})
+nvim_keymap('n', ';f', '<cmd>sus<CR>', {})
 -- !TODO improve
 nvim_keymap('n', ';cr', '<cmd>!cargo run<CR>', {})
-nvim_keymap('n', ';cb', '<cmd>!cargo build<CR>', {})
+nvim_keymap('n', ';cb', '<cmd>TermExec cmd=\'cargo build\'<CR>', {})
+nvim_keymap('n', ';m', '<cmd>TermExec cmd=\'make\'<CR>', {})
 nvim_keymap('n', ';cc', '<cmd>!cargo check<CR>', {})
 
 -- quick save with <leader> w
