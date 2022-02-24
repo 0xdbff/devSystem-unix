@@ -387,12 +387,12 @@ nvim_keymap('n', ';cc', '<cmd>!cargo check<CR>', {})
 require('telescope').setup({
     defaults = {
         file_ignore_patterns = {"node_modules", "/dist"},
-	layout_strategy = "horizontal",
-    		layout_config = {
-      		height = 0.6,
+	    layout_strategy = "horizontal",
+    	layout_config = {
+            height = 0.6,
             width= 0.6,
-		preview_cutoff = 120
-      		-- preview_width = 0.55,
+		    preview_cutoff = 120
+            -- preview_width = 0.55,
     	},
     },
     extensions = {
@@ -451,23 +451,23 @@ nvim_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', nmo)
 -- LSP settings
 local lspconfig = require 'lspconfig'
 local on_attach = function(_, bufnr)
-  local lspkeymap = vim.api.nvim_buf_set_keymap
-  local lsp_cmd = '<cmd>lua vim.lsp.buf.'
-  local cmdl = '<cmd>lua'
-  lspkeymap(bufnr, 'n', 'gD'         , lsp_cmd..'declaration()<CR>'                                         , nmo)
-  lspkeymap(bufnr, 'n', 'gd'         , lsp_cmd..'definition()<CR>'                                          , nmo)
-  lspkeymap(bufnr, 'n', 'K'          , lsp_cmd..'hover()<CR>'                                               , nmo)
-  lspkeymap(bufnr, 'n', 'gi'         , lsp_cmd..'implementation()<CR>'                                      , nmo)
-  lspkeymap(bufnr, 'n', '<C-k>'      , lsp_cmd..'signature_help()<CR>'                                      , nmo)
-  lspkeymap(bufnr, 'n', '<leader>wa' , lsp_cmd..'add_workspace_folder()<CR>'                                , nmo)
-  lspkeymap(bufnr, 'n', '<leader>wr' , lsp_cmd..'remove_workspace_folder()<CR>'                             , nmo)
-  lspkeymap(bufnr, 'n', '<leader>wl' , cmdl..'print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>' , nmo)
-  lspkeymap(bufnr, 'n', '<leader>D'  , lsp_cmd..'type_definition()<CR>'                                     , nmo)
-  lspkeymap(bufnr, 'n', '<leader>rn' , lsp_cmd..'rename()<CR>'                                              , nmo)
-  lspkeymap(bufnr, 'n', 'gr'         , lsp_cmd..'references()<CR>'                                          , nmo)
-  lspkeymap(bufnr, 'n', '<leader>ca' , lsp_cmd..'code_action()<CR>'                                         , nmo)
-  lspkeymap(bufnr, 'n', '<leader>so' , [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]] , nmo)
-  vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
+    local lspkeymap = vim.api.nvim_buf_set_keymap
+    local lsp_cmd = '<cmd>lua vim.lsp.buf.'
+    local cmdl = '<cmd>lua'
+    lspkeymap(bufnr, 'n', 'gD'         , lsp_cmd..'declaration()<CR>'                                         , nmo)
+    lspkeymap(bufnr, 'n', 'gd'         , lsp_cmd..'definition()<CR>'                                          , nmo)
+    lspkeymap(bufnr, 'n', 'K'          , lsp_cmd..'hover()<CR>'                                               , nmo)
+    lspkeymap(bufnr, 'n', 'gi'         , lsp_cmd..'implementation()<CR>'                                      , nmo)
+    lspkeymap(bufnr, 'n', '<C-k>'      , lsp_cmd..'signature_help()<CR>'                                      , nmo)
+    lspkeymap(bufnr, 'n', '<leader>wa' , lsp_cmd..'add_workspace_folder()<CR>'                                , nmo)
+    lspkeymap(bufnr, 'n', '<leader>wr' , lsp_cmd..'remove_workspace_folder()<CR>'                             , nmo)
+    lspkeymap(bufnr, 'n', '<leader>wl' , cmdl..'print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>' , nmo)
+    lspkeymap(bufnr, 'n', '<leader>D'  , lsp_cmd..'type_definition()<CR>'                                     , nmo)
+    lspkeymap(bufnr, 'n', '<leader>rn' , lsp_cmd..'rename()<CR>'                                              , nmo)
+    lspkeymap(bufnr, 'n', 'gr'         , lsp_cmd..'references()<CR>'                                          , nmo)
+    lspkeymap(bufnr, 'n', '<leader>ca' , lsp_cmd..'code_action()<CR>'                                         , nmo)
+    lspkeymap(bufnr, 'n', '<leader>so' , [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]] , nmo)
+    vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 end
 
 -- nvim-cmp supports additional completion capabilities
@@ -609,7 +609,7 @@ vim.cmd('autocmd! TermOpen term://* lua Set_terminal_keymaps()')
 -- require('rust-tools.inlay_hints').set_inlay_hints()
 -- require'rust-tools.open_cargo_toml'.open_cargo_toml()
 
--- -- Colorscheme
+-- -- -- Colorscheme
 -- local dbfox = require('nightfox')
 -- -- This function set the configuration of nightfox. If a value is not passed in the setup function
 -- -- it will be taken from the default configuration above
@@ -620,7 +620,7 @@ vim.cmd('autocmd! TermOpen term://* lua Set_terminal_keymaps()')
 --     -- keywords = "bold", -- change style of keywords to be bold
 --     functions = "italic" -- styles can be a comma separated list
 --   },
---   -- inverse = {
+--   -- i.vimnverse = {
 --   --   match_paren = true, -- inverse the highlighting of match_parens
 --   -- },
 --   -- colors = {
@@ -653,10 +653,10 @@ require('onedark').setup  {
     -- Options are italic, bold, underline, none
     -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
     code_style = {
-        comments = 'Italic',
+        comments = 'none',
         keywords = 'none',
         functions = 'none',
-        strings = 'italic',
+        strings = 'none',
         variables = 'none'
     },
 
@@ -667,7 +667,7 @@ require('onedark').setup  {
     -- Plugins Config --
     diagnostics = {
         darker = false, -- darker colors for diagnostic
-        undercurl = true,   -- use undercurl instead of underline for diagnostics
+        undercurl = false,   -- use undercurl instead of underline for diagnostics
         background = false,    -- use background color for virtual text
     },
 }
@@ -679,7 +679,7 @@ vim.opt.list = true
 
 ----- indent guidelines
 vim.cmd [[highlight IndentBlank_bar guifg=#303742 gui=nocombine]]
-vim.cmd [[highlight IndentBlank_bar guibg=#282c34 gui=nocombine]]
+-- vim.cmd [[highlight IndentBlank_bar guibg=#282c34 gui=nocombine]]
 -- vim.cmd [[highlight IndentBlank_dot guifg=#313844 gui=nocombine]]
 -- vim.cmd [[highlight IndentBlank_dot guibg=#282c34 gui=nocombine]]
 
