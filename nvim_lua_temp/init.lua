@@ -76,7 +76,9 @@ require('packer').startup(function()
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
-  -- Add indentation guides even on blank lines
+  -- lsp status info for lua line
+  use 'arkav/lualine-lsp-progress'
+  -- Add indentation guides 'soft vertical bars'
   use 'lukas-reineke/indent-blankline.nvim'
   -- Add git related info in the signs columns and popups
   use {
@@ -179,10 +181,24 @@ vim.cmd[[ nnoremap <C-H> <C-W><C-H> ]]
 -- Make windows to be basically the same size
 vim.cmd[[ nnoremap <leader>= <C-w>= ]]
 
-vim.cmd[[ 
-augroup c | au!
+vim.cmd[[
+augroup c| au!
     au Filetype c setlocal shiftwidth=4 softtabstop=4
     au BufNewFile,BufRead *.c,*.h :ClangFormatAutoEnable
+augroup END
+]]
+
+vim.cmd[[
+augroup cpp| au!
+    au Filetype cpp setlocal shiftwidth=4 softtabstop=4
+    au BufNewFile,BufRead *.cpp,*.hpp :ClangFormatAutoEnable
+augroup END
+]]
+
+vim.cmd[[
+augroup cuda| au!
+    au Filetype cuda setlocal shiftwidth=4 softtabstop=4
+    au BufNewFile,BufRead *.cu :ClangFormatAutoEnable
 augroup END
 ]]
 
@@ -456,7 +472,7 @@ local on_attach = function(_, bufnr)
     local cmdl = '<cmd>lua'
     lspkeymap(bufnr, 'n', 'gD'         , lsp_cmd..'declaration()<CR>'                                         , nmo)
     lspkeymap(bufnr, 'n', 'gd'         , lsp_cmd..'definition()<CR>'                                          , nmo)
-    lspkeymap(bufnr, 'n', 'K'          , lsp_cmd..'hover()<CR>'                                               , nmo)
+    lspkeymap(bufnr, 'n', '<leader>k'  , lsp_cmd..'hover()<CR>'                                               , nmo)
     lspkeymap(bufnr, 'n', 'gi'         , lsp_cmd..'implementation()<CR>'                                      , nmo)
     lspkeymap(bufnr, 'n', '<C-k>'      , lsp_cmd..'signature_help()<CR>'                                      , nmo)
     lspkeymap(bufnr, 'n', '<leader>wa' , lsp_cmd..'add_workspace_folder()<CR>'                                , nmo)
@@ -475,13 +491,19 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable the following language servers, quick setup default settings
-local servers = { 'clangd', 'pyright', 'tsserver' }
+local servers = {'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities,
   }
 end
+
+lspconfig.clangd.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { 'c', 'cpp', 'cuda' },
+}
 
 -- Rust
 lspconfig.rust_analyzer.setup {
@@ -528,45 +550,45 @@ local luasnip = require 'luasnip'
 -- nvim-cmp setup
 local cmp = require 'cmp'
 cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  mapping = {
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+    snippet = {
+        expand = function(args)
+            luasnip.lsp_expand(args.body)
+        end,
     },
-    ['<Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end,
-    ['<S-Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end,
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  },
+    mapping = {
+        ['<C-p>'] = cmp.mapping.select_prev_item(),
+        ['<C-n>'] = cmp.mapping.select_next_item(),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.close(),
+        ['<CR>'] = cmp.mapping.confirm {
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = true,
+        },
+        ['<Tab>'] = function(fallback)
+            if cmp.visible() then
+                  cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            else
+                fallback()
+            end
+        end,
+        ['<S-Tab>'] = function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end,
+    },
+    sources = {
+        { name = 'nvim_lsp' },
+        { name = 'luasnip' },
+    },
 }
 
 require("toggleterm").setup {
@@ -635,19 +657,16 @@ vim.cmd('autocmd! TermOpen term://* lua Set_terminal_keymaps()')
 -- -- Load the configuration set above and apply the colorscheme
 -- dbfox.load()
 -- --
-require('lualine').setup({
-    theme = 'onedark'
-})
 
 require('onedark').setup  {
     -- Main options --
     style = 'dark', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-    transparent = false,  -- Show/hide background
+    transparent = true,  -- Show/hide background
     term_colors = true, -- Change terminal color as per the selected theme style
     ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
     -- toggle theme style ---
-    toggle_style_key = '<leader>ts', -- Default keybinding to toggle
-    toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
+    -- toggle_style_key = '<leader>ts', -- Default keybinding to toggle
+    -- toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
 
     -- Change code style ---
     -- Options are italic, bold, underline, none
@@ -666,14 +685,43 @@ require('onedark').setup  {
 
     -- Plugins Config --
     diagnostics = {
-        darker = false, -- darker colors for diagnostic
-        undercurl = false,   -- use undercurl instead of underline for diagnostics
-        background = false,    -- use background color for virtual text
+        darker = false,     -- darker colors for diagnostic
+        undercurl = true,   -- use undercurl instead of underline for diagnostics
+        background = false, -- use background color for virtual text
     },
 }
 require('onedark').load()
 
-vim.opt.list = true
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'onedark',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {},
+    always_divide_middle = true,
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename', 'lsp_progress'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  extensions = {}
+}
+
+-- vim.opc.list = true
 -- vim.opt.listchars:append("space:⋅")
 -- vim.opt.listchars:append("eol:↴")
 
