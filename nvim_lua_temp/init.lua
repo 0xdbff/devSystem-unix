@@ -72,6 +72,7 @@ require('packer').startup(function()
   use 'Db-dev2002/sonokai'
   -- use 'Th3Whit3Wolf/onebuddy'
   -- Status line
+  use 'folke/tokyonight.nvim' 
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
@@ -422,12 +423,12 @@ require('telescope').setup({
 
 require'nvim-treesitter.configs'.setup({
     -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-    ensure_installed = "maintained",
+    ensure_installed = "all",
 
     -- Install languages synchronously (only applied to `ensure_installed`)
     sync_install = false,
     -- List of parsers to ignore installing
-    ignore_install = { "javascript" },
+    -- ignore_install = { "javascript" },
 
     highlight = {
         -- `false` will disable the whole extension
@@ -449,7 +450,7 @@ require('Comment').setup()
 
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
-require('telescope').load_extension('fzf')
+-- require('telescope').load_extension('fzf')
 
 local tb = "<cmd>lua require('telescope.builtin')."
 nvim_keymap('n','<leader>ff', tb..'find_files()<cr>',{})
@@ -631,71 +632,71 @@ vim.cmd('autocmd! TermOpen term://* lua Set_terminal_keymaps()')
 -- require('rust-tools.inlay_hints').set_inlay_hints()
 -- require'rust-tools.open_cargo_toml'.open_cargo_toml()
 
--- -- -- Colorscheme
--- local dbfox = require('nightfox')
--- -- This function set the configuration of nightfox. If a value is not passed in the setup function
--- -- it will be taken from the default configuration above
--- dbfox.setup({
---   fox = "dbfox", -- change the colorscheme to use nordfox
---   styles = {
---     comments = "italic", -- change style of comments to be italic
---     -- keywords = "bold", -- change style of keywords to be bold
---     functions = "italic" -- styles can be a comma separated list
---   },
---   -- i.vimnverse = {
---   --   match_paren = true, -- inverse the highlighting of match_parens
---   -- },
---   -- colors = {
---   --     bg = '#23272e'
---   -- },
---   -- hlgroups = {
---   --   TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
---   --   LspCodeLens = { bg = "#000000", style = "italic" },
---   -- }
--- })
---
--- -- Load the configuration set above and apply the colorscheme
--- dbfox.load()
+-- -- Colorscheme
+local dbfox = require('nightfox')
+-- This function set the configuration of nightfox. If a value is not passed in the setup function
+-- it will be taken from the default configuration above
+dbfox.setup({
+  fox = "nordfox", -- change the colorscheme to use nordfox
+  styles = {
+    -- comments = "italic", -- change style of comments to be italic
+    keywords = "bold", -- change style of keywords to be bold
+    functions = "italic" -- styles can be a comma separated list
+  },
+  -- i.vimnverse = {
+  --   match_paren = true, -- inverse the highlighting of match_parens
+  -- },
+  -- colors = {
+  --     bg = '#23272e'
+  -- },
+  -- hlgroups = {
+  --   TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
+  --   LspCodeLens = { bg = "#000000", style = "italic" },
+  -- }
+})
+
+-- Load the configuration set above and apply the colorscheme
+dbfox.load()
 -- --
 
-require('onedark').setup  {
-    -- Main options --
-    style = 'dark', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-    transparent = true,  -- Show/hide background
-    term_colors = true, -- Change terminal color as per the selected theme style
-    ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
-    -- toggle theme style ---
-    -- toggle_style_key = '<leader>ts', -- Default keybinding to toggle
-    -- toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
-
-    -- Change code style ---
-    -- Options are italic, bold, underline, none
-    -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
-    code_style = {
-        comments = 'none',
-        keywords = 'none',
-        functions = 'none',
-        strings = 'none',
-        variables = 'none'
-    },
-
-    -- Custom Highlights --
-    colors = {}, -- Override default colors
-    highlights = {}, -- Override highlight groups
-
-    -- Plugins Config --
-    diagnostics = {
-        darker = false,     -- darker colors for diagnostic
-        undercurl = true,   -- use undercurl instead of underline for diagnostics
-        background = false, -- use background color for virtual text
-    },
-}
-require('onedark').load()
+-- require('onedark').setup  {
+--     -- Main options --
+--     style = 'dark', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+--     transparent = false,  -- Show/hide background
+--     term_colors = true, -- Change terminal color as per the selected theme style
+--     ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
+--     -- toggle theme style ---
+--     -- toggle_style_key = '<leader>ts', -- Default keybinding to toggle
+--     -- toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
+--
+--     -- Change code style ---
+--     -- Options are italic, bold, underline, none
+--     -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
+--     code_style = {
+--         comments = 'none',
+--         keywords = 'none',
+--         functions = 'none',
+--         strings = 'none',
+--         variables = 'none'
+--     },
+--
+--     -- Custom Highlights --
+--     colors = {}, -- Override default colors
+--     highlights = {}, -- Override highlight groups
+--
+--     -- Plugins Config --
+--     diagnostics = {
+--         darker = false,     -- darker colors for diagnostic
+--         undercurl = true,   -- use undercurl instead of underline for diagnostics
+--         background = false, -- use background color for virtual text
+--     },
+-- }
+-- require('onedark').load()
 
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'onedark',
+    -- theme = 'nightfox',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     disabled_filetypes = {},
@@ -726,8 +727,8 @@ require('lualine').setup {
 -- vim.opt.listchars:append("eol:↴")
 
 ----- indent guidelines
-vim.cmd [[highlight IndentBlank_bar guifg=#303742 gui=nocombine]]
--- vim.cmd [[highlight IndentBlank_bar guibg=#282c34 gui=nocombine]]
+vim.cmd [[highlight IndentBlank_bar guifg=#41455f gui=nocombine]]
+-- vim.cmd [[highlight IndentBlank_bar guibg=#222222 gui=nocombine]]
 -- vim.cmd [[highlight IndentBlank_dot guifg=#313844 gui=nocombine]]
 -- vim.cmd [[highlight IndentBlank_dot guibg=#282c34 gui=nocombine]]
 
