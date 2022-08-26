@@ -1,20 +1,24 @@
 [Animation]
 Frames=0
+UseWMAssist=false
 
 [Appearance]
-BackgroundColor=19,19,19
+BackgroundColor=29,29,29
+BackgroundColorOpacity=26
 HideSkinBorders=true
+Blur=true
 Translucency=true
 
 [Desktop Entry]
-DefaultProfile=coding.profile
+DefaultProfile=Profile 1.profile
 
 [Dialogs]
 FirstRun=false
 
+[KFileDialog Settings]
+detailViewIconSize=16
+
 [Window]
 Height=70
-KeepOpen=false
-ShowOnAllDesktops=false
 ShowTabBar=false
 ShowTitleBar=false
