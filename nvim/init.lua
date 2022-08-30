@@ -11,7 +11,7 @@ local nvim_keymap = vim.api.nvim_set_keymap
 
 -- Install packer
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-	vim.fn.execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
+    vim.fn.execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
 end
 
 vim.cmd([[
@@ -23,137 +23,148 @@ vim.cmd([[
 
 local use = require("packer").use
 require("packer").startup(function()
-	-- Package manager
-	use("wbthomason/packer.nvim")
-	use({ "ellisonleao/gruvbox.nvim" })
+    -- Package manager
+    use("wbthomason/packer.nvim")
+    use({ "ellisonleao/gruvbox.nvim" })
+    use("EdenEast/nightfox.nvim")
 
-	------ Utils
-	-- Git integration
-	use("tpope/vim-fugitive")
-	-- Git integration :help compl-omni
-	use("tpope/vim-rhubarb")
+    use({
+        "kyazdani42/nvim-tree.lua",
+        requires = {
+            "kyazdani42/nvim-web-devicons", -- optional, for file icons
+        },
+        -- tag = "nightly", -- optional, updated every week. (see issue #1193)
+    })
+    use({
+        "lewis6991/gitsigns.nvim",
+        -- tag = "release", -- To use the latest release
+    })
 
-	-- Make comments easier
-	use("numToStr/Comment.nvim")
-	-- Relative lines on current buf(normal mode) only
-	-- use 'jeffkreeftmeijer/vim-numbertoggle'
+    ------ Utils
+    -- Git integration
+    use("tpope/vim-fugitive")
+    -- Git integration :help compl-omni
+    use("tpope/vim-rhubarb")
 
-	-- Automatic tags management
-	-- use 'ludovicchabant/vim-gutentags'
+    -- Make comments easier
+    use("numToStr/Comment.nvim")
+    -- Relative lines on current buf(normal mode) only
+    -- use 'jeffkreeftmeijer/vim-numbertoggle'
 
-	-- EasyMotion provides a much simpler way to use some motions in vim
-	-- use 'easymotion/vim-easymotion'
+    -- Automatic tags management
+    -- use 'ludovicchabant/vim-gutentags'
 
-	-- a generic formatter
-	-- use 'mhartington/formatter.nvim'
-	use("jose-elias-alvarez/null-ls.nvim")
+    -- EasyMotion provides a much simpler way to use some motions in vim
+    -- use 'easymotion/vim-easymotion'
 
-	use("godlygeek/tabular")
-	--
-	use("nvim-lua/popup.nvim")
-	use("nvim-lua/plenary.nvim")
-	-- debugging
-	use("mfussenegger/nvim-dap")
-	-- better terminal support
-	use("Db-dev2002/toggleterm.nvim")
+    -- a generic formatter
+    -- use 'mhartington/formatter.nvim'
+    use("jose-elias-alvarez/null-ls.nvim")
 
-	------ Telescope
-	use("nvim-telescope/telescope.nvim")
-	use({
-		"nvim-telescope/telescope-fzf-native.nvim",
-		run = "make",
-	})
-	-- use "nvim-telescope/telescope-rs.nvim"
-	-- use "nvim-telescope/telescope-fzf-writer.nvim"
-	-- use "nvim-telescope/telescope-github.nvim"
-	-- use "nvim-telescope/telescope-symbols.nvim"
-	-- use "nvim-telescope/telescope-hop.nvim"
-	-- use "nvim-telescope/telescope-file-browser.nvim"
-	-- use "nvim-telescope/telescope-ui-select.nvim"
-	-- use "nvim-telescope/telescope-smart-history.nvim"
+    use("godlygeek/tabular")
+    --
+    use("nvim-lua/popup.nvim")
+    use("nvim-lua/plenary.nvim")
+    -- debugging
+    use("mfussenegger/nvim-dap")
+    -- better terminal support
+    use("akinsho/toggleterm.nvim")
 
-	------ UI settings
-	-- Colorshemes
-	-- use 'mjlbach/onedark.nvim'
-	use("navarasu/onedark.nvim")
-	-- use 'Db-dev2002/dbfox.nvim'
-	-- use 'Db-dev2002/sonokai'
-	-- use 'Th3Whit3Wolf/onebuddy'
-	-- Status line
-	-- use 'folke/tokyonight.nvim'
-	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
-	})
-	-- lsp status info for lua line
-	use("arkav/lualine-lsp-progress")
-	-- Add indentation guides 'soft vertical bars'
-	use("lukas-reineke/indent-blankline.nvim")
-	-- Add git related info in the signs columns and popups
-	use({
-		"lewis6991/gitsigns.nvim",
-		requires = { "nvim-lua/plenary.nvim" },
-	})
-	-- Highlight, edit, and navigate code using a fast incremental parsing library
-	use("nvim-treesitter/nvim-treesitter")
-	-- Additional textobjects for treesitter
-	use("nvim-treesitter/nvim-treesitter-textobjects")
-	-- color codes highlighter
-	use({
-		"norcalli/nvim-colorizer.lua",
-		config = function()
-			require("colorizer").setup()
-		end,
-	})
-	-- ansi escape codes(colors) ft
-	use({
-		"norcalli/nvim-terminal.lua",
-		config = function()
-			require("terminal").setup()
-		end,
-	})
-	-- Make comments appear IN YO FACE
-	use({
-		"tjdevries/vim-inyoface",
-		config = function()
-			vim.api.nvim_set_keymap("n", "<leader>cc", "<Plug>(InYoFace_Toggle) <CR>", {})
-		end,
-	})
-	-- languages that benefit from plugins
-	use("rust-lang/rust.vim")
-	-- use 'lervag/vimtex'
-	use("plasticboy/vim-markdown")
-	use("keith/swift.vim")
-	use("neovimhaskell/haskell-vim")
-	use("elmcast/elm-vim")
-	use("tikhomirov/vim-glsl")
-	-- languages Utils
-	use("rhysd/vim-clang-format")
-	use("jose-elias-alvarez/nvim-lsp-ts-utils")
-	-- use 'nvim-lua/lsp_extensions.nvim'
-	use("simrat39/rust-tools.nvim")
-	-- rust crates management
-	use({
-		"saecki/crates.nvim",
-		-- tag = 'v0.1.0',
-		requires = { "nvim-lua/plenary.nvim" },
-		config = function()
-			require("crates").setup()
-		end,
-	})
+    ------ Telescope
+    use("nvim-telescope/telescope.nvim")
+    use({
+        "nvim-telescope/telescope-fzf-native.nvim",
+        run = "make",
+    })
+    -- use "nvim-telescope/telescope-rs.nvim"
+    -- use "nvim-telescope/telescope-fzf-writer.nvim"
+    -- use "nvim-telescope/telescope-github.nvim"
+    -- use "nvim-telescope/telescope-symbols.nvim"
+    -- use "nvim-telescope/telescope-hop.nvim"
+    -- use "nvim-telescope/telescope-file-browser.nvim"
+    -- use "nvim-telescope/telescope-ui-select.nvim"
+    -- use "nvim-telescope/telescope-smart-history.nvim"
 
-	------ LSP plugins
-	-- Collection of configurations for built-in LSP client
-	use("neovim/nvim-lspconfig")
-	-- Autocomplete plugins
-	use("hrsh7th/nvim-cmp")
-	use("hrsh7th/cmp-buffer")
-	use("hrsh7th/cmp-path")
-	use("hrsh7th/cmp-nvim-lua")
-	use("hrsh7th/cmp-nvim-lsp")
-	use("saadparwaiz1/cmp_luasnip")
-	-- Snippets plugin
-	use("L3MON4D3/LuaSnip")
+    ------ UI settings
+    -- Colorshemes
+    -- use 'mjlbach/onedark.nvim'
+    use("navarasu/onedark.nvim")
+
+    -- use 'Db-dev2002/dbfox.nvim'
+    -- use 'Db-dev2002/sonokai'
+    -- use 'Th3Whit3Wolf/onebuddy'
+    -- Status line
+    -- use 'folke/tokyonight.nvim'
+    use({
+        "nvim-lualine/lualine.nvim",
+        requires = { "kyazdani42/nvim-web-devicons", opt = true },
+    })
+    -- lsp status info for lua line
+    use("arkav/lualine-lsp-progress")
+    -- Add indentation guides 'soft vertical bars'
+    -- use("lukas-reineke/indent-blankline.nvim")
+    -- Add git related info in the signs columns and popups
+
+    -- Highlight, edit, and navigate code using a fast incremental parsing library
+    use("nvim-treesitter/nvim-treesitter")
+    -- Additional textobjects for treesitter
+    use("nvim-treesitter/nvim-treesitter-textobjects")
+    -- color codes highlighter
+    use({
+        "norcalli/nvim-colorizer.lua",
+        config = function()
+            require("colorizer").setup()
+        end,
+    })
+    -- ansi escape codes(colors) ft
+    use({
+        "norcalli/nvim-terminal.lua",
+        config = function()
+            require("terminal").setup()
+        end,
+    })
+    -- Make comments appear IN YO FACE
+    use({
+        "tjdevries/vim-inyoface",
+        config = function()
+            vim.api.nvim_set_keymap("n", "<leader>cc", "<Plug>(InYoFace_Toggle) <CR>", {})
+        end,
+    })
+    -- languages that benefit from plugins
+    use("rust-lang/rust.vim")
+    -- use 'lervag/vimtex'
+    use("plasticboy/vim-markdown")
+    use("keith/swift.vim")
+    use("neovimhaskell/haskell-vim")
+    use("elmcast/elm-vim")
+    use("tikhomirov/vim-glsl")
+    -- languages Utils
+    -- use("rhysd/vim-clang-format")
+    use("jose-elias-alvarez/nvim-lsp-ts-utils")
+    -- use 'nvim-lua/lsp_extensions.nvim'
+    use("simrat39/rust-tools.nvim")
+    -- rust crates management
+    use({
+        "saecki/crates.nvim",
+        -- tag = 'v0.1.0',
+        requires = { "nvim-lua/plenary.nvim" },
+        config = function()
+            require("crates").setup()
+        end,
+    })
+
+    ------ LSP plugins
+    -- Collection of configurations for built-in LSP client
+    use("neovim/nvim-lspconfig")
+    -- Autocomplete plugins
+    use("hrsh7th/nvim-cmp")
+    -- use("hrsh7th/cmp-buffer")
+    use("hrsh7th/cmp-path")
+    use("hrsh7th/cmp-nvim-lua")
+    use("hrsh7th/cmp-nvim-lsp")
+    use("saadparwaiz1/cmp_luasnip")
+    -- Snippets plugin
+    use("L3MON4D3/LuaSnip")
 end)
 
 --Set highlight on search
@@ -165,11 +176,11 @@ vim.o.softtabstop = 4
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.wildmenu = true
-vim.colorcolumn = true
+-- vim.colorcolumn = true
 vim.o.expandtab = true
 vim.o.autoindent = true
 -- Make line numbers default
-vim.o.number = true
+-- vim.o.number = true
 --Enable mouse mode
 vim.o.mouse = "a"
 --Set colorscheme
@@ -178,8 +189,8 @@ vim.o.termguicolors = true
 vim.o.completeopt = "menuone,noselect"
 
 -- vim.cmd[[ let g:completion_enable_auto_paren = 1 ]]
-vim.cmd([[ let g:rustfmt_autosave = 1 ]])
-vim.cmd([[ let g:clang_format#code_style = 'llvm' ]])
+-- vim.cmd([[ let g:rustfmt_autosave = 1 ]])
+-- vim.cmd([[ let g:clang_format#code_style = 'llvm' ]])
 
 -- Easier Moving between splits
 vim.cmd([[ nnoremap <C-J> <C-W><C-J> ]])
@@ -211,12 +222,6 @@ vim.cmd([[
     augroup END
 ]])
 
--- vim.cmd[[autocmd InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *.rs:lua require'lsp_extensions'.inlay_hints{ prefix = ' » ',highlight = "NonText", enabled = {"ChainingHint"}}]]
-
-vim.cmd(
-	[[autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require('lsp_extensions').inlay_hints{ enabled = {"TypeHint", "ChainingHint", "ParameterHint"} }]]
-)
-
 vim.cmd([[setlocal textwidth=80]])
 
 -- vim.cmd [[
@@ -226,126 +231,6 @@ vim.cmd([[setlocal textwidth=80]])
 --     " au BufNewFile,BufRead *.rs :require('rust-tools').setup({})
 -- augroup END
 -- ]]
-
--- require("rust-tools").setup({
---     tools = { -- rust-tools options
---         -- Automatically set inlay hints (type hints)
---         autoSetHints = true,
---
---         -- Whether to show hover actions inside the hover window
---         -- This overrides the default hover handler
---         hover_with_actions = true,
---
---         -- how to execute terminal commands
---         -- options right now: termopen / quickfix
---         executor = require("rust-tools/executors").termopen,
---
---         runnables = {
---             -- whether to use telescope for selection menu or not
---             use_telescope = true
---
---             -- rest of the opts are forwarded to telescope
---         },
---
---         debuggables = {
---             -- whether to use telescope for selection menu or not
---             use_telescope = true
---
---             -- rest of the opts are forwarded to telescope
---         },
---
---         -- These apply to the default RustSetInlayHints command
---         inlay_hints = {
---
---             -- Only show inlay hints for the current line
---             only_current_line = false,
---
---             -- Event which triggers a refersh of the inlay hints.
---             -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
---             -- not that this may cause  higher CPU usage.
---             -- This option is only respected when only_current_line and
---             -- autoSetHints both are true.
---             only_current_line_autocmd = "CursorHold",
---
---             -- wheter to show parameter hints with the inlay hints or not
---             show_parameter_hints = true,
---
---             -- whether to show variable name before type hints with the inlay hints or not
---             show_variable_name = false,
---
---             -- prefix for parameter hints
---             parameter_hints_prefix = "<- ",
---
---             -- prefix for all the other hints (type, chaining)
---             other_hints_prefix = "=> ",
---
---             -- whether to align to the length of the longest line in the file
---             max_len_align = false,
---
---             -- padding from the left if max_len_align is true
---             max_len_align_padding = 1,
---
---             -- whether to align to the extreme right or not
---             right_align = false,
---
---             -- padding from the right if right_align is true
---             right_align_padding = 7,
---
---             -- The color of the hints
---             highlight = "Comment",
---         },
---         hover_actions = {
---             -- the border that is used for the hover window
---             -- see vim.api.nvim_open_win()
---             border = {
---                 {"╭", "FloatBorder"}, {"─", "FloatBorder"},
---                 {"╮", "FloatBorder"}, {"│", "FloatBorder"},
---                 {"╯", "FloatBorder"}, {"─", "FloatBorder"},
---                 {"╰", "FloatBorder"}, {"│", "FloatBorder"}
---             },
---             -- whether the hover action window gets automatically focused
---             auto_focus = false
---         },
---         -- settings for showing the crate graph based on graphviz and the dot
---         -- command
---         crate_graph = {
---             -- Backend used for displaying the graph
---             -- see: https://graphviz.org/docs/outputs/
---             -- default: x11
---             backend = "x11",
---             -- where to store the output, nil for no output stored (relative
---             -- path from pwd)
---             -- default: nil
---             output = nil,
---             -- command to pipe the output to, nil for no piping
---             pipe = nil,
---             -- NOTE: Be careful when using pipe and output together
---             -- true for all crates.io and external crates, false only the local
---             -- crates
---             -- default: true
---             full = true,
---         }
---     },
---     -- all the opts to send to nvim-lspconfig
---     -- these override the defaults set by rust-tools.nvim
---     -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
---     server = {
---         -- standalone file support
---         -- setting it to false may improve startup time
---         standalone = false,
---     }, -- rust-analyer options
---
---     -- debugging stuff
---     dap = {
---         adapter = {
---             ype = 'executable',
---             command = 'lldb-vscode',
---             name = "rt_lldb"
---         }
---     }
--- })
---
--- require('rust-tools.inlay_hints').set_inlay_hints()
 
 -- Copy and paste to/from system clipboard
 vim.cmd([[ vmap <leader>y "+y ]])
@@ -360,12 +245,12 @@ vim.o.updatetime = 100
 vim.o.timeoutlen = 260
 
 function Getos()
-	local os_name = io.popen("uname -s 2>/dev/null", "r")
-	if os_name then
-		return os_name:read()
-	end
+    local os_name = io.popen("uname -s 2>/dev/null", "r")
+    if os_name then
+        return os_name:read()
+    end
 
-	return "not supported"
+    return "not supported"
 end
 
 OS = Getos()
@@ -375,12 +260,14 @@ local is_linux = (OS == "Linux")
 -- permanent undo dir
 vim.o.undofile = true
 if is_linux then
-	vim.o.undodir = "/home/db/dev/.temp/nvim/did"
+    vim.o.undodir = "/home/db/dev/.temp/nvim/did"
 elseif is_darwin then
-	vim.o.undodir = "/Users/db/dev/.temp/nvim/did"
+    vim.o.undodir = "/Users/db/dev/.temp/nvim/did"
 else
-	-- TODO
+    -- TODO
 end
+
+vim.cmd([[set completeopt=menu,menuone,noselect ]])
 
 -- Set the number of lines to keep visible above and below the cursor at the
 -- top and bottom of the screen
@@ -389,7 +276,7 @@ vim.o.scrolloff = 8
 vim.o.termguicolors = true
 -- better comments
 vim.o.textwidth = 80
-vim.o.colorcolumn = "100"
+-- vim.o.colorcolumn = 100
 
 vim.cmd([[ set nowrap ]])
 
@@ -419,47 +306,47 @@ nvim_keymap("n", ";cc", "<cmd>!cargo check<CR>", {})
 -- vim.cmd[[ nmap <leader>w :w<CR> ]]
 
 require("telescope").setup({
-	defaults = {
-		file_ignore_patterns = { "node_modules", "/dist" },
-		layout_strategy = "horizontal",
-		layout_config = {
-			height = 0.6,
-			width = 0.6,
-			preview_cutoff = 120,
-			-- preview_width = 0.55,
-		},
-	},
-	extensions = {
-		frecency = {
-			show_scores = false,
-			show_unindexed = true,
-			ignore_patterns = { "*.git/*", "*/tmp/*", "*/node_modules/*" },
-		},
-	},
+    defaults = {
+        file_ignore_patterns = { "node_modules", "/dist" },
+        layout_strategy = "horizontal",
+        layout_config = {
+            height = 0.6,
+            width = 0.6,
+            preview_cutoff = 120,
+            -- preview_width = 0.55,
+        },
+    },
+    extensions = {
+        frecency = {
+            show_scores = false,
+            show_unindexed = true,
+            ignore_patterns = { "*.git/*", "*/tmp/*", "*/node_modules/*" },
+        },
+    },
 })
 
 require("nvim-treesitter.configs").setup({
-	-- One of "all", "maintained" (parsers with maintainers), or a list of languages
-	ensure_installed = "all",
+    -- One of "all", "maintained" (parsers with maintainers), or a list of languages
+    ensure_installed = "all",
 
-	-- Install languages synchronously (only applied to `ensure_installed`)
-	sync_install = false,
-	-- List of parsers to ignore installing
-	-- ignore_install = { "javascript" },
+    -- Install languages synchronously (only applied to `ensure_installed`)
+    sync_install = false,
+    -- List of parsers to ignore installing
+    -- ignore_install = { "javascript" },
 
-	highlight = {
-		-- `false` will disable the whole extension
-		enable = true,
+    highlight = {
+        -- `false` will disable the whole extension
+        enable = true,
 
-		-- list of language that will be disabled
-		-- disable = { "c", "rust" },
+        -- list of language that will be disabled
+        -- disable = { "c", "rust" },
 
-		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-		-- Using this option may slow down your editor, and you may see some duplicate highlights.
-		-- Instead of true it can also be a list of languages
-		additional_vim_regex_highlighting = false,
-	},
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false,
+    },
 })
 
 require("Comment").setup()
@@ -477,9 +364,16 @@ nvim_keymap("n", "<leader>la", tb .. 'lsp_code_actions(require("telescope.themes
 
 -- null ls
 require("null-ls").setup({
-	sources = {
-		require("null-ls").builtins.formatting.stylua,
-	},
+    debug = true,
+    sources = {
+        require("null-ls").builtins.formatting.stylua,
+        require("null-ls").builtins.formatting.prettier,
+        require("null-ls").builtins.formatting.black,
+        require("null-ls").builtins.formatting.clang_format,
+
+        require("null-ls").builtins.diagnostics.fish,
+        require("null-ls").builtins.diagnostics.zsh,
+    },
 })
 
 -- Diagnostic keymaps
@@ -491,24 +385,24 @@ nvim_keymap("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", nmo)
 -- LSP settings
 local lspconfig = require("lspconfig")
 local on_attach = function(_, bufnr)
-	local lspkeymap = vim.api.nvim_buf_set_keymap
-	local lsp_cmd = "<cmd>lua vim.lsp.buf."
-	local cmdl = "<cmd>lua"
-	lspkeymap(bufnr, "n", "gD", lsp_cmd .. "declaration()<CR>", nmo)
-	lspkeymap(bufnr, "n", "gd", lsp_cmd .. "definition()<CR>", nmo)
-	lspkeymap(bufnr, "n", "<leader>k", lsp_cmd .. "hover()<CR>", nmo)
-	lspkeymap(bufnr, "n", "gi", lsp_cmd .. "implementation()<CR>", nmo)
-	lspkeymap(bufnr, "n", "<C-k>", lsp_cmd .. "signature_help()<CR>", nmo)
-	lspkeymap(bufnr, "n", "<leader>wa", lsp_cmd .. "add_workspace_folder()<CR>", nmo)
-	lspkeymap(bufnr, "n", "<leader>wr", lsp_cmd .. "remove_workspace_folder()<CR>", nmo)
-	lspkeymap(bufnr, "n", "<leader>wl", cmdl .. "print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", nmo)
-	lspkeymap(bufnr, "n", "<leader>D", lsp_cmd .. "type_definition()<CR>", nmo)
-	lspkeymap(bufnr, "n", "<leader>rn", lsp_cmd .. "rename()<CR>", nmo)
-	lspkeymap(bufnr, "n", "gr", lsp_cmd .. "references()<CR>", nmo)
-	lspkeymap(bufnr, "n", "<leader>ca", lsp_cmd .. "code_action()<CR>", nmo)
-	lspkeymap(bufnr, "n", "<leader>so", [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], nmo)
-	vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
-	-- autoformat code
+    local lspkeymap = vim.api.nvim_buf_set_keymap
+    local lsp_cmd = "<cmd>lua vim.lsp.buf."
+    local cmdl = "<cmd>lua"
+    lspkeymap(bufnr, "n", "gD", lsp_cmd .. "declaration()<CR>", nmo)
+    lspkeymap(bufnr, "n", "gd", lsp_cmd .. "definition()<CR>", nmo)
+    lspkeymap(bufnr, "n", "<leader>k", lsp_cmd .. "hover()<CR>", nmo)
+    lspkeymap(bufnr, "n", "gi", lsp_cmd .. "implementation()<CR>", nmo)
+    lspkeymap(bufnr, "n", "<C-k>", lsp_cmd .. "signature_help()<CR>", nmo)
+    lspkeymap(bufnr, "n", "<leader>wa", lsp_cmd .. "add_workspace_folder()<CR>", nmo)
+    lspkeymap(bufnr, "n", "<leader>wr", lsp_cmd .. "remove_workspace_folder()<CR>", nmo)
+    lspkeymap(bufnr, "n", "<leader>wl", cmdl .. "print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", nmo)
+    lspkeymap(bufnr, "n", "<leader>D", lsp_cmd .. "type_definition()<CR>", nmo)
+    lspkeymap(bufnr, "n", "<leader>rn", lsp_cmd .. "rename()<CR>", nmo)
+    lspkeymap(bufnr, "n", "gr", lsp_cmd .. "references()<CR>", nmo)
+    lspkeymap(bufnr, "n", "<leader>ca", lsp_cmd .. "code_action()<CR>", nmo)
+    lspkeymap(bufnr, "n", "<leader>so", [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], nmo)
+    -- Formatter
+    vim.cmd([[ command! Format execute 'lua vim.lsp.buf.format()' ]])
 end
 
 -- nvim-cmp supports additional completion capabilities
@@ -518,17 +412,17 @@ capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 -- Enable the following language servers, quick setup default settings
 local servers = { "pyright", "tsserver" }
 for _, lsp in ipairs(servers) do
-	lspconfig[lsp].setup({
-		on_attach = on_attach,
-		capabilities = capabilities,
-	})
+    lspconfig[lsp].setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+    })
 end
 
 -- trying ccls instead of clangd
 lspconfig.ccls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-	filetypes = { "c", "cpp", "cuda" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "c", "cpp", "cuda" },
 })
 
 -- Rust
@@ -537,6 +431,122 @@ lspconfig.ccls.setup({
 --     capabilities = capabilities,
 -- }
 
+local rust_opts = {
+    tools = { -- rust-tools options
+
+        -- how to execute terminal commands
+        -- options right now: termopen / quickfix
+        executor = require("rust-tools/executors").termopen,
+
+        -- callback to execute once rust-analyzer is done initializing the workspace
+        -- The callback receives one parameter indicating the `health` of the server: "ok" | "warning" | "error"
+        on_initialized = nil,
+
+        -- automatically call RustReloadWorkspace when writing to a Cargo.toml file.
+        reload_workspace_from_cargo_toml = true,
+
+        -- These apply to the default RustSetInlayHints command
+        inlay_hints = {
+            -- automatically set inlay hints (type hints)
+            -- default: true
+            auto = true,
+
+            -- Only show inlay hints for the current line
+            only_current_line = false,
+
+            -- whether to show parameter hints with the inlay hints or not
+            -- default: true
+            show_parameter_hints = true,
+
+            -- prefix for parameter hints
+            -- default: "<-"
+            parameter_hints_prefix = "› ",
+
+            -- prefix for all the other hints (type, chaining)
+            -- default: "=>"
+            other_hints_prefix = "» ",
+
+            -- whether to align to the lenght of the longest line in the file
+            max_len_align = false,
+
+            -- padding from the left if max_len_align is true
+            max_len_align_padding = 1,
+
+            -- whether to align to the extreme right or not
+            right_align = false,
+
+            -- padding from the right if right_align is true
+            right_align_padding = 7,
+
+            -- The color of the hints
+            highlight = "Comment",
+        },
+
+        -- options same as lsp hover / vim.lsp.util.open_floating_preview()
+        hover_actions = {
+
+            -- the border that is used for the hover window
+            -- see vim.api.nvim_open_win()
+            border = {
+                -- { "╭", "FloatBorder" },
+                -- { "─", "FloatBorder" },
+                -- { "╮", "FloatBorder" },
+                -- { "│", "FloatBorder" },
+                -- { "╯", "FloatBorder" },
+                -- { "─", "FloatBorder" },
+                -- { "╰", "FloatBorder" },
+                -- { "│", "FloatBorder" },
+            },
+
+            -- whether the hover action window gets automatically focused
+            -- default: false
+            auto_focus = false,
+        },
+    },
+
+    -- all the opts to send to nvim-lspconfig
+    -- these override the defaults set by rust-tools.nvim
+    -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
+    server = {
+        -- standalone file support
+        -- setting it to false may improve startup time
+        -- standalone = false,
+        -- load lsp on rust
+        on_attach = on_attach,
+        capabilities = capabilities,
+
+        -- rust-analyzer options
+        settings = {
+            ["rust-analyzer"] = {
+                -- cargo = {
+                --     allFeatures = true,
+                -- },
+                -- diagnostics = {
+                --     disabled = {
+                --         "unresolved-proc-macro",
+                --     },
+                -- },
+                -- completion = {
+                --     postfix = {
+                --         enable = false,
+                --     },
+                -- },
+            },
+        },
+    },
+
+    -- debugging stuff
+    dap = {
+        adapter = {
+            type = "executable",
+            command = "lldb-vscode",
+            name = "rt_lldb",
+        },
+    },
+}
+
+-- require("rust-tools").setup(rust_opts)
+
 -- Make runtime files discoverable to the server
 local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
@@ -544,30 +554,30 @@ table.insert(runtime_path, "lua/?/init.lua")
 
 -- Lua
 lspconfig.sumneko_lua.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-	settings = {
-		Lua = {
-			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-				version = "LuaJIT",
-				-- Setup your lua path
-				path = runtime_path,
-			},
-			diagnostics = {
-				-- Get the language server to recognize the `vim` global
-				globals = { "vim" },
-			},
-			workspace = {
-				-- Make the server aware of Neovim runtime files
-				library = vim.api.nvim_get_runtime_file("", true),
-			},
-			-- Do not send telemetry data containing a randomized but unique identifier
-			telemetry = {
-				enable = false,
-			},
-		},
-	},
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = "LuaJIT",
+                -- Setup your lua path
+                path = runtime_path,
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = { "vim" },
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = vim.api.nvim_get_runtime_file("", true),
+            },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = {
+                enable = false,
+            },
+        },
+    },
 })
 
 -- luasnip setup
@@ -576,78 +586,78 @@ local luasnip = require("luasnip")
 -- nvim-cmp setup
 local cmp = require("cmp")
 cmp.setup({
-	snippet = {
-		expand = function(args)
-			luasnip.lsp_expand(args.body)
-		end,
-	},
-	mapping = {
-		["<C-p>"] = cmp.mapping.select_prev_item(),
-		["<C-n>"] = cmp.mapping.select_next_item(),
-		["<C-d>"] = cmp.mapping.scroll_docs(-4),
-		["<C-f>"] = cmp.mapping.scroll_docs(4),
-		["<C-Space>"] = cmp.mapping.complete(),
-		["<C-e>"] = cmp.mapping.close(),
-		["<CR>"] = cmp.mapping.confirm({
-			behavior = cmp.ConfirmBehavior.Replace,
-			select = true,
-		}),
-		["<Tab>"] = function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			elseif luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
-			else
-				fallback()
-			end
-		end,
-		["<S-Tab>"] = function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif luasnip.jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
-		end,
-	},
-	sources = {
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-	},
+    snippet = {
+        expand = function(args)
+            luasnip.lsp_expand(args.body)
+        end,
+    },
+    mapping = {
+        ["<C-p>"] = cmp.mapping.select_prev_item(),
+        ["<C-n>"] = cmp.mapping.select_next_item(),
+        ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+        ["<C-f>"] = cmp.mapping.scroll_docs(4),
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ["<C-e>"] = cmp.mapping.close(),
+        ["<CR>"] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = true,
+        }),
+        ["<Tab>"] = function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            else
+                fallback()
+            end
+        end,
+        ["<S-Tab>"] = function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end,
+    },
+    sources = {
+        { name = "nvim_lsp" },
+        { name = "luasnip" },
+    },
 })
 
 require("toggleterm").setup({
-	-- -- size can be a number or function which is passed the current terminal
-	-- size = 20 | function(term)
-	--   if term.direction == "horizontal" then
-	--     return 15
-	--   elseif term.direction == "vertical" then
-	--     return vim.o.columns * 0.4
-	--   end
-	-- end,
-	open_mapping = [[<c-\>]],
-	hide_numbers = true, -- hide the number column in toggleterm buffers
-	shade_filetypes = {},
-	shade_terminals = true,
-	shading_factor = 1, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
-	start_in_insert = true,
-	insert_mappings = true, -- whether or not the open mapping applies in insert mode
-	terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
-	persist_size = true,
-	direction = "vertical",
-	size = 100,
-	close_on_exit = true, -- close the terminal window when the process exits
-	shell = "/usr/bin/env fish", -- change the default shell
+    -- -- size can be a number or function which is passed the current terminal
+    -- size = 20 | function(term)
+    --   if term.direction == "horizontal" then
+    --     return 15
+    --   elseif term.direction == "vertical" then
+    --     return vim.o.columns * 0.4
+    --   end
+    -- end,
+    open_mapping = [[<c-\>]],
+    hide_numbers = true, -- hide the number column in toggleterm buffers
+    shade_filetypes = {},
+    shade_terminals = true,
+    shading_factor = 3, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+    start_in_insert = true,
+    insert_mappings = true, -- whether or not the open mapping applies in insert mode
+    terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
+    persist_size = true,
+    direction = "vertical",
+    size = 100,
+    close_on_exit = true, -- close the terminal window when the process exits
+    shell = "/usr/bin/env fish", -- change the default shell
 })
 
 function Set_terminal_keymaps()
-	local opts = { noremap = true }
-	vim.api.nvim_buf_set_keymap(0, "t", "<esc>", [[<C-\><C-n>]], opts)
-	-- vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-	-- vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-	-- vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-	-- vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+    local opts = { noremap = true }
+    vim.api.nvim_buf_set_keymap(0, "t", "<esc>", [[<C-\><C-n>]], opts)
+    -- vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
+    -- vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
+    -- vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
+    -- vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
@@ -657,150 +667,393 @@ vim.cmd("autocmd! TermOpen term://* lua Set_terminal_keymaps()")
 -- require('rust-tools.inlay_hints').set_inlay_hints()
 -- require'rust-tools.open_cargo_toml'.open_cargo_toml()
 
--- -- Colorscheme
--- require('nightfox').setup({
--- -- This function set the configuration of nightfox. If a value is not passed in the setup function
--- -- it will be taken from the default configuration above
+-- Default options
+-- require("nightfox").setup({
+--     options = {
+--         -- Compiled file's destination location
+--         compile_path = vim.fn.stdpath("cache") .. "/nightfox",
+--         compile_file_suffix = "_compiled", -- Compiled file suffix
+--         transparent = false, -- Disable setting background
+--         terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
+--         dim_inactive = false, -- Non focused panes set to alternative background
+--         styles = { -- Style to be applied to different syntax groups
+--             comments = "NONE", -- Value is any valid attr-list value `:help attr-list`
+--             conditionals = "NONE",
+--             constants = "NONE",
+--             functions = "NONE",
+--             keywords = "NONE",
+--             numbers = "NONE",
+--             operators = "NONE",
+--             strings = "NONE",
+--             types = "NONE",
+--             variables = "NONE",
+--         },
+--         inverse = { -- Inverse highlight for different types
+--             match_paren = false,
+--             visual = false,
+--             search = false,
+--         },
+--         modules = { -- List of various plugins and additional options
+--             -- ...
+--         },
+--     },
+--     palettes = {},
+--     specs = {},
+--     groups = {},
+-- })
 --
---   fox = "nordfox", -- change the colorscheme to use nordfox
---   options = {
---     styles = {
---       comments = "italic", -- change style of comments to be italic
---       keywords = "italic", -- change style of keywords to be bold
---       functions = "italic" -- styles can be a comma separated list
---     },
---   }
---   -- i.vimnverse = {
---   --   match_paren = true, -- inverse the highlighting of match_parens
---   -- },
---   -- colors = {
---   --     bg = '#23272e'
---   -- },
---   -- hlgroups = {
---   --   TSPunctDelimiter = { fg = "${red}" }, -- Override a highlight group with the color red
---   --   LspCodeLens = { bg = "#000000", style = "italic" },
---   -- }
--- })
-
--- require('nightfox').setup({
---   options = {
---     -- Compiled file's destination location
---     compile_path = vim.fn.stdpath("cache") .. "/nightfox",
---     compile_file_suffix = "_compiled", -- Compiled file suffix
---     transparent = false,    -- Disable setting background
---     terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
---     dim_inactive = false,   -- Non focused panes set to alternative background
---     styles = {              -- Style to be applied to different syntax groups
---       comments = "underline",    -- Value is any valid attr-list value `:help attr-list`
---       conditionals = "NONE",
---       constants = "NONE",
---       functions = "italic",
---       keywords = "NONE",
---       numbers = "NONE",
---       operators = "NONE",
---       strings = "reverse",
---       types = "NONE",
---       variables = "NONE",
---     },
---     inverse = {             -- Inverse highlight for different types
---       match_paren = true,
---       visual = true,
---       search = true,
---     },
---     modules = {             -- List of various plugins and additional options
---       -- ...
---     },
---   }
--- })
-
--- vim.cmd("colorscheme nordfox")
+-- -- setup must be called before loading
+-- vim.cmd("colorscheme carbonfox")
 
 vim.cmd("set laststatus=3")
 
--- Load the configuration set above and apply the colorscheme
--- dbfox.load()
-
 require("onedark").setup({
-	-- Main options --
-	style = "dark", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-	transparent = true, -- Show/hide background
-	term_colors = true, -- Change terminal color as per the selected theme style
-	ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
-	-- toggle theme style ---
-	-- toggle_style_key = '<leader>ts', -- Default keybinding to toggle
-	-- toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
+    -- Main options --
+    style = "dark", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+    transparent = true, -- Show/hide background
+    term_colors = true, -- Change terminal color as per the selected theme style
+    ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
+    -- toggle theme style ---
+    -- toggle_style_key = "<leader>ts", -- Default keybinding to toggle
+    -- toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
 
-	-- Change code style ---
-	-- Options are italic, bold, underline, none
-	-- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
-	code_style = {
-		comments = "none",
-		keywords = "italic",
-		functions = "none",
-		strings = "italic,bold",
-		variables = "none",
-	},
+    -- Change code style ---
+    -- Options are italic, bold, underline, none
+    -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
+    code_style = {
+        comments = "none",
+        keywords = "italic",
+        functions = "bold",
+        strings = "italic,bold",
+        variables = "none",
+    },
 
-	-- Custom Highlights --
-	colors = {}, -- Override default colors
-	highlights = {}, -- Override highlight groups
+    -- Custom Highlights --
+    colors = {}, -- Override default colors
+    highlights = {}, -- Override highlight groups
 
-	-- Plugins Config --
-	diagnostics = {
-		darker = false, -- darker colors for diagnostic
-		undercurl = true, -- use undercurl instead of underline for diagnostics
-		background = false, -- use background color for virtual text
-	},
+    -- Plugins Config --
+    diagnostics = {
+        darker = false, -- darker colors for diagnostic
+        undercurl = true, -- use undercurl instead of underline for diagnostics
+        background = false, -- use background color for virtual text
+    },
 })
 require("onedark").load()
 
 require("lualine").setup({
-	options = {
-		icons_enabled = true,
-		-- theme = 'nightfox',
-		component_separators = { left = "", right = "" },
-		section_separators = { left = "", right = "" },
-		disabled_filetypes = {},
-		always_divide_middle = true,
-	},
-	sections = {
-		lualine_a = { "mode" },
-		lualine_b = { "branch", "diff", "diagnostics" },
-		lualine_c = { "filename", "lsp_progress" },
-		lualine_x = { "encoding", "fileformat", "filetype" },
-		lualine_y = { "progress" },
-		lualine_z = { "location" },
-	},
-	inactive_sections = {
-		lualine_a = {},
-		lualine_b = {},
-		lualine_c = { "filename" },
-		lualine_x = { "location" },
-		lualine_y = {},
-		lualine_z = {},
-	},
-	tabline = {},
-	extensions = {},
+    options = {
+        icons_enabled = true,
+        -- theme = 'nightfox',
+        component_separators = { left = "", right = "" },
+        section_separators = { left = "", right = "" },
+        disabled_filetypes = {},
+        always_divide_middle = true,
+    },
+    sections = {
+        lualine_a = { "mode" },
+        lualine_b = { "branch", "diff", "diagnostics" },
+        lualine_c = { "filename", "lsp_progress" },
+        lualine_x = { "encoding", "fileformat", "filetype" },
+        lualine_y = { "progress" },
+        lualine_z = { "location" },
+    },
+    inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { "filename" },
+        lualine_x = { "location" },
+        lualine_y = {},
+        lualine_z = {},
+    },
+    tabline = {},
+    extensions = {},
 })
+
+require("gitsigns").setup({
+    signs = {
+        add = { hl = "GitSignsAdd", text = "│", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
+        change = { hl = "GitSignsChange", text = "│", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
+        delete = { hl = "GitSignsDelete", text = "_", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
+        topdelete = { hl = "GitSignsDelete", text = "‾", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
+        changedelete = { hl = "GitSignsChange", text = "~", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
+    },
+    signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+    numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+    linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+    word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+    watch_gitdir = {
+        interval = 1000,
+        follow_files = true,
+    },
+    attach_to_untracked = true,
+    current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+    current_line_blame_opts = {
+        virt_text = true,
+        virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
+        delay = 1000,
+        ignore_whitespace = false,
+    },
+    current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
+    sign_priority = 6,
+    update_debounce = 100,
+    status_formatter = nil, -- Use default
+    max_file_length = 40000, -- Disable if file is longer than this (in lines)
+    preview_config = {
+        -- Options passed to nvim_open_win
+        border = "single",
+        style = "minimal",
+        relative = "cursor",
+        row = 0,
+        col = 1,
+    },
+    yadm = {
+        enable = false,
+    },
+})
+
+-- OR setup with some options
+-- require("nvim-tree").setup({
+--   sort_by = "case_sensitive",
+--   view = {
+--     adaptive_size = true,
+--     mappings = {
+--       list = {
+--         { key = "u", action = "dir_up" },
+--       },
+--     },
+--   },
+--   renderer = {
+--     group_empty = true,
+--   },
+--   filters = {
+--     dotfiles = true,
+--   },
+-- })
+
+require("nvim-tree").setup({ -- BEGIN_DEFAULT_OPTS
+    auto_reload_on_write = true,
+    create_in_closed_folder = false,
+    disable_netrw = true,
+    hijack_cursor = false,
+    hijack_netrw = false,
+    hijack_unnamed_buffer_when_opening = false,
+    ignore_buffer_on_setup = false,
+    open_on_setup = false,
+    open_on_setup_file = false,
+    open_on_tab = false,
+    ignore_buf_on_tab_change = {},
+    sort_by = "name",
+    root_dirs = {},
+    prefer_startup_root = false,
+    sync_root_with_cwd = false,
+    reload_on_bufenter = false,
+    respect_buf_cwd = false,
+    on_attach = "disable", -- function(bufnr). If nil, will use the deprecated mapping strategy
+    remove_keymaps = false, -- boolean (disable totally or not) or list of key (lhs)
+    view = {
+        adaptive_size = false,
+        centralize_selection = false,
+        width = 30,
+        height = 30,
+        hide_root_folder = false,
+        side = "left",
+        preserve_window_proportions = false,
+        number = false,
+        relativenumber = false,
+        signcolumn = "yes",
+        -- @deprecated
+        mappings = {
+            custom_only = false,
+            list = {
+                -- user mappings go here
+            },
+        },
+        float = {
+            enable = false,
+            open_win_config = {
+                relative = "editor",
+                border = "rounded",
+                width = 30,
+                height = 30,
+                row = 1,
+                col = 1,
+            },
+        },
+    },
+    renderer = {
+        add_trailing = false,
+        group_empty = false,
+        highlight_git = false,
+        full_name = false,
+        highlight_opened_files = "bold",
+        root_folder_modifier = ":~",
+        indent_width = 2,
+        indent_markers = {
+            enable = false,
+            inline_arrows = true,
+            icons = {
+                corner = "└",
+                edge = "│",
+                item = "│",
+                bottom = "─",
+                none = " ",
+            },
+        },
+        icons = {
+            webdev_colors = true,
+            git_placement = "before",
+            padding = " ",
+            symlink_arrow = " ➛ ",
+            show = {
+                file = true,
+                folder = true,
+                folder_arrow = true,
+                git = true,
+            },
+            glyphs = {
+                default = "",
+                symlink = "",
+                bookmark = "",
+                folder = {
+                    arrow_closed = "",
+                    arrow_open = "",
+                    default = "",
+                    open = "",
+                    empty = "",
+                    empty_open = "",
+                    symlink = "",
+                    symlink_open = "",
+                },
+                git = {
+                    unstaged = "✗",
+                    staged = "✓",
+                    unmerged = "",
+                    renamed = "➜",
+                    untracked = "★",
+                    deleted = "",
+                    ignored = "◌",
+                },
+            },
+        },
+        special_files = { "Cargo.toml", "Makefile", "README.md", "readme.md" },
+        symlink_destination = true,
+    },
+    hijack_directories = {
+        enable = false,
+        auto_open = true,
+    },
+    update_focused_file = {
+        enable = false,
+        update_root = false,
+        ignore_list = {},
+    },
+    ignore_ft_on_setup = {},
+    system_open = {
+        cmd = "",
+        args = {},
+    },
+    diagnostics = {
+        enable = false,
+        show_on_dirs = false,
+        debounce_delay = 50,
+        icons = {
+            hint = "",
+            info = "",
+            warning = "",
+            error = "",
+        },
+    },
+    filters = {
+        dotfiles = false,
+        custom = {},
+        exclude = {},
+    },
+    filesystem_watchers = {
+        enable = true,
+        debounce_delay = 50,
+    },
+    git = {
+        enable = true,
+        ignore = true,
+        show_on_dirs = true,
+        timeout = 400,
+    },
+    actions = {
+        use_system_clipboard = true,
+        change_dir = {
+            enable = true,
+            global = false,
+            restrict_above_cwd = false,
+        },
+        expand_all = {
+            max_folder_discovery = 300,
+            exclude = {},
+        },
+        file_popup = {
+            open_win_config = {
+                col = 1,
+                row = 1,
+                relative = "cursor",
+                border = "shadow",
+                style = "minimal",
+            },
+        },
+        open_file = {
+            quit_on_open = false,
+            resize_window = true,
+            window_picker = {
+                enable = true,
+                chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+                exclude = {
+                    filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
+                    buftype = { "nofile", "terminal", "help" },
+                },
+            },
+        },
+        remove_file = {
+            close_window = true,
+        },
+    },
+    trash = {
+        cmd = "gio trash",
+        require_confirm = true,
+    },
+    live_filter = {
+        prefix = "[FILTER]: ",
+        always_show_folders = true,
+    },
+    log = {
+        enable = false,
+        truncate = false,
+        types = {
+            all = false,
+            config = false,
+            copy_paste = false,
+            dev = false,
+            diagnostics = false,
+            git = false,
+            profile = false,
+            watcher = false,
+        },
+    },
+}) -- END_DEFAULT_OPTS
 
 -- vim.opc.list = true
 -- vim.opt.listchars:append("space:⋅")
 -- vim.opt.listchars:append("eol:↴")
 
 ----- indent guidelines
-vim.cmd([[highlight IndentBlank_bar guifg=#333842 gui=nocombine]])
--- vim.cmd [[highlight IndentBlank_bar guibg=#222222 gui=nocombine]]
--- vim.cmd [[highlight IndentBlank_dot guifg=#313844 gui=nocombine]]
--- vim.cmd [[highlight IndentBlank_dot guibg=#282c34 gui=nocombine]]
-
-require("indent_blankline").setup({
-	space_char_blankline = " ",
-	-- show_current_context = true,
-	-- show_current_context_start = true,
-	char_highlight_list = {
-		"IndentBlank_bar",
-	},
-	-- space_char_highlight_list = {
-	--     "IndentBlank_dot",
-	-- },
-})
+-- vim.cmd([[highlight IndentBlank_bar guifg=#323741 gui=nocombine]])
+--
+-- require("indent_blankline").setup({
+--     space_char_blankline = " ",
+--     -- show_current_context = true,
+--     -- show_current_context_start = true,
+--     char_highlight_list = {
+--         "IndentBlank_bar",
+--     },
+--     -- space_char_highlight_list = {
+--     --     "IndentBlank_dot",
+--     -- }
+-- })
