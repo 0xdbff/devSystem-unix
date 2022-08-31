@@ -518,19 +518,19 @@ local rust_opts = {
         -- rust-analyzer options
         settings = {
             ["rust-analyzer"] = {
-                -- cargo = {
-                --     allFeatures = true,
-                -- },
-                -- diagnostics = {
-                --     disabled = {
-                --         "unresolved-proc-macro",
-                --     },
-                -- },
-                -- completion = {
-                --     postfix = {
-                --         enable = false,
-                --     },
-                -- },
+                cargo = {
+                    allFeatures = true,
+                },
+                diagnostics = {
+                    disabled = {
+                        "unresolved-proc-macro",
+                    },
+                },
+                completion = {
+                    postfix = {
+                        enable = false,
+                    },
+                },
             },
         },
     },
@@ -545,7 +545,7 @@ local rust_opts = {
     },
 }
 
--- require("rust-tools").setup(rust_opts)
+require("rust-tools").setup(rust_opts)
 
 -- Make runtime files discoverable to the server
 local runtime_path = vim.split(package.path, ";")
@@ -638,15 +638,27 @@ require("toggleterm").setup({
     -- end,
     open_mapping = [[<c-\>]],
     hide_numbers = true, -- hide the number column in toggleterm buffers
-    shade_filetypes = {},
-    shade_terminals = true,
-    shading_factor = 3, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+    shade_terminals = false,
+     highlights = {
+    -- highlights which map to a highlight group name and a table of it's values
+    -- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
+    Normal = {
+      guibg = "#23272e",
+    },
+    NormalFloat = {
+      link = 'Normal'
+    },
+    FloatBorder = {
+      guifg = "#abb2bf",
+      guibg = "#23272e",
+    },
+},
     start_in_insert = true,
     insert_mappings = true, -- whether or not the open mapping applies in insert mode
     terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
     persist_size = true,
     direction = "vertical",
-    size = 100,
+    size = 70,
     close_on_exit = true, -- close the terminal window when the process exits
     shell = "/usr/bin/env fish", -- change the default shell
 })
@@ -710,7 +722,7 @@ vim.cmd("set laststatus=3")
 require("onedark").setup({
     -- Main options --
     style = "dark", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-    transparent = true, -- Show/hide background
+    transparent = false, -- Show/hide background
     term_colors = true, -- Change terminal color as per the selected theme style
     ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
     -- toggle theme style ---
@@ -730,7 +742,10 @@ require("onedark").setup({
 
     -- Custom Highlights --
     colors = {}, -- Override default colors
-    highlights = {}, -- Override highlight groups
+    highlights = {
+        NvimTreeNormal = { fg = "#abb2bf", bg = "#23272e" },
+        Terminal = { fg = "#abb2bf", bg = "#23272e" },
+    }, -- Override highlight groups
 
     -- Plugins Config --
     diagnostics = {
