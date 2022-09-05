@@ -102,7 +102,7 @@ require("packer").startup(function()
     -- lsp status info for lua line
     use("arkav/lualine-lsp-progress")
     -- Add indentation guides 'soft vertical bars'
-    -- use("lukas-reineke/indent-blankline.nvim")
+    use("lukas-reineke/indent-blankline.nvim")
     -- Add git related info in the signs columns and popups
 
     -- Highlight, edit, and navigate code using a fast incremental parsing library
@@ -176,17 +176,18 @@ vim.o.softtabstop = 4
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.wildmenu = true
--- vim.colorcolumn = true
+vim.colorcolumn = false
 vim.o.expandtab = true
 vim.o.autoindent = true
 -- Make line numbers default
 -- vim.o.number = true
 --Enable mouse mode
 vim.o.mouse = "a"
---Set colorscheme
-vim.o.termguicolors = true
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = "menuone,noselect"
+
+ -- vim.g['guicursor']= 'n-i-v-c:ver100-iCursor'
+ vim.opt.guicursor= 'n-i-v-c:ver100-iCursor'
 
 -- vim.cmd[[ let g:completion_enable_auto_paren = 1 ]]
 -- vim.cmd([[ let g:rustfmt_autosave = 1 ]])
@@ -201,26 +202,26 @@ vim.cmd([[ nnoremap <C-H> <C-W><C-H> ]])
 -- Make windows to be basically the same size
 vim.cmd([[ nnoremap <leader>= <C-w>= ]])
 
-vim.cmd([[
-    augroup c| au!
-        au Filetype c setlocal shiftwidth=4 softtabstop=4
-        au BufNewFile,BufRead *.c,*.h :ClangFormatAutoEnable
-    augroup END
-]])
-
-vim.cmd([[
-    augroup cpp| au!
-        au Filetype cpp setlocal shiftwidth=4 softtabstop=4
-        au BufNewFile,BufRead *.cpp,*.hpp :ClangFormatAutoEnable
-    augroup END
-]])
-
-vim.cmd([[
-    augroup cuda| au!
-        au Filetype cuda setlocal shiftwidth=4 softtabstop=4
-        au BufNewFile,BufRead *.cu :ClangFormatAutoEnable
-    augroup END
-]])
+-- vim.cmd([[
+--     augroup c| au!
+--         au Filetype c setlocal shiftwidth=4 softtabstop=4
+--         au BufNewFile,BufRead *.c,*.h :ClangFormatAutoEnable
+--     augroup END
+-- ]])
+--
+-- vim.cmd([[
+--     augroup cpp| au!
+--         au Filetype cpp setlocal shiftwidth=4 softtabstop=4
+--         au BufNewFile,BufRead *.cpp,*.hpp :ClangFormatAutoEnable
+--     augroup END
+-- ]])
+--
+-- vim.cmd([[
+--     augroup cuda| au!
+--         au Filetype cuda setlocal shiftwidth=4 softtabstop=4
+--         au BufNewFile,BufRead *.cu :ClangFormatAutoEnable
+--     augroup END
+-- ]])
 
 vim.cmd([[setlocal textwidth=80]])
 
@@ -273,8 +274,6 @@ vim.cmd([[set completeopt=menu,menuone,noselect ]])
 -- top and bottom of the screen
 vim.o.scrolloff = 8
 -- vim.o.nowrap = true
-vim.o.termguicolors = true
--- better comments
 vim.o.textwidth = 80
 -- vim.o.colorcolumn = 100
 
@@ -479,8 +478,7 @@ local rust_opts = {
             right_align_padding = 7,
 
             -- The color of the hints
-            highlight = "Comment",
-        },
+            highlight = "Comment", },
 
         -- options same as lsp hover / vim.lsp.util.open_floating_preview()
         hover_actions = {
@@ -496,6 +494,14 @@ local rust_opts = {
                 -- { "─", "FloatBorder" },
                 -- { "╰", "FloatBorder" },
                 -- { "│", "FloatBorder" },
+                { " ", "FloatBorder" },
+                { " ", "FloatBorder" },
+                { " ", "FloatBorder" },
+                { " ", "FloatBorder" },
+                { " ", "FloatBorder" },
+                { " ", "FloatBorder" },
+                { " ", "FloatBorder" },
+                { " ", "FloatBorder" },
             },
 
             -- whether the hover action window gets automatically focused
@@ -639,26 +645,26 @@ require("toggleterm").setup({
     open_mapping = [[<c-\>]],
     hide_numbers = true, -- hide the number column in toggleterm buffers
     shade_terminals = false,
-     highlights = {
-    -- highlights which map to a highlight group name and a table of it's values
-    -- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
-    Normal = {
-      guibg = "#23272e",
+    highlights = {
+        -- highlights which map to a highlight group name and a table of it's values
+        -- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
+        Normal = {
+            guibg = "#23272e",
+        },
+        NormalFloat = {
+            link = "Normal",
+        },
+        FloatBorder = {
+            guifg = "#abb2bf",
+            guibg = "#23272e",
+        },
     },
-    NormalFloat = {
-      link = 'Normal'
-    },
-    FloatBorder = {
-      guifg = "#abb2bf",
-      guibg = "#23272e",
-    },
-},
     start_in_insert = true,
     insert_mappings = true, -- whether or not the open mapping applies in insert mode
     terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
     persist_size = true,
     direction = "vertical",
-    size = 70,
+    size = 80,
     close_on_exit = true, -- close the terminal window when the process exits
     shell = "/usr/bin/env fish", -- change the default shell
 })
@@ -744,7 +750,7 @@ require("onedark").setup({
     colors = {}, -- Override default colors
     highlights = {
         NvimTreeNormal = { fg = "#abb2bf", bg = "#23272e" },
-        Terminal = { fg = "#abb2bf", bg = "#23272e" },
+        -- Terminal = { fg = "#abb2bf", bg = "#23272e" },
     }, -- Override highlight groups
 
     -- Plugins Config --
@@ -1010,7 +1016,7 @@ require("nvim-tree").setup({ -- BEGIN_DEFAULT_OPTS
                 col = 1,
                 row = 1,
                 relative = "cursor",
-                border = "shadow",
+                border = "none",
                 style = "minimal",
             },
         },
@@ -1059,16 +1065,17 @@ require("nvim-tree").setup({ -- BEGIN_DEFAULT_OPTS
 -- vim.opt.listchars:append("eol:↴")
 
 ----- indent guidelines
--- vim.cmd([[highlight IndentBlank_bar guifg=#323741 gui=nocombine]])
+vim.cmd([[highlight IndentBlank_bar guifg=#20252d gui=nocombine]])
+vim.cmd([[highlight IndentBlanklineContextChar guifg=#5c6370 gui=nocombine]])
 --
--- require("indent_blankline").setup({
---     space_char_blankline = " ",
---     -- show_current_context = true,
---     -- show_current_context_start = true,
---     char_highlight_list = {
---         "IndentBlank_bar",
---     },
---     -- space_char_highlight_list = {
---     --     "IndentBlank_dot",
---     -- }
--- })
+require("indent_blankline").setup({
+    space_char_blankline = " ",
+    show_current_context = true,
+    -- show_current_context_start = true,
+    char_highlight_list = {
+        "IndentBlank_bar",
+    },
+    -- space_char_highlight_list = {
+    --     "IndentBlank_dot",
+    -- }
+})
