@@ -67,8 +67,11 @@ require("packer").startup(function()
     use("nvim-lua/plenary.nvim")
     -- debugging
     use("mfussenegger/nvim-dap")
+
     -- better terminal support
     use("akinsho/toggleterm.nvim")
+
+    use({ "glepnir/dashboard-nvim" })
 
     ------ Telescope
     use("nvim-telescope/telescope.nvim")
@@ -180,14 +183,15 @@ vim.colorcolumn = false
 vim.o.expandtab = true
 vim.o.autoindent = true
 -- Make line numbers default
--- vim.o.number = true
+vim.o.number = true
+vim.opt.relativenumber = true
 --Enable mouse mode
 vim.o.mouse = "a"
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = "menuone,noselect"
 
- -- vim.g['guicursor']= 'n-i-v-c:ver100-iCursor'
- vim.opt.guicursor= 'n-i-v-c:ver100-iCursor'
+-- vim.g['guicursor']= 'n-i-v-c:ver100-iCursor'
+vim.opt.guicursor = "n-i-v-c:ver100-iCursor"
 
 -- vim.cmd[[ let g:completion_enable_auto_paren = 1 ]]
 -- vim.cmd([[ let g:rustfmt_autosave = 1 ]])
@@ -222,8 +226,6 @@ vim.cmd([[ nnoremap <leader>= <C-w>= ]])
 --         au BufNewFile,BufRead *.cu :ClangFormatAutoEnable
 --     augroup END
 -- ]])
-
-vim.cmd([[setlocal textwidth=80]])
 
 -- vim.cmd [[
 -- augroup rust | au!
@@ -273,11 +275,9 @@ vim.cmd([[set completeopt=menu,menuone,noselect ]])
 -- Set the number of lines to keep visible above and below the cursor at the
 -- top and bottom of the screen
 vim.o.scrolloff = 8
--- vim.o.nowrap = true
-vim.o.textwidth = 80
+vim.o.nowrap = true
+-- vim.o.textwidth = 80
 -- vim.o.colorcolumn = 100
-
-vim.cmd([[ set nowrap ]])
 
 vim.cmd([[ nnoremap <leader><leader> <c-^> ]])
 
@@ -294,12 +294,15 @@ nvim_keymap("n", ";te", ':tabe <C-R>=expand("%:p:h") . "/" <CR>', {})
 -- quick save with ;w
 nvim_keymap("n", ";w", "<cmd>w<CR>", {})
 -- quick suspend with ;s
-nvim_keymap("n", ";f", "<cmd>sus<CR>", {})
+nvim_keymap("n", ";f", "<cmd>Format<CR>", {})
 -- !TODO improve
-nvim_keymap("n", ";cr", "<cmd>!cargo run<CR>", {})
+nvim_keymap("n", ";cr", "<cmd>TermExec cmd='cargo run'<CR>", {})
 nvim_keymap("n", ";cb", "<cmd>TermExec cmd='cargo build'<CR>", {})
 nvim_keymap("n", ";m", "<cmd>TermExec cmd='make'<CR>", {})
-nvim_keymap("n", ";cc", "<cmd>!cargo check<CR>", {})
+nvim_keymap("n", ";cc", "<cmd>TermExec cmd='cargo check'<CR>", {})
+nvim_keymap("n", ";t", "<cmd>NvimTreeToggle<CR>", { silent = false })
+nvim_keymap("n", ";q", ":q!<CR>", {})
+nvim_keymap("n", ";qq", ":qa!<CR>", {})
 
 -- quick save with <leader> w
 -- vim.cmd[[ nmap <leader>w :w<CR> ]]
@@ -309,10 +312,10 @@ require("telescope").setup({
         file_ignore_patterns = { "node_modules", "/dist" },
         layout_strategy = "horizontal",
         layout_config = {
-            height = 0.6,
+            height = 0.8,
             width = 0.6,
             preview_cutoff = 120,
-            -- preview_width = 0.55,
+            preview_width = 0.6,
         },
     },
     extensions = {
@@ -355,7 +358,7 @@ require("Comment").setup()
 -- require('telescope').load_extension('fzf')
 
 local tb = "<cmd>lua require('telescope.builtin')."
-nvim_keymap("n", "<leader>ff", tb .. "find_files()<cr>", {})
+nvim_keymap("n", "<leader>f", tb .. "find_files()<cr>", {})
 nvim_keymap("n", "<leader>fg", tb .. "live_grep()<cr>", {})
 nvim_keymap("n", "<leader>fb", tb .. "buffer()<cr>", {})
 nvim_keymap("n", "<leader>fh", tb .. "help_tags()<cr>", {})
@@ -478,7 +481,8 @@ local rust_opts = {
             right_align_padding = 7,
 
             -- The color of the hints
-            highlight = "Comment", },
+            highlight = "Comment",
+        },
 
         -- options same as lsp hover / vim.lsp.util.open_floating_preview()
         hover_actions = {
@@ -750,7 +754,11 @@ require("onedark").setup({
     colors = {}, -- Override default colors
     highlights = {
         NvimTreeNormal = { fg = "#abb2bf", bg = "#23272e" },
-        -- Terminal = { fg = "#abb2bf", bg = "#23272e" },
+        -- CursorLineNr = { fg = "#ffffff" , bg = "#000000"},
+        TelescopeBorder = {fg = "#e9ff5e"},
+        TelescopePromptBorder = { fg = "#000000" },
+        TelescopeResultsBorder = { fg = "#000000" },
+        TelescopePreviewBorder = { fg = "#000000" },
     }, -- Override highlight groups
 
     -- Plugins Config --
@@ -833,23 +841,22 @@ require("gitsigns").setup({
     },
 })
 
--- OR setup with some options
 -- require("nvim-tree").setup({
---   sort_by = "case_sensitive",
---   view = {
---     adaptive_size = true,
---     mappings = {
---       list = {
---         { key = "u", action = "dir_up" },
---       },
+--     sort_by = "case_sensitive",
+--     view = {
+--         adaptive_size = true,
+--         mappings = {
+--             list = {
+--                 { key = "u", action = "dir_up" },
+--             },
+--         },
 --     },
---   },
---   renderer = {
---     group_empty = true,
---   },
---   filters = {
---     dotfiles = true,
---   },
+--     renderer = {
+--         group_empty = true,
+--     },
+--     filters = {
+--         dotfiles = true,
+--     },
 -- })
 
 require("nvim-tree").setup({ -- BEGIN_DEFAULT_OPTS
@@ -1069,6 +1076,7 @@ vim.cmd([[highlight IndentBlank_bar guifg=#20252d gui=nocombine]])
 vim.cmd([[highlight IndentBlanklineContextChar guifg=#5c6370 gui=nocombine]])
 --
 require("indent_blankline").setup({
+    filetype_exclude = { "dashboard" },
     space_char_blankline = " ",
     show_current_context = true,
     -- show_current_context_start = true,
@@ -1079,3 +1087,61 @@ require("indent_blankline").setup({
     --     "IndentBlank_dot",
     -- }
 })
+
+-- local home = os.getenv("HOME")
+
+-- local db = require("dashboard")
+-- macos
+-- db.preview_command = "cat | lolcat -F 0.3"
+-- linux
+-- db.preview_command = "ueberzug"
+--
+-- --
+-- -- db.preview_file_path = home .. '/dev/neovim/runtime/nvim.png'
+-- db.preview_file_path = home .. '/try.png'
+-- db.preview_file_height = 16
+-- db.preview_file_width = 80
+-- db.custom_center = {
+--     {
+--         icon = "  ",
+--         desc = "Recently latest session                  ",
+--         shortcut = "SPC s l",
+--         action = "SessionLoad",
+--     },
+--     {
+--         icon = "  ",
+--         desc = "Recently opened files                   ",
+--         action = "DashboardFindHistory",
+--         shortcut = "SPC f h",
+--     },
+--     {
+--         icon = "  ",
+--         desc = "Find  File                              ",
+--         action = "Telescope find_files find_command=rg,--hidden,--files",
+--         shortcut = "SPC f f",
+--     },
+--     {
+--         icon = "  ",
+--         desc = "File Browser                            ",
+--         action = "Telescope file_browser",
+--         shortcut = "SPC f b",
+--     },
+--     {
+--         icon = "  ",
+--         desc = "Find  word                              ",
+--         action = "Telescope live_grep",
+--         shortcut = "SPC f w",
+--     },
+--     {
+--         icon = "  ",
+--         desc = "Open Personal dotfiles                  ",
+--         action = "Telescope dotfiles path=" .. home .. "/.dotfiles",
+--         shortcut = "SPC f d",
+--     },
+-- }
+--
+-- db.custom_header = {
+--     '',
+--     '𝖓𝖊𝖔𝖛𝖎𝖒✍',
+--     '',
+-- }
