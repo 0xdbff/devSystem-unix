@@ -1,23 +1,12 @@
-#change to system's package manager
-set package_manager sudo pacman 
-#if yay is installed, will be default after setup
-set install_args -S
-set update_args -Syu
-
-if not command -v starship &> /dev/null
-    if $package_manager $install_args starship
-    else 
-        echo "installing starship from source"
-        #TODO
-    end
+if command -v starship &> /dev/null
+    #prompt
+    starship init fish | source
 end
 
 #powerline
 #source /opt/homebrew/lib/python3.9/site-packages/powerline/bindings/fish/powerline-setup.fish
 #powerline-setup
 
-#prompt
-starship init fish | source
 
 #IF ANY ABBRV conflits with an important command, an issue would be appreciated
 #main-util shortcuts
@@ -27,30 +16,30 @@ abbr -a t touch
 abbr -a sus suspend
 abbr -a nv 'nvidia-settings'
 abbr -a d 'rm'
-abbr -a dd 'rm -rf'
+abbr -a D 'rm -rf'
 
 #Directories abbr and setup
 #make working dirs if not found
-if not test -d ~/dev
-        mkdir ~/dev
-        if not test -d ~/dev/bin
-                mkdir ~/dev/bin
-        end
-end 
+# if not test -d ~/dev
+#         mkdir ~/dev
+#         if not test -d ~/dev/bin
+#                 mkdir ~/dev/bin
+#         end
+# end 
 #quick access to development dir
 abbr -a cdd ~/dev
 #quick access dev or beta bins
-abbr -a cdb ~/dev/bin 
-if not test -d ~/sh
-        mkdir ~/sh
-end 
+# abbr -a cdb ~/dev/bin 
+# if not test -d ~/sh
+#         mkdir ~/sh
+# end 
 #quick access to user scripts dir
-abbr -a cds ~/sh
-if not test -d ~/logs
-        mkdir ~/logs
-end 
+# abbr -a cds ~/sh
+# if not test -d ~/logs
+#         mkdir ~/logs
+# end 
 #quick access logs performed by user
-abbr -a cdl ~/logs
+# abbr -a cdl ~/logs
 #quick change to software installation dirs
 abbr -a cdlb ~/.local/bin
 abbr -a cdB /bin/
@@ -80,19 +69,19 @@ abbr -a ct 'cargo t'
 set RE (uname -r)
 
 #tmux commands
-abbr -a Tmn  'tmux new -s'
-abbr -a Tmnd 'tmux new -s dev@Darwin-$RE'
-abbr -a Tmny 'tmux new -s Yakuake@$USER'
-abbr -a Tmnc 'tmux new -s cli@$USER'
-abbr -a Tma  'tmux attach -t'
-abbr -a Tmad 'tmux attach -t dev@$USER'
-abbr -a Tmay 'tmux attach -t Yakuake@$USER'
-abbr -a Tmac 'tmux attach -a cli@$USER'
-abbr -a Tmk  'tmux kill-session -t'
-abbr -a Tmkd 'tmux kill-session -t dev@$USER'
-abbr -a Tmky 'tmux kill-session -t Yakuake@$USER'
-abbr -a Tmkc 'tmux kill-session -t cli@$USER'
-abbr -a Tmks 'tmux kill-server'
+# abbr -a Tmn  'tmux new -s'
+# abbr -a Tmnd 'tmux new -s dev@Darwin-$RE'
+# abbr -a Tmny 'tmux new -s Yakuake@$USER'
+# abbr -a Tmnc 'tmux new -s cli@$USER'
+# abbr -a Tma  'tmux attach -t'
+# abbr -a Tmad 'tmux attach -t dev@$USER'
+# abbr -a Tmay 'tmux attach -t Yakuake@$USER'
+# abbr -a Tmac 'tmux attach -a cli@$USER'
+# abbr -a Tmk  'tmux kill-session -t'
+# abbr -a Tmkd 'tmux kill-session -t dev@$USER'
+# abbr -a Tmky 'tmux kill-session -t Yakuake@$USER'
+# abbr -a Tmkc 'tmux kill-session -t cli@$USER'
+# abbr -a Tmks 'tmux kill-server'
 
 #Git Commands
 abbr -a g git
@@ -228,7 +217,7 @@ abbr -a gah 'git stash; and git pull --rebase; and git stash pop'
 
 #if tmux not found, yay as arch package manager
 
-abbr -a n 'nvim .'
+alias  n 'nvim'
 
 abbr -a cl 'clear'
 abbr -a m make
@@ -246,11 +235,11 @@ abbr -a pr 'gh pr create -t (git show -s --format=%s HEAD) -b (git show -s --for
 # complete --command yay --wraps pacman
 
 if command -v yay > /dev/null
-	abbr -a p 'yay -S'
-	abbr -a up 'yay -Syu'
+	    abbr -a p 'yay -S'
+	    abbr -a up 'yay -Syu'
     else
-        abbr -a p '$package_manager $install_args'
-	abbr -a up '$package_manager $update_args' 
+        abbr -a p 'sudo apt install'
+	    abbr -a up sudo 'apt update && sudo apt upgrade'
 end
 
 if command -v exa > /dev/null
@@ -266,11 +255,6 @@ if command -v exa > /dev/null
 	    abbr -a ll 'ls -l'
 	    abbr -a L  'ls -la'
 end
-
-if test -f /usr/share/autojump/autojump.fish;
-	source /usr/share/autojump/autojump.fish;
-end
-
 
 function fish_greeting
 	echo

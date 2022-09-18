@@ -294,7 +294,7 @@ nvim_keymap("n", ";te", ':tabe <C-R>=expand("%:p:h") . "/" <CR>', {})
 -- quick save with ;w
 nvim_keymap("n", ";w", "<cmd>w<CR>", {})
 -- quick suspend with ;s
-nvim_keymap("n", ";f", "<cmd>Format<CR>", {})
+nvim_keymap("n", ";f", "<cmd>Format()<CR>", {})
 -- !TODO improve
 nvim_keymap("n", ";cr", "<cmd>TermExec cmd='cargo run'<CR>", {})
 nvim_keymap("n", ";cb", "<cmd>TermExec cmd='cargo build'<CR>", {})
@@ -358,7 +358,7 @@ require("Comment").setup()
 -- require('telescope').load_extension('fzf')
 
 local tb = "<cmd>lua require('telescope.builtin')."
-nvim_keymap("n", "<leader>f", tb .. "find_files()<cr>", {})
+nvim_keymap("n", "<leader>ff", tb .. "find_files()<cr>", {})
 nvim_keymap("n", "<leader>fg", tb .. "live_grep()<cr>", {})
 nvim_keymap("n", "<leader>fb", tb .. "buffer()<cr>", {})
 nvim_keymap("n", "<leader>fh", tb .. "help_tags()<cr>", {})
