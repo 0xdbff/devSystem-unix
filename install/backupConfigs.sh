@@ -33,4 +33,3 @@ cp -rf ~/.config/fish/ ~/dev/devConfig_files_GNU-Linux/shells/
 cp -rf ~/.vscode/* ~/dev/devConfig_files_GNU-Linux/vsCode/
 
 echo "Config files backed up on --> $backup_path"
-

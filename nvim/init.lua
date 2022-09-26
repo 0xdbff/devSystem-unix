@@ -71,7 +71,7 @@ require("packer").startup(function()
     -- better terminal support
     use("akinsho/toggleterm.nvim")
 
-    use({ "glepnir/dashboard-nvim" })
+    -- use({ "glepnir/dashboard-nvim" })
 
     ------ Telescope
     use("nvim-telescope/telescope.nvim")
@@ -105,7 +105,7 @@ require("packer").startup(function()
     -- lsp status info for lua line
     use("arkav/lualine-lsp-progress")
     -- Add indentation guides 'soft vertical bars'
-    use("lukas-reineke/indent-blankline.nvim")
+    -- use("lukas-reineke/indent-blankline.nvim")
     -- Add git related info in the signs columns and popups
 
     -- Highlight, edit, and navigate code using a fast incremental parsing library
@@ -134,7 +134,7 @@ require("packer").startup(function()
         end,
     })
     -- languages that benefit from plugins
-    use("rust-lang/rust.vim")
+    -- use("rust-lang/rust.vim")
     -- use 'lervag/vimtex'
     use("plasticboy/vim-markdown")
     use("keith/swift.vim")
@@ -161,11 +161,11 @@ require("packer").startup(function()
     use("neovim/nvim-lspconfig")
     -- Autocomplete plugins
     use("hrsh7th/nvim-cmp")
-    -- use("hrsh7th/cmp-buffer")
+    use("hrsh7th/cmp-buffer")
     use("hrsh7th/cmp-path")
     use("hrsh7th/cmp-nvim-lua")
     use("hrsh7th/cmp-nvim-lsp")
-    use("saadparwaiz1/cmp_luasnip")
+    -- use("saadparwaiz1/cmp_luasnip")
     -- Snippets plugin
     use("L3MON4D3/LuaSnip")
 end)
@@ -294,7 +294,7 @@ nvim_keymap("n", ";te", ':tabe <C-R>=expand("%:p:h") . "/" <CR>', {})
 -- quick save with ;w
 nvim_keymap("n", ";w", "<cmd>w<CR>", {})
 -- quick suspend with ;s
-nvim_keymap("n", ";f", "<cmd>Format()<CR>", {})
+nvim_keymap("n", ";f", "<cmd>lua vim.lsp.buf.format()<CR>", {})
 -- !TODO improve
 nvim_keymap("n", ";cr", "<cmd>TermExec cmd='cargo run'<CR>", {})
 nvim_keymap("n", ";cb", "<cmd>TermExec cmd='cargo build'<CR>", {})
@@ -339,6 +339,12 @@ require("nvim-treesitter.configs").setup({
     highlight = {
         -- `false` will disable the whole extension
         enable = true,
+
+        -- disable for large buffers, it can cause performance issues on some ft's...
+        disable = function(lang,bufnr)
+            return lang == "rust" and vim.api.nvim_buf_line_count(bufnr) > 1200 -- i like things fast!(...) true rustacean :)
+            -- !TODO
+        end,
 
         -- list of language that will be disabled
         -- disable = { "c", "rust" },
@@ -421,7 +427,7 @@ for _, lsp in ipairs(servers) do
 end
 
 -- trying ccls instead of clangd
-lspconfig.ccls.setup({
+lspconfig.clangd.setup({
     on_attach = on_attach,
     capabilities = capabilities,
     filetypes = { "c", "cpp", "cuda" },
@@ -591,51 +597,47 @@ lspconfig.sumneko_lua.setup({
 })
 
 -- luasnip setup
-local luasnip = require("luasnip")
+local ls = require("luasnip")
 
 -- nvim-cmp setup
-local cmp = require("cmp")
-cmp.setup({
-    snippet = {
-        expand = function(args)
-            luasnip.lsp_expand(args.body)
-        end,
-    },
-    mapping = {
-        ["<C-p>"] = cmp.mapping.select_prev_item(),
-        ["<C-n>"] = cmp.mapping.select_next_item(),
-        ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-        ["<C-f>"] = cmp.mapping.scroll_docs(4),
-        ["<C-Space>"] = cmp.mapping.complete(),
-        ["<C-e>"] = cmp.mapping.close(),
-        ["<CR>"] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-        }),
-        ["<Tab>"] = function(fallback)
-            if cmp.visible() then
-                cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-                luasnip.expand_or_jump()
-            else
-                fallback()
-            end
-        end,
-        ["<S-Tab>"] = function(fallback)
-            if cmp.visible() then
-                cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-                luasnip.jump(-1)
-            else
-                fallback()
-            end
-        end,
-    },
-    sources = {
-        { name = "nvim_lsp" },
-        { name = "luasnip" },
-    },
-})
+-- local cmp = require("cmp")
+-- cmp.setup({
+--     snippet = {
+--         expand = function(args)
+--             ls.lsp_expand(args.body)
+--         end,
+--     },
+--     mapping = {
+--         ["<C-p>"] = cmp.mapping.select_prev_item(),
+--         ["<C-n>"] = cmp.mapping.select_next_item(),
+--         ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+--         ["<C-f>"] = cmp.mapping.scroll_docs(4),
+--     },
+--     sources = {
+--         { name = "nvim_lsp" },
+--         { name = "luasnip" },
+--         { name = "buffer", keyword_length = 4 },
+--     },
+-- })
+
+-- Keymaps for Luasnip
+vim.keymap.set({ "i", "s" }, "<C-k>", function()
+	if ls.expand_or_jumpable() then
+		ls.expand_or_jump()
+	end
+end, { silent = true })
+
+vim.keymap.set({ "i", "s" }, "<C-j>", function()
+	if ls.jumpable(-1) then
+		ls.jump(-1)
+	end
+end, { silent = true })
+
+vim.keymap.set("i", "<C-l>", function()
+	if ls.choice_active() then
+		ls.change_choice(1)
+	end
+end)
 
 require("toggleterm").setup({
     -- -- size can be a number or function which is passed the current terminal
@@ -746,7 +748,7 @@ require("onedark").setup({
         comments = "none",
         keywords = "italic",
         functions = "bold",
-        strings = "italic,bold",
+        strings = "italic",
         variables = "none",
     },
 
@@ -840,24 +842,6 @@ require("gitsigns").setup({
         enable = false,
     },
 })
-
--- require("nvim-tree").setup({
---     sort_by = "case_sensitive",
---     view = {
---         adaptive_size = true,
---         mappings = {
---             list = {
---                 { key = "u", action = "dir_up" },
---             },
---         },
---     },
---     renderer = {
---         group_empty = true,
---     },
---     filters = {
---         dotfiles = true,
---     },
--- })
 
 require("nvim-tree").setup({ -- BEGIN_DEFAULT_OPTS
     auto_reload_on_write = true,
@@ -1072,21 +1056,21 @@ require("nvim-tree").setup({ -- BEGIN_DEFAULT_OPTS
 -- vim.opt.listchars:append("eol:↴")
 
 ----- indent guidelines
-vim.cmd([[highlight IndentBlank_bar guifg=#20252d gui=nocombine]])
-vim.cmd([[highlight IndentBlanklineContextChar guifg=#5c6370 gui=nocombine]])
---
-require("indent_blankline").setup({
-    filetype_exclude = { "dashboard" },
-    space_char_blankline = " ",
-    show_current_context = true,
-    -- show_current_context_start = true,
-    char_highlight_list = {
-        "IndentBlank_bar",
-    },
-    -- space_char_highlight_list = {
-    --     "IndentBlank_dot",
-    -- }
-})
+-- vim.cmd([[highlight IndentBlank_bar guifg=#20252d gui=nocombine]])
+-- vim.cmd([[highlight IndentBlanklineContextChar guifg=#5c6370 gui=nocombine]])
+-- --
+-- require("indent_blankline").setup({
+--     filetype_exclude = { "dashboard" },
+--     space_char_blankline = " ",
+--     show_current_context = true,
+--     -- show_current_context_start = true,
+--     char_highlight_list = {
+--         "IndentBlank_bar",
+--     },
+--     -- space_char_highlight_list = {
+--     --     "IndentBlank_dot",
+--     -- }
+-- })
 
 -- local home = os.getenv("HOME")
 
