@@ -165,9 +165,9 @@ require("packer").startup(function()
     use("hrsh7th/cmp-path")
     use("hrsh7th/cmp-nvim-lua")
     use("hrsh7th/cmp-nvim-lsp")
-    -- use("saadparwaiz1/cmp_luasnip")
+    use("saadparwaiz1/cmp_luasnip")
     -- Snippets plugin
-    use("L3MON4D3/LuaSnip")
+    use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})
 end)
 
 --Set highlight on search
@@ -191,7 +191,8 @@ vim.o.mouse = "a"
 vim.o.completeopt = "menuone,noselect"
 
 -- vim.g['guicursor']= 'n-i-v-c:ver100-iCursor'
-vim.opt.guicursor = "n-i-v-c:ver100-iCursor"
+-- only replace o-pending is a block, !TODO set it as a beam on terminal mode
+vim.opt.guicursor = "n-i-c-ci-cr:ver100-iCursor"
 
 -- vim.cmd[[ let g:completion_enable_auto_paren = 1 ]]
 -- vim.cmd([[ let g:rustfmt_autosave = 1 ]])
@@ -334,20 +335,23 @@ require("nvim-treesitter.configs").setup({
     -- Install languages synchronously (only applied to `ensure_installed`)
     sync_install = false,
     -- List of parsers to ignore installing
-    -- ignore_install = { "javascript" },
+    ignore_install = { "phpdoc" },
 
     highlight = {
         -- `false` will disable the whole extension
         enable = true,
 
-        -- disable for large buffers, it can cause performance issues on some ft's...
-        disable = function(lang,bufnr)
-            return lang == "rust" and vim.api.nvim_buf_line_count(bufnr) > 1200 -- i like things fast!(...) true rustacean :)
-            -- !TODO
-        end,
+        disable = {
+            "phpdoc",
+            -- disable for large buffers, it can cause performance issues on some ft's...
+            function(lang, bufnr)
+                return lang == "rust" and vim.api.nvim_buf_line_count(bufnr) > 1200 -- i like things fast!(...) true rustacean :)
+                -- !TODO
+            end,
+        },
 
         -- list of language that will be disabled
-        -- disable = { "c", "rust" },
+        -- disable = { "phpdoc" },
 
         -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
         -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
@@ -433,6 +437,15 @@ lspconfig.clangd.setup({
     filetypes = { "c", "cpp", "cuda" },
 })
 
+local omnisharp_path = "/Users/db/.cache/omnisharp-vim/omnisharp-roslyn/run"
+local pid = vim.fn.getpid()
+
+lspconfig.omnisharp.setup({
+    cmd = { omnisharp_path, '--languageserver' , '--hostPID', tostring(pid) },
+    on_attach = on_attach,
+    capabilities = capabilities,
+})
+
 -- Rust
 -- lspconfig.rust_analyzer.setup {
 --     on_attach = on_attach,
@@ -458,34 +471,25 @@ local rust_opts = {
             -- automatically set inlay hints (type hints)
             -- default: true
             auto = true,
-
             -- Only show inlay hints for the current line
             only_current_line = false,
-
             -- whether to show parameter hints with the inlay hints or not
             -- default: true
             show_parameter_hints = true,
-
             -- prefix for parameter hints
             -- default: "<-"
             parameter_hints_prefix = "› ",
-
             -- prefix for all the other hints (type, chaining)
             -- default: "=>"
             other_hints_prefix = "» ",
-
             -- whether to align to the lenght of the longest line in the file
             max_len_align = false,
-
             -- padding from the left if max_len_align is true
             max_len_align_padding = 1,
-
             -- whether to align to the extreme right or not
             right_align = false,
-
             -- padding from the right if right_align is true
             right_align_padding = 7,
-
             -- The color of the hints
             highlight = "Comment",
         },
@@ -496,14 +500,6 @@ local rust_opts = {
             -- the border that is used for the hover window
             -- see vim.api.nvim_open_win()
             border = {
-                -- { "╭", "FloatBorder" },
-                -- { "─", "FloatBorder" },
-                -- { "╮", "FloatBorder" },
-                -- { "│", "FloatBorder" },
-                -- { "╯", "FloatBorder" },
-                -- { "─", "FloatBorder" },
-                -- { "╰", "FloatBorder" },
-                -- { "│", "FloatBorder" },
                 { " ", "FloatBorder" },
                 { " ", "FloatBorder" },
                 { " ", "FloatBorder" },
@@ -532,23 +528,23 @@ local rust_opts = {
         capabilities = capabilities,
 
         -- rust-analyzer options
-        settings = {
-            ["rust-analyzer"] = {
-                cargo = {
-                    allFeatures = true,
-                },
-                diagnostics = {
-                    disabled = {
-                        "unresolved-proc-macro",
-                    },
-                },
-                completion = {
-                    postfix = {
-                        enable = false,
-                    },
-                },
-            },
-        },
+        -- settings = {
+        --     ["rust-analyzer"] = {
+        --         cargo = {
+        --             allFeatures = true,
+        --         },
+        --         diagnostics = {
+        --             disabled = {
+        --                 "unresolved-proc-macro",
+        --             },
+        --         },
+        --         completion = {
+        --             postfix = {
+        --                 enable = false,
+        --             },
+        --         },
+        --     },
+        -- },
     },
 
     -- debugging stuff
@@ -600,43 +596,43 @@ lspconfig.sumneko_lua.setup({
 local ls = require("luasnip")
 
 -- nvim-cmp setup
--- local cmp = require("cmp")
--- cmp.setup({
---     snippet = {
---         expand = function(args)
---             ls.lsp_expand(args.body)
---         end,
---     },
---     mapping = {
---         ["<C-p>"] = cmp.mapping.select_prev_item(),
---         ["<C-n>"] = cmp.mapping.select_next_item(),
---         ["<C-d>"] = cmp.mapping.scroll_docs(-4),
---         ["<C-f>"] = cmp.mapping.scroll_docs(4),
---     },
---     sources = {
---         { name = "nvim_lsp" },
---         { name = "luasnip" },
---         { name = "buffer", keyword_length = 4 },
---     },
--- })
+local cmp = require("cmp")
+cmp.setup({
+    snippet = {
+        expand = function(args)
+            ls.lsp_expand(args.body)
+        end,
+    },
+    mapping = {
+        ["<C-p>"] = cmp.mapping.select_prev_item(),
+        ["<C-n>"] = cmp.mapping.select_next_item(),
+        ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+        ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    },
+    sources = {
+        { name = "nvim_lsp" },
+        { name = "luasnip" },
+        { name = "buffer", keyword_length = 4 },
+    },
+})
 
 -- Keymaps for Luasnip
 vim.keymap.set({ "i", "s" }, "<C-k>", function()
-	if ls.expand_or_jumpable() then
-		ls.expand_or_jump()
-	end
+    if ls.expand_or_jumpable() then
+        ls.expand_or_jump()
+    end
 end, { silent = true })
 
 vim.keymap.set({ "i", "s" }, "<C-j>", function()
-	if ls.jumpable(-1) then
-		ls.jump(-1)
-	end
+    if ls.jumpable(-1) then
+        ls.jump(-1)
+    end
 end, { silent = true })
 
 vim.keymap.set("i", "<C-l>", function()
-	if ls.choice_active() then
-		ls.change_choice(1)
-	end
+    if ls.choice_active() then
+        ls.change_choice(1)
+    end
 end)
 
 require("toggleterm").setup({
@@ -757,7 +753,7 @@ require("onedark").setup({
     highlights = {
         NvimTreeNormal = { fg = "#abb2bf", bg = "#23272e" },
         -- CursorLineNr = { fg = "#ffffff" , bg = "#000000"},
-        TelescopeBorder = {fg = "#e9ff5e"},
+        TelescopeBorder = { fg = "#e9ff5e" },
         TelescopePromptBorder = { fg = "#000000" },
         TelescopeResultsBorder = { fg = "#000000" },
         TelescopePreviewBorder = { fg = "#000000" },
@@ -867,7 +863,6 @@ require("nvim-tree").setup({ -- BEGIN_DEFAULT_OPTS
         adaptive_size = false,
         centralize_selection = false,
         width = 30,
-        height = 30,
         hide_root_folder = false,
         side = "left",
         preserve_window_proportions = false,
