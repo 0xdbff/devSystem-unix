@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+TryExec=alacritty-win
+Exec=alacritty-win
+Icon=alacritty-win
+Terminal=false
+Categories=System;TerminalEmulator;
+
+Name=Term
+GenericName=Term
+Comment=A fast, cross-platform, OpenGL terminal emulator
+StartupWMClass=Term
+Actions=New;
+
+[Desktop Action New]
+Name=New Terminal
+Exec=alacritty-win
