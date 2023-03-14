@@ -111,10 +111,10 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: FiraCode Nerd Font Mono
+    family: Iosevka Nerd Font Mono
 
     # The `style` can be specified to pick a specific face.
-    style: Retina
+    style: Regular
 
   # Bold font face
   bold:
@@ -122,18 +122,19 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: FiraCode Nerd Font Mono
+    # family: FiraCode Nerd Font Mono
 
     # The `style` can be specified to pick a specific face.
-    style: Retina
- 
+    # style: Retina
+    style: Medium
+
   # Italic font face
   italic:
     # Font family
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Iosekva nerd font
+    # family: Iosekva nerd font
 
     # The `style` can be specified to pick a specific face.
     style: Italic
@@ -144,20 +145,20 @@ font:
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Iosekva Term
+    # family: Iosekva Term
 
     # The `style` can be specified to pick a specific face.
     style: Medium Italic
 
   # Point size
-  size: 7
+  size: 12.5
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
   # spacing.
   offset:
     x: 0
-    y: 0
+    y: 1
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increasing `x` moves the glyph to the

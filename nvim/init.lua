@@ -136,7 +136,7 @@ require("packer").startup(function()
     -- languages that benefit from plugins
     -- use("rust-lang/rust.vim")
     -- use 'lervag/vimtex'
-    use("plasticboy/vim-markdown")
+    -- use("plasticboy/vim-markdown")
     use("keith/swift.vim")
     use("neovimhaskell/haskell-vim")
     use("elmcast/elm-vim")
@@ -330,7 +330,7 @@ require("telescope").setup({
 
 require("nvim-treesitter.configs").setup({
     -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-    ensure_installed = "all",
+    -- ensure_installed = "all",
 
     -- Install languages synchronously (only applied to `ensure_installed`)
     sync_install = false,
@@ -491,10 +491,10 @@ end
 
 -- nvim-cmp supports additional completion capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities);
 
 -- Enable the following language servers, quick setup default settings
-local servers = { "pyright", "tsserver" }
+local servers = { "pyright" }
 for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup({
         on_attach = on_attach,
@@ -509,13 +509,22 @@ lspconfig.clangd.setup({
     filetypes = { "c", "cpp", "cuda" },
 })
 
+lspconfig.tsserver.setup({
+    cmd = { 'typescript-language-server', '--stdio' };
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx' };
+    root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json');
+    settings = {};
+})
+
 local pid = vim.fn.getpid()
 local omnisharp_path
 
 if is_linux then
     omnisharp_path = "/home/db/.local/bin/omnisharp/OmniSharp"
 elseif is_darwin then
-    omnisharp_path = "/home/db/.local/bin/omnisharp/OmniSharp"
+    omnisharp_path = "/Users/db/.local/bin/omnisharp/OmniSharp"
 end
 
 lspconfig.omnisharp.setup({
