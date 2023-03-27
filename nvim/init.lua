@@ -301,7 +301,8 @@ nvim_keymap("n", ";cr", "<cmd>TermExec cmd='cargo run'<CR>", {})
 nvim_keymap("n", ";cb", "<cmd>TermExec cmd='cargo build'<CR>", {})
 nvim_keymap("n", ";m", "<cmd>TermExec cmd='make'<CR>", {})
 nvim_keymap("n", ";cc", "<cmd>TermExec cmd='cargo check'<CR>", {})
-nvim_keymap("n", ";t", "<cmd>NvimTreeToggle<CR>", { silent = false })
+nvim_keymap("n", ";t", "<cmd>NvimTreeFocus<CR>", { silent = false })
+nvim_keymap("n", ";T", "<cmd>NvimTreeToggle<CR>", { silent = false })
 nvim_keymap("n", ";q", ":q!<CR>", {})
 nvim_keymap("n", ";qq", ":qa!<CR>", {})
 
@@ -330,7 +331,7 @@ require("telescope").setup({
 
 require("nvim-treesitter.configs").setup({
     -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-    -- ensure_installed = "all",
+    ensure_installed = "all",
 
     -- Install languages synchronously (only applied to `ensure_installed`)
     sync_install = false,
@@ -509,6 +510,36 @@ lspconfig.clangd.setup({
     filetypes = { "c", "cpp", "cuda" },
 })
 
+lspconfig.cssls.setup({
+    cmd = { 'css-languageserver', '--stdio' };
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "css", "scss", "less" },
+    root_dir = lspconfig.util.root_pattern("package.json", ".git"),
+})
+
+lspconfig.html.setup({
+    cmd = { "vscode-html-language-server", "--stdio" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "html" },
+    init_options = {
+        configurationSection = { "html", "css", "javascript" },
+        embeddedLanguages = {
+            css = true,
+            javascript = true
+        },
+        provideFormatter = true
+    },
+    root_dir = lspconfig.util.root_pattern("package.json", ".git"),
+})
+
+lspconfig.pyright.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    root_dir = lspconfig.util.root_pattern('package.json', 'package-lock.json');
+})
+
 lspconfig.tsserver.setup({
     cmd = { 'typescript-language-server', '--stdio' };
     on_attach = on_attach,
@@ -652,7 +683,7 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 -- Lua
-lspconfig.sumneko_lua.setup({
+lspconfig.lua_ls.setup({
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
