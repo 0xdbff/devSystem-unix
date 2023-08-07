@@ -15,10 +15,10 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 
 vim.cmd([[
-    augroup Packer
-        autocmd!
-        autocmd BufWritePost init.lua PackerCompile
-    augroup end
+augroup Packer
+autocmd!
+autocmd BufWritePost init.lua PackerCompile
+augroup end
 ]])
 
 local use = require("packer").use
@@ -92,6 +92,7 @@ require("packer").startup(function()
     -- Colorshemes
     -- use 'mjlbach/onedark.nvim'
     use("navarasu/onedark.nvim")
+    use 'folke/tokyonight.nvim'
 
     -- use 'Db-dev2002/dbfox.nvim'
     -- use 'Db-dev2002/sonokai'
@@ -170,6 +171,8 @@ require("packer").startup(function()
     use({ "L3MON4D3/LuaSnip" })
 end)
 
+vim.o.termguicolors = true
+
 --Set highlight on search
 vim.o.hlsearch = true
 vim.o.tabstop = 4
@@ -189,6 +192,18 @@ vim.opt.relativenumber = true
 vim.o.mouse = "a"
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = "menuone,noselect"
+vim.wo.cursorline = true
+
+-- Enable cursorline for active window only
+vim.api.nvim_exec([[
+  augroup CursorLine
+    autocmd!
+    autocmd WinEnter,BufEnter * setlocal cursorline
+    autocmd WinLeave,BufLeave * setlocal nocursorline
+  augroup END
+]], false)
+
+
 
 -- vim.g['guicursor']= 'n-i-v-c:ver100-iCursor'
 -- only replace o-pending is a block, !TODO set it as a beam on terminal mode
@@ -276,7 +291,7 @@ vim.cmd([[set completeopt=menu,menuone,noselect ]])
 -- Set the number of lines to keep visible above and below the cursor at the
 -- top and bottom of the screen
 vim.o.scrolloff = 8
-vim.o.nowrap = true
+-- vim.o.nowrap = true -- THIS BREAKS NVIM 0.10
 -- vim.o.textwidth = 80
 -- vim.o.colorcolumn = 100
 
@@ -311,7 +326,7 @@ nvim_keymap("n", ";qq", ":qa!<CR>", {})
 
 require("telescope").setup({
     defaults = {
-        file_ignore_patterns = { "node_modules", "/dist" },
+        file_ignore_patterns = { "node_modules", "/dist", "/venv","/migrations", "/build", "__pycache__" },
         layout_strategy = "horizontal",
         layout_config = {
             height = 0.8,
@@ -336,7 +351,7 @@ require("nvim-treesitter.configs").setup({
     -- Install languages synchronously (only applied to `ensure_installed`)
     sync_install = false,
     -- List of parsers to ignore installing
-    ignore_install = { "phpdoc" },
+    -- ignore_install = { "phpdoc" },
 
     highlight = {
         -- `false` will disable the whole extension
@@ -495,74 +510,89 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities);
 
 -- Enable the following language servers, quick setup default settings
-local servers = { "pyright" }
-for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup({
+-- local servers = { "pyright" }
+-- for _, lsp in ipairs(servers) do
+--     lspconfig[lsp].setup({
+    --         on_attach = on_attach,
+    --         capabilities = capabilities,
+    --     })
+    -- end
+
+    lspconfig.clangd.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { "c", "cpp", "cuda" },
+    })
+
+    -- CSS, intall vscode css language server with bins
+    lspconfig.cssls.setup({
+        cmd = { 'css-languageserver', '--stdio' };
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { "css", "scss", "less" },
+        root_dir = lspconfig.util.root_pattern("package.json", ".git"),
+    })
+
+    lspconfig.html.setup({
+        cmd = { "html-languageserver", "--stdio" },
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { "html" },
+        init_options = {
+            configurationSection = { "html", "css", "javascript" },
+            embeddedLanguages = {
+                css = true,
+                javascript = true
+            },
+            provideFormatter = true
+        },
+        root_dir = lspconfig.util.root_pattern("package.json", ".git"),
+    })
+
+    -- lspconfig.pyright.setup({
+    --     -- cmd = { 'pyright-langserver', '--stdio', '--skipunannotated' };
+    --     on_attach = on_attach,
+    --     capabilities = capabilities,
+    --     root_dir = lspconfig.util.root_pattern('package.json', 'package-lock.json', 'manage.py', 'pyrightconfig.json');
+    -- })
+    lspconfig.pyright.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = { "pyright-langserver", "--stdio" },
+        filetypes = { "python" },
+        settings = {
+            python = {
+                analysis = {
+                    typeCheckingMode = "basic", -- Change to "basic" or "strict" as per your requirements
+                    -- You can add more settings here based on your requirements
+                }
+            }
+        }
+    })
+
+    lspconfig.tsserver.setup({
+        cmd = { 'typescript-language-server', '--stdio' };
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx' };
+        root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json');
+        settings = {};
+    })
+
+    local pid = vim.fn.getpid()
+    local omnisharp_path
+
+    if is_linux then
+        omnisharp_path = "/home/db/.local/bin/omnisharp/OmniSharp"
+    elseif is_darwin then
+        omnisharp_path = "/Users/db/.local/bin/omnisharp/OmniSharp"
+    end
+
+    lspconfig.omnisharp.setup({
+        cmd = { omnisharp_path, "--languageserver", "--hostPID", tostring(pid) },
         on_attach = on_attach,
         capabilities = capabilities,
     })
-end
-
--- trying ccls instead of clangd
-lspconfig.clangd.setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = { "c", "cpp", "cuda" },
-})
-
-lspconfig.cssls.setup({
-    cmd = { 'css-languageserver', '--stdio' };
-    on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = { "css", "scss", "less" },
-    root_dir = lspconfig.util.root_pattern("package.json", ".git"),
-})
-
-lspconfig.html.setup({
-    cmd = { "vscode-html-language-server", "--stdio" },
-    on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = { "html" },
-    init_options = {
-        configurationSection = { "html", "css", "javascript" },
-        embeddedLanguages = {
-            css = true,
-            javascript = true
-        },
-        provideFormatter = true
-    },
-    root_dir = lspconfig.util.root_pattern("package.json", ".git"),
-})
-
-lspconfig.pyright.setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-    root_dir = lspconfig.util.root_pattern('package.json', 'package-lock.json');
-})
-
-lspconfig.tsserver.setup({
-    cmd = { 'typescript-language-server', '--stdio' };
-    on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx' };
-    root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json');
-    settings = {};
-})
-
-local pid = vim.fn.getpid()
-local omnisharp_path
-
-if is_linux then
-    omnisharp_path = "/home/db/.local/bin/omnisharp/OmniSharp"
-elseif is_darwin then
-    omnisharp_path = "/Users/db/.local/bin/omnisharp/OmniSharp"
-end
-
-lspconfig.omnisharp.setup({
-    cmd = { omnisharp_path, "--languageserver", "--hostPID", tostring(pid) },
-    on_attach = on_attach,
-    capabilities = capabilities,
-})
 
 -- Rust
 -- lspconfig.rust_analyzer.setup {
@@ -798,50 +828,169 @@ vim.cmd("autocmd! TermOpen term://* lua Set_terminal_keymaps()")
 -- })
 --
 -- -- setup must be called before loading
--- vim.cmd("colorscheme carbonfox")
+-- vim.cmd("colorscheme nordfox")
 
 vim.cmd("set laststatus=3")
 
-require("onedark").setup({
-    -- Main options --
-    style = "dark", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-    transparent = false, -- Show/hide background
-    term_colors = true, -- Change terminal color as per the selected theme style
-    ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
-    -- toggle theme style ---
-    -- toggle_style_key = "<leader>ts", -- Default keybinding to toggle
-    -- toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
+-- vim.cmd[[colorscheme tokyonight]]
+-- require("onedark").setup({
+--     -- Main options --
+--     style = "dark", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+--     transparent = true, -- Show/hide background
+--     term_colors = true, -- Change terminal color as per the selected theme style
+--     ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
+--     -- toggle theme style ---
+--     -- toggle_style_key = "<leader>ts", -- Default keybinding to toggle
+--     -- toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
+--
+--     -- Change code style ---
+--     -- Options are italic, bold, underline, none
+--     -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
+--     code_style = {
+--         comments = "none",
+--         keywords = "italic",
+--         functions = "bold",
+--         strings = "italic",
+--         variables = "none",
+--     },
+--
+--     -- Custom Highlights --
+--     colors = {}, -- Override default colors
+--     highlights = {
+--         NvimTreeNormal = { fg = "#abb2bf", bg = "#23272e" },
+--         -- CursorLineNr = { fg = "#ffffff" , bg = "#000000"},
+--         TelescopeBorder = { fg = "#61afef" },
+--         TelescopePromptBorder = { fg = "#000000" },
+--         TelescopeResultsBorder = { fg = "#000000" },
+--         TelescopePreviewBorder = { fg = "#000000" },
+--     }, -- Override highlight groups
+--
+--     -- Plugins Config --
+--     diagnostics = {
+--         darker = false, -- darker colors for diagnostic
+--         undercurl = true, -- use undercurl instead of underline for diagnostics
+--         background = false, -- use background color for virtual text
+--     },
+-- })
+-- require("onedark").load()
 
-    -- Change code style ---
-    -- Options are italic, bold, underline, none
-    -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
-    code_style = {
-        comments = "none",
-        keywords = "italic",
-        functions = "bold",
-        strings = "italic",
-        variables = "none",
+require("tokyonight").setup({
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
+    light_style = "day", -- The theme is used when the background is set to light
+    transparent = false, -- Enable this to disable setting the background color
+    terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
+    styles = {
+        -- Style to be applied to different syntax groups
+        -- Value is any valid attr-list value for `:help nvim_set_hl`
+        comments = { italic = true},
+        keywords = { italic = true },
+        functions = {},
+        variables = {},
+        -- Background styles. Can be "dark", "transparent" or "normal"
+        sidebars = "dark", -- style for sidebars, see below
+        floats = "dark", -- style for floating windows
     },
+    sidebars = { "qf" }, -- Set a darker background on sidebar-like windows. For example: `["qf", "vista_kind", "terminal", "packer"]`
+    day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
+    hide_inactive_statusline = false, -- Enabling this option, will hide inactive statuslines and replace them with a thin border instead. Should work with the standard **StatusLine** and **LuaLine**.
+    dim_inactive = 0.1, -- dims inactive windows
+    lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
 
-    -- Custom Highlights --
-    colors = {}, -- Override default colors
-    highlights = {
-        NvimTreeNormal = { fg = "#abb2bf", bg = "#23272e" },
-        -- CursorLineNr = { fg = "#ffffff" , bg = "#000000"},
-        TelescopeBorder = { fg = "#e9ff5e" },
-        TelescopePromptBorder = { fg = "#000000" },
-        TelescopeResultsBorder = { fg = "#000000" },
-        TelescopePreviewBorder = { fg = "#000000" },
-    }, -- Override highlight groups
+    --- You can override specific color groups to use other groups or a hex color
+    --- function will be called with a ColorScheme table
+    ---@param colors ColorScheme
 
-    -- Plugins Config --
-    diagnostics = {
-        darker = false, -- darker colors for diagnostic
-        undercurl = true, -- use undercurl instead of underline for diagnostics
-        background = false, -- use background color for virtual text
-    },
+    on_colors = function(colors)
+        colors.bg_dark = "#23272e"   -- slightly darker background for better contrast
+        colors.bg = "#282c34"        -- little bit darker to reduce eye strain
+        colors.bg_highlight = "#30343f"
+        colors.terminal_black = "#3c4350"
+        colors.fg = "#abb2bf"        -- brighter text for better readability
+        colors.fg_dark = "#7f8c98"   -- slightly brighter
+        colors.fg_gutter = "#3c4350" -- slightly brighter
+        colors.dark3 = "#4a515d"
+        colors.comment = "#687186"   -- slightly brighter comments
+        colors.dark5 = "#6a6f7b"
+        colors.blue0 = "#61afef"
+        colors.blue = "#61afef"
+        colors.cyan = "#56b6c2"
+        colors.blue1 = "#59bbdc"
+        colors.blue2 = "#5fabea"
+        colors.blue5 = "#619aef"
+        colors.blue6 = "#6190ef"
+        colors.blue7 = "#617def"
+        colors.magenta = "#e86671"
+        colors.magenta2 = "#e87966"
+        colors.purple = "#c678dd"
+        colors.orange = "#d19a66"
+        colors.yellow = "#e5c07b"
+        colors.green = "#98c379"
+        colors.green1 = "#79c3a0"
+        colors.green2 = "#a0c379"
+        colors.teal = "#1abc9c"
+        colors.red = "#e06c75"
+        colors.red1 = "#d45c66"
+        colors.bg_popup = colors.bg_dark
+        colors.bg_statusline = colors.bg_dark
+        colors.git = { change = "#4a88ff", add = "#98c379", delete = "#e06c75" }
+    end,
+
+    --- You can override specific highlights to use other groups or a hex color
+    --- function will be called with a Highlights and ColorScheme table
+    ---@param highlights Highlights
+    ---@param colors ColorScheme
+    on_highlights = function(hl, c)
+        local prompt = "#282c34"
+        hl.TelescopeNormal = {
+            bg = prompt,
+            fg = c.fg_dark,
+        }
+        hl.TelescopeBorder = {
+            bg = c.bg_dark,
+            fg = c.bg_dark,
+        }
+        hl.TelescopePromptNormal = {
+            bg = prompt,
+        }
+        hl.TelescopePromptBorder = {
+            bg = prompt,
+            fg = prompt,
+        }
+        hl.TelescopePromptTitle = {
+            bg = prompt,
+            fg = prompt,
+        }
+        hl.TelescopePreviewTitle = {
+            bg = c.bg_dark,
+            fg = c.bg_dark,
+        }
+        hl.TelescopeResultsTitle = {
+            bg = c.bg_dark,
+            fg = c.bg_dark,
+        }
+
+        -- hl.LspDiagnosticsVirtualTextError = { bg = "NONE", fg = c.red }
+        -- hl.LspDiagnosticsVirtualTextWarning = { bg = "NONE", fg = c.yellow }
+        -- hl.LspDiagnosticsVirtualTextInformation = { bg = "NONE", fg = c.blue }
+        -- hl.LspDiagnosticsVirtualTextHint = { bg = "NONE", fg = c.green }
+
+        hl.DiagnosticVirtualTextError = { bg = "NONE", fg = c.error } -- Used for "Error" diagnostic virtual text
+        hl.DiagnosticVirtualTextWarn = { bg = "NONE", fg = c.warning } -- Used for "Warning" diagnostic virtual text
+        hl.DiagnosticVirtualTextInfo = { bg = "NONE", fg = c.info } -- Used for "Information" diagnostic virtual text
+        hl.DiagnosticVirtualTextHint = { bg = "NONE", fg = c.hint } -- Used for "Hint" diagnostic virtual text
+
+        hl.NormalFloat = { fg = c.fg_float, bg = "#2f353e" }
+
+        hl.LineNr = { fg = "#0f1114" }
+        hl.CursorLine = { bg = "#2f353e" }
+        hl.Visual = { bg = "#23272e" }
+    end,
 })
-require("onedark").load()
+--
+vim.cmd[[colorscheme tokyonight]]
+require("tokyonight").load()
 
 require("lualine").setup({
     options = {
@@ -914,288 +1063,4 @@ require("gitsigns").setup({
     },
 })
 
-require("nvim-tree").setup({ -- BEGIN_DEFAULT_OPTS
-    auto_reload_on_write = true,
-    create_in_closed_folder = false,
-    disable_netrw = true,
-    hijack_cursor = false,
-    hijack_netrw = false,
-    hijack_unnamed_buffer_when_opening = false,
-    ignore_buffer_on_setup = false,
-    open_on_setup = false,
-    open_on_setup_file = false,
-    open_on_tab = false,
-    ignore_buf_on_tab_change = {},
-    sort_by = "name",
-    root_dirs = {},
-    prefer_startup_root = false,
-    sync_root_with_cwd = false,
-    reload_on_bufenter = false,
-    respect_buf_cwd = false,
-    on_attach = "disable", -- function(bufnr). If nil, will use the deprecated mapping strategy
-    remove_keymaps = false, -- boolean (disable totally or not) or list of key (lhs)
-    view = {
-        adaptive_size = false,
-        centralize_selection = false,
-        width = 30,
-        hide_root_folder = false,
-        side = "left",
-        preserve_window_proportions = false,
-        number = false,
-        relativenumber = false,
-        signcolumn = "yes",
-        -- @deprecated
-        mappings = {
-            custom_only = false,
-            list = {
-                -- user mappings go here
-            },
-        },
-        float = {
-            enable = false,
-            open_win_config = {
-                relative = "editor",
-                border = "rounded",
-                width = 30,
-                height = 30,
-                row = 1,
-                col = 1,
-            },
-        },
-    },
-    renderer = {
-        add_trailing = false,
-        group_empty = false,
-        highlight_git = false,
-        full_name = false,
-        highlight_opened_files = "bold",
-        root_folder_modifier = ":~",
-        indent_width = 2,
-        indent_markers = {
-            enable = false,
-            inline_arrows = true,
-            icons = {
-                corner = "└",
-                edge = "│",
-                item = "│",
-                bottom = "─",
-                none = " ",
-            },
-        },
-        icons = {
-            webdev_colors = true,
-            git_placement = "before",
-            padding = " ",
-            symlink_arrow = " ➛ ",
-            show = {
-                file = true,
-                folder = true,
-                folder_arrow = true,
-                git = true,
-            },
-            glyphs = {
-                default = "",
-                symlink = "",
-                bookmark = "",
-                folder = {
-                    arrow_closed = "",
-                    arrow_open = "",
-                    default = "",
-                    open = "",
-                    empty = "",
-                    empty_open = "",
-                    symlink = "",
-                    symlink_open = "",
-                },
-                git = {
-                    unstaged = "✗",
-                    staged = "✓",
-                    unmerged = "",
-                    renamed = "➜",
-                    untracked = "★",
-                    deleted = "",
-                    ignored = "◌",
-                },
-            },
-        },
-        special_files = { "Cargo.toml", "Makefile", "README.md", "readme.md" },
-        symlink_destination = true,
-    },
-    hijack_directories = {
-        enable = false,
-        auto_open = true,
-    },
-    update_focused_file = {
-        enable = false,
-        update_root = false,
-        ignore_list = {},
-    },
-    ignore_ft_on_setup = {},
-    system_open = {
-        cmd = "",
-        args = {},
-    },
-    diagnostics = {
-        enable = false,
-        show_on_dirs = false,
-        debounce_delay = 50,
-        icons = {
-            hint = "",
-            info = "",
-            warning = "",
-            error = "",
-        },
-    },
-    filters = {
-        dotfiles = false,
-        custom = {},
-        exclude = {},
-    },
-    filesystem_watchers = {
-        enable = true,
-        debounce_delay = 50,
-    },
-    git = {
-        enable = true,
-        ignore = true,
-        show_on_dirs = true,
-        timeout = 400,
-    },
-    actions = {
-        use_system_clipboard = true,
-        change_dir = {
-            enable = true,
-            global = false,
-            restrict_above_cwd = false,
-        },
-        expand_all = {
-            max_folder_discovery = 300,
-            exclude = {},
-        },
-        file_popup = {
-            open_win_config = {
-                col = 1,
-                row = 1,
-                relative = "cursor",
-                border = "none",
-                style = "minimal",
-            },
-        },
-        open_file = {
-            quit_on_open = false,
-            resize_window = true,
-            window_picker = {
-                enable = true,
-                chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
-                exclude = {
-                    filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
-                    buftype = { "nofile", "terminal", "help" },
-                },
-            },
-        },
-        remove_file = {
-            close_window = true,
-        },
-    },
-    trash = {
-        cmd = "gio trash",
-        require_confirm = true,
-    },
-    live_filter = {
-        prefix = "[FILTER]: ",
-        always_show_folders = true,
-    },
-    log = {
-        enable = false,
-        truncate = false,
-        types = {
-            all = false,
-            config = false,
-            copy_paste = false,
-            dev = false,
-            diagnostics = false,
-            git = false,
-            profile = false,
-            watcher = false,
-        },
-    },
-}) -- END_DEFAULT_OPTS
-
--- vim.opc.list = true
--- vim.opt.listchars:append("space:⋅")
--- vim.opt.listchars:append("eol:↴")
-
------ indent guidelines
--- vim.cmd([[highlight IndentBlank_bar guifg=#20252d gui=nocombine]])
--- vim.cmd([[highlight IndentBlanklineContextChar guifg=#5c6370 gui=nocombine]])
--- --
--- require("indent_blankline").setup({
---     filetype_exclude = { "dashboard" },
---     space_char_blankline = " ",
---     show_current_context = true,
---     -- show_current_context_start = true,
---     char_highlight_list = {
---         "IndentBlank_bar",
---     },
---     -- space_char_highlight_list = {
---     --     "IndentBlank_dot",
---     -- }
--- })
-
--- local home = os.getenv("HOME")
-
--- local db = require("dashboard")
--- macos
--- db.preview_command = "cat | lolcat -F 0.3"
--- linux
--- db.preview_command = "ueberzug"
---
--- --
--- -- db.preview_file_path = home .. '/dev/neovim/runtime/nvim.png'
--- db.preview_file_path = home .. '/try.png'
--- db.preview_file_height = 16
--- db.preview_file_width = 80
--- db.custom_center = {
---     {
---         icon = "  ",
---         desc = "Recently latest session                  ",
---         shortcut = "SPC s l",
---         action = "SessionLoad",
---     },
---     {
---         icon = "  ",
---         desc = "Recently opened files                   ",
---         action = "DashboardFindHistory",
---         shortcut = "SPC f h",
---     },
---     {
---         icon = "  ",
---         desc = "Find  File                              ",
---         action = "Telescope find_files find_command=rg,--hidden,--files",
---         shortcut = "SPC f f",
---     },
---     {
---         icon = "  ",
---         desc = "File Browser                            ",
---         action = "Telescope file_browser",
---         shortcut = "SPC f b",
---     },
---     {
---         icon = "  ",
---         desc = "Find  word                              ",
---         action = "Telescope live_grep",
---         shortcut = "SPC f w",
---     },
---     {
---         icon = "  ",
---         desc = "Open Personal dotfiles                  ",
---         action = "Telescope dotfiles path=" .. home .. "/.dotfiles",
---         shortcut = "SPC f d",
---     },
--- }
---
--- db.custom_header = {
---     '',
---     '𝖓𝖊𝖔𝖛𝖎𝖒✍',
---     '',
--- }
+require("nvim-tree").setup()
