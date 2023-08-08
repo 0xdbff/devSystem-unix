@@ -906,7 +906,7 @@ require("tokyonight").setup({
         colors.bg_dark = "#23272e"
         colors.bg = "#282c34"
         colors.bg_visual = "#30353f"
-        colors.bg_highlight = "#2a2f37"
+        colors.bg_highlight = "#23272c"
         colors.terminal_black = "#0f1114"
         colors.bg_sidebar = "#282c34"
         colors.fg = "#abb2bf"
@@ -947,7 +947,7 @@ require("tokyonight").setup({
         local prompt = c.bg
         hl.TelescopeNormal = {
             bg = prompt,
-            fg = c.fg_dark,
+            fg = c.fg,
         }
         hl.TelescopeBorder = {
             bg = c.bg_dark,
@@ -981,7 +981,7 @@ require("tokyonight").setup({
         hl.NormalFloat = { fg = c.fg_float, bg = c.dark3 }
 
         hl.LineNr = { fg = c.terminal_black }
-        hl.CursorLine = { bg = c.bg_highlight }
+        hl.CursorLine = { bg = c.bg_visual }
         hl.CursorLineNr = {fg = c.blue, italic = true }
 
         hl.SignColumn = { bg = c.bg_highlight, fg = c.fg_gutter }
@@ -992,7 +992,7 @@ require("tokyonight").setup({
         hl.DiagnosticWarn = { bg = c.bg_highlight, fg = c.warning, italic = true }
         hl.DiagnosticInfo = { bg = c.bg_highlight, fg = c.info, italic = true }
         hl.DiagnosticHint = { bg = c.bg_highlight, fg = c.hint, italic = true }
-        -- hl.DiagnosticUnnecessary = {bg = c.bg_highlight, fg = c.terminal_black }
+        hl.DiagnosticUnnecessary = { fg = c.comment }
     end,
 })
 --
