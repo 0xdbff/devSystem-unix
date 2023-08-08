@@ -903,16 +903,18 @@ require("tokyonight").setup({
     ---@param colors ColorScheme
 
     on_colors = function(colors)
-        colors.bg_dark = "#23272e"   -- slightly darker background for better contrast
-        colors.bg = "#282c34"        -- little bit darker to reduce eye strain
-        colors.bg_highlight = "#30343f"
-        colors.terminal_black = "#3c4350"
-        colors.fg = "#abb2bf"        -- brighter text for better readability
-        colors.fg_dark = "#7f8c98"   -- slightly brighter
-        colors.fg_gutter = "#3c4350" -- slightly brighter
-        colors.dark3 = "#4a515d"
-        colors.comment = "#687186"   -- slightly brighter comments
-        colors.dark5 = "#6a6f7b"
+        colors.bg_dark = "#23272e"
+        colors.bg = "#282c34"
+        colors.bg_visual = "#30353f"
+        colors.bg_highlight = "#2a2f37"
+        colors.terminal_black = "#0f1114"
+        colors.bg_sidebar = "#282c34"
+        colors.fg = "#abb2bf"
+        colors.fg_dark = "#7f8c98"
+        colors.fg_gutter = "#323741"
+        colors.dark3 = "#373d48"
+        colors.comment = "#687186"
+        colors.dark5 = "#3f4552"
         colors.blue0 = "#61afef"
         colors.blue = "#61afef"
         colors.cyan = "#56b6c2"
@@ -934,7 +936,7 @@ require("tokyonight").setup({
         colors.red1 = "#d45c66"
         colors.bg_popup = colors.bg_dark
         colors.bg_statusline = colors.bg_dark
-        colors.git = { change = "#4a88ff", add = "#98c379", delete = "#e06c75" }
+        colors.git = { change = "#4a88ff", add = "#79c3a0", delete = "#e06c75" }
     end,
 
     --- You can override specific highlights to use other groups or a hex color
@@ -942,7 +944,7 @@ require("tokyonight").setup({
     ---@param highlights Highlights
     ---@param colors ColorScheme
     on_highlights = function(hl, c)
-        local prompt = "#282c34"
+        local prompt = c.bg
         hl.TelescopeNormal = {
             bg = prompt,
             fg = c.fg_dark,
@@ -971,25 +973,30 @@ require("tokyonight").setup({
             fg = c.bg_dark,
         }
 
-        -- hl.LspDiagnosticsVirtualTextError = { bg = "NONE", fg = c.red }
-        -- hl.LspDiagnosticsVirtualTextWarning = { bg = "NONE", fg = c.yellow }
-        -- hl.LspDiagnosticsVirtualTextInformation = { bg = "NONE", fg = c.blue }
-        -- hl.LspDiagnosticsVirtualTextHint = { bg = "NONE", fg = c.green }
+        hl.DiagnosticVirtualTextError = { bg = "NONE",italic = true, fg = c.error }
+        hl.DiagnosticVirtualTextWarn = { bg = "NONE",italic = true, fg = c.warning }
+        hl.DiagnosticVirtualTextInfo = { bg = "NONE",italic = true, fg = c.info } 
+        hl.DiagnosticVirtualTextHint = { bg = "NONE",italic = true, fg = c.hint }
 
-        hl.DiagnosticVirtualTextError = { bg = "NONE", fg = c.error } -- Used for "Error" diagnostic virtual text
-        hl.DiagnosticVirtualTextWarn = { bg = "NONE", fg = c.warning } -- Used for "Warning" diagnostic virtual text
-        hl.DiagnosticVirtualTextInfo = { bg = "NONE", fg = c.info } -- Used for "Information" diagnostic virtual text
-        hl.DiagnosticVirtualTextHint = { bg = "NONE", fg = c.hint } -- Used for "Hint" diagnostic virtual text
-
-        hl.NormalFloat = { fg = c.fg_float, bg = "#2f353e" }
+        hl.NormalFloat = { fg = c.fg_float, bg = c.dark3 }
 
         hl.LineNr = { fg = "#0f1114" }
-        hl.CursorLine = { bg = "#2f353e" }
-        hl.Visual = { bg = "#23272e" }
+        hl.CursorLine = { bg = c.bg_highlight }
+        hl.CursorLineNr = {fg = c.blue, italic = true }
+
+        hl.SignColumn = { bg = c.bg_highlight, fg = c.fg_gutter }
+        hl.GitSignsAdd = { bg = c.bg_highlight , fg = c.gitSigns.add }
+        hl.GitSignsChange = { bg = c.bg_highlight, fg = c.gitSigns.change }
+        hl.GitSignsDelete = { bg = c.bg_highlight,  fg = c.gitSigns.delete }
+        hl.DiagnosticError = { bg = c.bg_highlight, fg = c.error, italic = true }
+        hl.DiagnosticWarn = { bg = c.bg_highlight, fg = c.warning, italic = true }
+        hl.DiagnosticInfo = { bg = c.bg_highlight, fg = c.info, italic = true }
+        hl.DiagnosticHint = { bg = c.bg_highlight, fg = c.hint, italic = true }
+        -- hl.DiagnosticUnnecessary = {bg = c.bg_highlight, fg = c.terminal_black }
     end,
 })
 --
-vim.cmd[[colorscheme tokyonight]]
+-- vim.cmd[[colorscheme tokyonight]]
 require("tokyonight").load()
 
 require("lualine").setup({
