@@ -973,14 +973,14 @@ require("tokyonight").setup({
             fg = c.bg_dark,
         }
 
-        hl.DiagnosticVirtualTextError = { bg = "NONE",italic = true, fg = c.error }
-        hl.DiagnosticVirtualTextWarn = { bg = "NONE",italic = true, fg = c.warning }
-        hl.DiagnosticVirtualTextInfo = { bg = "NONE",italic = true, fg = c.info } 
-        hl.DiagnosticVirtualTextHint = { bg = "NONE",italic = true, fg = c.hint }
+        hl.DiagnosticVirtualTextError = { bg = "NONE",italic = true, fg = c.terminal_black }
+        hl.DiagnosticVirtualTextWarn = { bg = "NONE",italic = true, fg = c.terminal_black }
+        hl.DiagnosticVirtualTextInfo = { bg = "NONE",italic = true, fg = c.terminal_black } 
+        hl.DiagnosticVirtualTextHint = { bg = "NONE",italic = true, fg = c.terminal_black }
 
         hl.NormalFloat = { fg = c.fg_float, bg = c.dark3 }
 
-        hl.LineNr = { fg = "#0f1114" }
+        hl.LineNr = { fg = c.terminal_black }
         hl.CursorLine = { bg = c.bg_highlight }
         hl.CursorLineNr = {fg = c.blue, italic = true }
 
