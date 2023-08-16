@@ -258,7 +258,7 @@ draw_bold_text_with_bright_colors: true
 colors:
   primary:
     # background: "0x282c34"
-    background: "0x23272e"
+    background: "#202632"
     foreground: "0xdcdfe4"
 
   normal:
@@ -267,7 +267,7 @@ colors:
     green: "0x98c379"
     yellow: "0xe5c07b"
     blue: "0x61afef"
-    magenta: "0xc678dd"
+    magenta: "#7e72e5"
     cyan: "0x56b6c2"
     white: "0xdcdfe4"
 

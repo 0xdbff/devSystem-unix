@@ -171,6 +171,9 @@ require("packer").startup(function()
     use({ "L3MON4D3/LuaSnip" })
 end)
 
+-- vim.g.lsp_diagnostics_virtual_text_prefix = "-"
+-- vim.api.nvim_set_var("g:lsp_diagnostics_virtual_text_prefix", "-")
+
 vim.o.termguicolors = true
 
 --Set highlight on search
@@ -207,7 +210,11 @@ vim.api.nvim_exec([[
 
 -- vim.g['guicursor']= 'n-i-v-c:ver100-iCursor'
 -- only replace o-pending is a block, !TODO set it as a beam on terminal mode
-vim.opt.guicursor = "n-i-c-ci-cr:ver100-iCursor"
+vim.opt.guicursor = "a:ver100-iCursor"
+-- vim.opt.guicursor = "n-v-c:ver100,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
+
+
+
 
 -- vim.cmd[[ let g:completion_enable_auto_paren = 1 ]]
 -- vim.cmd([[ let g:rustfmt_autosave = 1 ]])
@@ -292,8 +299,7 @@ vim.cmd([[set completeopt=menu,menuone,noselect ]])
 -- top and bottom of the screen
 vim.o.scrolloff = 8
 -- vim.o.nowrap = true -- THIS BREAKS NVIM 0.10
--- vim.o.textwidth = 80
--- vim.o.colorcolumn = 100
+vim.o.textwidth = 80
 
 vim.cmd([[ nnoremap <leader><leader> <c-^> ]])
 
@@ -330,9 +336,9 @@ require("telescope").setup({
         layout_strategy = "horizontal",
         layout_config = {
             height = 0.8,
-            width = 0.6,
+            width = 0.7,
             preview_cutoff = 120,
-            preview_width = 0.6,
+            preview_width = 0.64,
         },
     },
     extensions = {
@@ -482,7 +488,6 @@ nvim_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", nmo)
 nvim_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", nmo)
 nvim_keymap("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", nmo)
 
--- LSP settings
 local lspconfig = require("lspconfig")
 local on_attach = function(_, bufnr)
     local lspkeymap = vim.api.nvim_buf_set_keymap
@@ -501,8 +506,12 @@ local on_attach = function(_, bufnr)
     lspkeymap(bufnr, "n", "gr", lsp_cmd .. "references()<CR>", nmo)
     lspkeymap(bufnr, "n", "<leader>ca", lsp_cmd .. "code_action()<CR>", nmo)
     lspkeymap(bufnr, "n", "<leader>so", [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], nmo)
-    -- Formatter
-    vim.cmd([[ command! Format execute 'lua vim.lsp.buf.format()' ]])
+
+    vim.diagnostic.config({
+        virtual_text = {
+            prefix = "◈",  -- Change this to whatever prefix you prefer.
+        }
+    })
 end
 
 -- nvim-cmp supports additional completion capabilities
@@ -749,7 +758,7 @@ require("toggleterm").setup({
     --     return vim.o.columns * 0.4
     --   end
     -- end,
-    open_mapping = [[<c-\>]],
+    open_mapping = [[<c-c>]],
     hide_numbers = true, -- hide the number column in toggleterm buffers
     shade_terminals = false,
     highlights = {
@@ -901,20 +910,29 @@ require("tokyonight").setup({
     --- You can override specific color groups to use other groups or a hex color
     --- function will be called with a ColorScheme table
     ---@param colors ColorScheme
-
     on_colors = function(colors)
-        colors.bg_dark = "#23272e"
-        colors.bg = "#282c34"
-        colors.bg_visual = "#30353f"
-        colors.bg_highlight = "#23272c"
-        colors.terminal_black = "#0f1114"
-        colors.bg_sidebar = "#282c34"
+        -- colors.bg_dark = "#252930"
+        -- colors.bg = "#282c34"
+        -- colors.bg_visual = "#30353f"
+        -- colors.bg_highlight = "#23272c"
+        -- colors.terminal_black = "#000206"
+        -- colors.bg_sidebar = "#1E2228"
+        -- colors.fg = "#abb2bf"
+        -- colors.fg_dark = "#7f8c98"
+        -- colors.fg_gutter = "#323741"
+        -- colors.dark3 = "#373d48"
+        colors.bg_dark = "#1d222d"
+        colors.bg = "#202632"
+        colors.bg_visual = "#272e3c"
+        colors.bg_highlight = "#1a1f28"
+        colors.terminal_black = "#000006"
+        colors.bg_sidebar = "#191d26"
         colors.fg = "#abb2bf"
         colors.fg_dark = "#7f8c98"
-        colors.fg_gutter = "#323741"
-        colors.dark3 = "#373d48"
+        colors.fg_gutter = "#2a3241"
+        colors.dark3 = "#2d3646"
         colors.comment = "#687186"
-        colors.dark5 = "#3f4552"
+        colors.dark5 = "#31394b"
         colors.blue0 = "#61afef"
         colors.blue = "#61afef"
         colors.cyan = "#56b6c2"
@@ -925,7 +943,7 @@ require("tokyonight").setup({
         colors.blue7 = "#617def"
         colors.magenta = "#e86671"
         colors.magenta2 = "#e87966"
-        colors.purple = "#c678dd"
+        colors.purple = "#7e72e5"
         colors.orange = "#d19a66"
         colors.yellow = "#e5c07b"
         colors.green = "#98c379"
@@ -973,14 +991,14 @@ require("tokyonight").setup({
             fg = c.bg_dark,
         }
 
-        hl.DiagnosticVirtualTextError = { bg = "NONE",italic = true, fg = c.terminal_black }
-        hl.DiagnosticVirtualTextWarn = { bg = "NONE",italic = true, fg = c.terminal_black }
-        hl.DiagnosticVirtualTextInfo = { bg = "NONE",italic = true, fg = c.terminal_black } 
-        hl.DiagnosticVirtualTextHint = { bg = "NONE",italic = true, fg = c.terminal_black }
+        hl.DiagnosticVirtualTextError = { bg = "NONE",italic = true, fg = "#1f0000" }
+        hl.DiagnosticVirtualTextWarn = { bg = "NONE",italic = true, fg = "#00001f" }
+        hl.DiagnosticVirtualTextInfo = { bg = "NONE",italic = true, fg = "#00001f" } 
+        hl.DiagnosticVirtualTextHint = { bg = "NONE",italic = true, fg = "#00001f" }
 
         hl.NormalFloat = { fg = c.fg_float, bg = c.dark3 }
 
-        hl.LineNr = { fg = c.terminal_black }
+        hl.LineNr = { fg = "#000008" }
         hl.CursorLine = { bg = c.bg_visual }
         hl.CursorLineNr = {fg = c.blue, italic = true }
 
