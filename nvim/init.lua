@@ -933,28 +933,39 @@ require("tokyonight").setup({
         colors.dark3 = "#2d3646"
         colors.comment = "#687186"
         colors.dark5 = "#31394b"
-        colors.blue0 = "#61afef"
+        colors.cyan = "#59bbdc"
         colors.blue = "#61afef"
-        colors.cyan = "#56b6c2"
-        colors.blue1 = "#59bbdc"
+        colors.blue0 = "#458588"
+        colors.blue1 = "#5293c8"
         colors.blue2 = "#5fabea"
         colors.blue5 = "#619aef"
         colors.blue6 = "#6190ef"
         colors.blue7 = "#617def"
         colors.magenta = "#e86671"
-        colors.magenta2 = "#e87966"
-        colors.purple = "#7e72e5"
+        colors.magenta2 = "#7f7ff0"
+        colors.purple = "#e87966"
         colors.orange = "#d19a66"
         colors.yellow = "#e5c07b"
         colors.green = "#98c379"
         colors.green1 = "#79c3a0"
-        colors.green2 = "#a0c379"
+        -- colors.green2 = "#a0c379"
+        colors.green2 = "#689d6a"
         colors.teal = "#1abc9c"
         colors.red = "#e06c75"
         colors.red1 = "#d45c66"
         colors.bg_popup = colors.bg_dark
         colors.bg_statusline = colors.bg_dark
         colors.git = { change = "#4a88ff", add = "#79c3a0", delete = "#e06c75" }
+
+        -- black:   '##282828'
+        -- red:     '##cc241d'
+        -- green:   '##98971a'
+        -- yellow:  '##d79921'
+        -- blue:    '##458588'
+        -- magenta: '##b16286'
+        -- cyan:    '##689d6a'
+        -- white:   '##a89984'
+
     end,
 
     --- You can override specific highlights to use other groups or a hex color
