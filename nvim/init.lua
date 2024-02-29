@@ -71,6 +71,8 @@ require("packer").startup(function()
     -- better terminal support
     use("akinsho/toggleterm.nvim")
 
+    use('lervag/vimtex')
+
     -- use({ "glepnir/dashboard-nvim" })
 
     ------ Telescope
@@ -330,6 +332,24 @@ nvim_keymap("n", ";qq", ":qa!<CR>", {})
 -- quick save with <leader> w
 -- vim.cmd[[ nmap <leader>w :w<CR> ]]
 
+vim.cmd [[
+    let g:tex_flavor = 'latex'
+    " let g:vimtex_view_method = 'general'
+]]
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'tex',
+    callback = function()
+        vim.api.nvim_set_keymap('n', '<leader>lc', ':VimtexCompile<CR>', {noremap = true, silent = true})
+        vim.api.nvim_set_keymap('n', '<leader>lf', ':VimtexForwardSearch<CR>', {noremap = true, silent = true})
+        vim.api.nvim_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', {noremap = true, silent = true})
+        vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
+        vim.api.nvim_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true, silent = true})
+        vim.api.nvim_set_keymap('n', '<leader>ll', ':VimtexCompile<CR>', {noremap = true, silent = true})  
+    end
+})
+
+
 require("telescope").setup({
     defaults = {
         file_ignore_patterns = { "node_modules", "/dist", "/venv","/migrations", "/build", "__pycache__" },
@@ -352,7 +372,7 @@ require("telescope").setup({
 
 require("nvim-treesitter.configs").setup({
     -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-    ensure_installed = "all",
+    -- ensure_installed = "all",
 
     -- Install languages synchronously (only applied to `ensure_installed`)
     sync_install = false,
@@ -365,6 +385,7 @@ require("nvim-treesitter.configs").setup({
 
         disable = {
             "phpdoc",
+            "latex",
             -- disable for large buffers, it can cause performance issues on some ft's...
             function(lang, bufnr)
                 return lang == "rust" and vim.api.nvim_buf_line_count(bufnr) > 1200 -- i like things fast!(...) true rustacean :)
@@ -404,7 +425,7 @@ require("null-ls").setup({
         require("null-ls").builtins.formatting.prettier,
         require("null-ls").builtins.formatting.black,
         require("null-ls").builtins.formatting.clang_format,
-
+        -- require("null_ls").builtins.formatting.texfmt,
         require("null-ls").builtins.diagnostics.fish,
         require("null-ls").builtins.diagnostics.zsh,
     },
@@ -540,6 +561,43 @@ capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities);
         capabilities = capabilities,
         filetypes = { "css", "scss", "less" },
         root_dir = lspconfig.util.root_pattern("package.json", ".git"),
+    })
+
+    lspconfig.texlab.setup({
+        -- cmd = { 'texlab' },
+        on_attach = on_attach,
+        capabilities = capabilities,
+        -- filetypes = { 'tex', 'plaintex', 'bib' },
+        -- root_dir = lspconfig.util.root_pattern('main.tex'),
+        -- single_file_support = true,
+        settings = {
+            texlab = {
+                rootDirectory = nil,
+                build = {
+                    executable = 'latexmk',
+                    args = { '-pdf', '-interaction=nonstopmode', '-synctex=1', '%f' },
+                    onSave = false,
+                    forwardSearchAfter = false,
+                },
+                auxDirectory = '.',
+                forwardSearch = {
+                    executable = nil,
+                    args = {},
+                },
+                chktex = {
+                    onOpenAndSave = false,
+                    onEdit = false,
+                },
+                diagnosticsDelay = 300,
+                latexFormatter = 'latexindent',
+                latexindent = {
+                    ['local'] = nil, -- local is a reserved keyword
+                    modifyLineBreaks = false,
+                },
+                bibtexFormatter = 'texlab',
+                formatterLineLength = 100,
+            },
+        },
     })
 
     lspconfig.html.setup({
@@ -842,191 +900,191 @@ vim.cmd("autocmd! TermOpen term://* lua Set_terminal_keymaps()")
 vim.cmd("set laststatus=3")
 
 -- vim.cmd[[colorscheme tokyonight]]
--- require("onedark").setup({
---     -- Main options --
---     style = "dark", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
---     transparent = true, -- Show/hide background
---     term_colors = true, -- Change terminal color as per the selected theme style
---     ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
---     -- toggle theme style ---
---     -- toggle_style_key = "<leader>ts", -- Default keybinding to toggle
---     -- toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
---
---     -- Change code style ---
---     -- Options are italic, bold, underline, none
---     -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
---     code_style = {
---         comments = "none",
---         keywords = "italic",
---         functions = "bold",
---         strings = "italic",
---         variables = "none",
---     },
---
---     -- Custom Highlights --
---     colors = {}, -- Override default colors
---     highlights = {
---         NvimTreeNormal = { fg = "#abb2bf", bg = "#23272e" },
---         -- CursorLineNr = { fg = "#ffffff" , bg = "#000000"},
---         TelescopeBorder = { fg = "#61afef" },
---         TelescopePromptBorder = { fg = "#000000" },
---         TelescopeResultsBorder = { fg = "#000000" },
---         TelescopePreviewBorder = { fg = "#000000" },
---     }, -- Override highlight groups
---
---     -- Plugins Config --
---     diagnostics = {
---         darker = false, -- darker colors for diagnostic
---         undercurl = true, -- use undercurl instead of underline for diagnostics
---         background = false, -- use background color for virtual text
---     },
--- })
--- require("onedark").load()
+require("onedark").setup({
+    -- Main options --
+    style = "dark", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+    transparent = true, -- Show/hide background
+    term_colors = true, -- Change terminal color as per the selected theme style
+    ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
+    -- toggle theme style ---
+    -- toggle_style_key = "<leader>ts", -- Default keybinding to toggle
+    -- toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
 
-require("tokyonight").setup({
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
-    light_style = "day", -- The theme is used when the background is set to light
-    transparent = false, -- Enable this to disable setting the background color
-    terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
-    styles = {
-        -- Style to be applied to different syntax groups
-        -- Value is any valid attr-list value for `:help nvim_set_hl`
-        comments = { italic = true},
-        keywords = { italic = true },
-        functions = {},
-        variables = {},
-        -- Background styles. Can be "dark", "transparent" or "normal"
-        sidebars = "dark", -- style for sidebars, see below
-        floats = "dark", -- style for floating windows
+    -- Change code style ---
+    -- Options are italic, bold, underline, none
+    -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
+    code_style = {
+        comments = "none",
+        keywords = "italic",
+        functions = "bold",
+        strings = "italic",
+        variables = "none",
     },
-    sidebars = { "qf" }, -- Set a darker background on sidebar-like windows. For example: `["qf", "vista_kind", "terminal", "packer"]`
-    day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
-    hide_inactive_statusline = false, -- Enabling this option, will hide inactive statuslines and replace them with a thin border instead. Should work with the standard **StatusLine** and **LuaLine**.
-    dim_inactive = 0.1, -- dims inactive windows
-    lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
 
-    --- You can override specific color groups to use other groups or a hex color
-    --- function will be called with a ColorScheme table
-    ---@param colors ColorScheme
-    on_colors = function(colors)
-        -- colors.bg_dark = "#252930"
-        -- colors.bg = "#282c34"
-        -- colors.bg_visual = "#30353f"
-        -- colors.bg_highlight = "#23272c"
-        -- colors.terminal_black = "#000206"
-        -- colors.bg_sidebar = "#1E2228"
-        -- colors.fg = "#abb2bf"
-        -- colors.fg_dark = "#7f8c98"
-        -- colors.fg_gutter = "#323741"
-        -- colors.dark3 = "#373d48"
-        colors.bg_dark = "#1d222d"
-        colors.bg = "#202632"
-        colors.bg_visual = "#272e3c"
-        colors.bg_highlight = "#1a1f28"
-        colors.terminal_black = "#000006"
-        colors.bg_sidebar = "#191d26"
-        colors.fg = "#abb2bf"
-        colors.fg_dark = "#7f8c98"
-        colors.fg_gutter = "#2a3241"
-        colors.dark3 = "#2d3646"
-        colors.comment = "#687186"
-        colors.dark5 = "#31394b"
-        colors.cyan = "#59bbdc"
-        colors.blue = "#61afef"
-        colors.blue0 = "#458588"
-        colors.blue1 = "#5293c8"
-        colors.blue2 = "#5fabea"
-        colors.blue5 = "#619aef"
-        colors.blue6 = "#6190ef"
-        colors.blue7 = "#617def"
-        colors.magenta = "#e86671"
-        colors.magenta2 = "#7f7ff0"
-        colors.purple = "#e87966"
-        colors.orange = "#d19a66"
-        colors.yellow = "#e5c07b"
-        colors.green = "#98c379"
-        colors.green1 = "#79c3a0"
-        -- colors.green2 = "#a0c379"
-        colors.green2 = "#689d6a"
-        colors.teal = "#1abc9c"
-        colors.red = "#e06c75"
-        colors.red1 = "#d45c66"
-        colors.bg_popup = colors.bg_dark
-        colors.bg_statusline = colors.bg_dark
-        colors.git = { change = "#4a88ff", add = "#79c3a0", delete = "#e06c75" }
+    -- Custom Highlights --
+    colors = {}, -- Override default colors
+    highlights = {
+        NvimTreeNormal = { fg = "#abb2bf", bg = "#23272e" },
+        -- CursorLineNr = { fg = "#ffffff" , bg = "#000000"},
+        TelescopeBorder = { fg = "#61afef" },
+        TelescopePromptBorder = { fg = "#000000" },
+        TelescopeResultsBorder = { fg = "#000000" },
+        TelescopePreviewBorder = { fg = "#000000" },
+    }, -- Override highlight groups
 
-        -- black:   '##282828'
-        -- red:     '##cc241d'
-        -- green:   '##98971a'
-        -- yellow:  '##d79921'
-        -- blue:    '##458588'
-        -- magenta: '##b16286'
-        -- cyan:    '##689d6a'
-        -- white:   '##a89984'
-
-    end,
-
-    --- You can override specific highlights to use other groups or a hex color
-    --- function will be called with a Highlights and ColorScheme table
-    ---@param highlights Highlights
-    ---@param colors ColorScheme
-    on_highlights = function(hl, c)
-        local prompt = c.bg
-        hl.TelescopeNormal = {
-            bg = prompt,
-            fg = c.fg,
-        }
-        hl.TelescopeBorder = {
-            bg = c.bg_dark,
-            fg = c.bg_dark,
-        }
-        hl.TelescopePromptNormal = {
-            bg = prompt,
-        }
-        hl.TelescopePromptBorder = {
-            bg = prompt,
-            fg = prompt,
-        }
-        hl.TelescopePromptTitle = {
-            bg = prompt,
-            fg = prompt,
-        }
-        hl.TelescopePreviewTitle = {
-            bg = c.bg_dark,
-            fg = c.bg_dark,
-        }
-        hl.TelescopeResultsTitle = {
-            bg = c.bg_dark,
-            fg = c.bg_dark,
-        }
-
-        hl.DiagnosticVirtualTextError = { bg = "NONE",italic = true, fg = "#1f0000" }
-        hl.DiagnosticVirtualTextWarn = { bg = "NONE",italic = true, fg = "#00001f" }
-        hl.DiagnosticVirtualTextInfo = { bg = "NONE",italic = true, fg = "#00001f" } 
-        hl.DiagnosticVirtualTextHint = { bg = "NONE",italic = true, fg = "#00001f" }
-
-        hl.NormalFloat = { fg = c.fg_float, bg = c.dark3 }
-
-        hl.LineNr = { fg = "#000008" }
-        hl.CursorLine = { bg = c.bg_visual }
-        hl.CursorLineNr = {fg = c.blue, italic = true }
-
-        hl.SignColumn = { bg = c.bg_highlight, fg = c.fg_gutter }
-        hl.GitSignsAdd = { bg = c.bg_highlight , fg = c.gitSigns.add }
-        hl.GitSignsChange = { bg = c.bg_highlight, fg = c.gitSigns.change }
-        hl.GitSignsDelete = { bg = c.bg_highlight,  fg = c.gitSigns.delete }
-        hl.DiagnosticError = { bg = c.bg_highlight, fg = c.error, italic = true }
-        hl.DiagnosticWarn = { bg = c.bg_highlight, fg = c.warning, italic = true }
-        hl.DiagnosticInfo = { bg = c.bg_highlight, fg = c.info, italic = true }
-        hl.DiagnosticHint = { bg = c.bg_highlight, fg = c.hint, italic = true }
-        hl.DiagnosticUnnecessary = { fg = c.comment }
-    end,
+    -- Plugins Config --
+    diagnostics = {
+        darker = false, -- darker colors for diagnostic
+        undercurl = true, -- use undercurl instead of underline for diagnostics
+        background = false, -- use background color for virtual text
+    },
 })
+require("onedark").load()
+
+-- require("tokyonight").setup({
+--     -- your configuration comes here
+--     -- or leave it empty to use the default settings
+--     style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
+--     light_style = "day", -- The theme is used when the background is set to light
+--     transparent = false, -- Enable this to disable setting the background color
+--     terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
+--     styles = {
+--         -- Style to be applied to different syntax groups
+--         -- Value is any valid attr-list value for `:help nvim_set_hl`
+--         comments = { italic = true},
+--         keywords = { italic = true },
+--         functions = {},
+--         variables = {},
+--         -- Background styles. Can be "dark", "transparent" or "normal"
+--         sidebars = "dark", -- style for sidebars, see below
+--         floats = "dark", -- style for floating windows
+--     },
+--     sidebars = { "qf" }, -- Set a darker background on sidebar-like windows. For example: `["qf", "vista_kind", "terminal", "packer"]`
+--     day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
+--     hide_inactive_statusline = false, -- Enabling this option, will hide inactive statuslines and replace them with a thin border instead. Should work with the standard **StatusLine** and **LuaLine**.
+--     dim_inactive = 0.1, -- dims inactive windows
+--     lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
+-- 
+--     --- You can override specific color groups to use other groups or a hex color
+--     --- function will be called with a ColorScheme table
+--     ---@param colors ColorScheme
+--     on_colors = function(colors)
+--         -- colors.bg_dark = "#252930"
+--         -- colors.bg = "#282c34"
+--         -- colors.bg_visual = "#30353f"
+--         -- colors.bg_highlight = "#23272c"
+--         -- colors.terminal_black = "#000206"
+--         -- colors.bg_sidebar = "#1E2228"
+--         -- colors.fg = "#abb2bf"
+--         -- colors.fg_dark = "#7f8c98"
+--         -- colors.fg_gutter = "#323741"
+--         -- colors.dark3 = "#373d48"
+--         colors.bg_dark = "#1d222d"
+--         colors.bg = "#202632"
+--         colors.bg_visual = "#272e3c"
+--         colors.bg_highlight = "#1a1f28"
+--         colors.terminal_black = "#000006"
+--         colors.bg_sidebar = "#191d26"
+--         colors.fg = "#abb2bf"
+--         colors.fg_dark = "#7f8c98"
+--         colors.fg_gutter = "#2a3241"
+--         colors.dark3 = "#2d3646"
+--         colors.comment = "#687186"
+--         colors.dark5 = "#31394b"
+--         colors.cyan = "#59bbdc"
+--         colors.blue = "#61afef"
+--         colors.blue0 = "#458588"
+--         colors.blue1 = "#5293c8"
+--         colors.blue2 = "#5fabea"
+--         colors.blue5 = "#619aef"
+--         colors.blue6 = "#6190ef"
+--         colors.blue7 = "#617def"
+--         colors.magenta = "#e86671"
+--         colors.magenta2 = "#7f7ff0"
+--         colors.purple = "#e87966"
+--         colors.orange = "#d19a66"
+--         colors.yellow = "#e5c07b"
+--         colors.green = "#98c379"
+--         colors.green1 = "#79c3a0"
+--         -- colors.green2 = "#a0c379"
+--         colors.green2 = "#689d6a"
+--         colors.teal = "#1abc9c"
+--         colors.red = "#e06c75"
+--         colors.red1 = "#d45c66"
+--         colors.bg_popup = colors.bg_dark
+--         colors.bg_statusline = colors.bg_dark
+--         colors.git = { change = "#4a88ff", add = "#79c3a0", delete = "#e06c75" }
+-- 
+--         -- black:   '##282828'
+--         -- red:     '##cc241d'
+--         -- green:   '##98971a'
+--         -- yellow:  '##d79921'
+--         -- blue:    '##458588'
+--         -- magenta: '##b16286'
+--         -- cyan:    '##689d6a'
+--         -- white:   '##a89984'
+-- 
+--     end,
+-- 
+--     --- You can override specific highlights to use other groups or a hex color
+--     --- function will be called with a Highlights and ColorScheme table
+--     ---@param highlights Highlights
+--     ---@param colors ColorScheme
+--     on_highlights = function(hl, c)
+--         local prompt = c.bg
+--         hl.TelescopeNormal = {
+--             bg = prompt,
+--             fg = c.fg,
+--         }
+--         hl.TelescopeBorder = {
+--             bg = c.bg_dark,
+--             fg = c.bg_dark,
+--         }
+--         hl.TelescopePromptNormal = {
+--             bg = prompt,
+--         }
+--         hl.TelescopePromptBorder = {
+--             bg = prompt,
+--             fg = prompt,
+--         }
+--         hl.TelescopePromptTitle = {
+--             bg = prompt,
+--             fg = prompt,
+--         }
+--         hl.TelescopePreviewTitle = {
+--             bg = c.bg_dark,
+--             fg = c.bg_dark,
+--         }
+--         hl.TelescopeResultsTitle = {
+--             bg = c.bg_dark,
+--             fg = c.bg_dark,
+--         }
+-- 
+--         hl.DiagnosticVirtualTextError = { bg = "NONE",italic = true, fg = "#1f0000" }
+--         hl.DiagnosticVirtualTextWarn = { bg = "NONE",italic = true, fg = "#00001f" }
+--         hl.DiagnosticVirtualTextInfo = { bg = "NONE",italic = true, fg = "#00001f" } 
+--         hl.DiagnosticVirtualTextHint = { bg = "NONE",italic = true, fg = "#00001f" }
+-- 
+--         hl.NormalFloat = { fg = c.fg_float, bg = c.dark3 }
+-- 
+--         hl.LineNr = { fg = "#000008" }
+--         hl.CursorLine = { bg = c.bg_visual }
+--         hl.CursorLineNr = {fg = c.blue, italic = true }
+-- 
+--         hl.SignColumn = { bg = c.bg_highlight, fg = c.fg_gutter }
+--         hl.GitSignsAdd = { bg = c.bg_highlight , fg = c.gitSigns.add }
+--         hl.GitSignsChange = { bg = c.bg_highlight, fg = c.gitSigns.change }
+--         hl.GitSignsDelete = { bg = c.bg_highlight,  fg = c.gitSigns.delete }
+--         hl.DiagnosticError = { bg = c.bg_highlight, fg = c.error, italic = true }
+--         hl.DiagnosticWarn = { bg = c.bg_highlight, fg = c.warning, italic = true }
+--         hl.DiagnosticInfo = { bg = c.bg_highlight, fg = c.info, italic = true }
+--         hl.DiagnosticHint = { bg = c.bg_highlight, fg = c.hint, italic = true }
+--         hl.DiagnosticUnnecessary = { fg = c.comment }
+--     end,
+-- })
 --
 -- vim.cmd[[colorscheme tokyonight]]
-require("tokyonight").load()
+-- require("tokyonight").load()
 
 require("lualine").setup({
     options = {
