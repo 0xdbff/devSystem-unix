@@ -28,6 +28,8 @@ require("packer").startup(function()
     use({ "ellisonleao/gruvbox.nvim" })
     use("EdenEast/nightfox.nvim")
 
+    use("marko-cerovac/material.nvim")
+
     use({
         "kyazdani42/nvim-tree.lua",
         requires = {
@@ -45,6 +47,8 @@ require("packer").startup(function()
     use("tpope/vim-fugitive")
     -- Git integration :help compl-omni
     use("tpope/vim-rhubarb")
+    -- copilot
+    use("github/copilot.vim")
 
     -- Make comments easier
     use("numToStr/Comment.nvim")
@@ -71,7 +75,7 @@ require("packer").startup(function()
     -- better terminal support
     use("akinsho/toggleterm.nvim")
 
-    use('lervag/vimtex')
+    use("lervag/vimtex")
 
     -- use({ "glepnir/dashboard-nvim" })
 
@@ -94,7 +98,7 @@ require("packer").startup(function()
     -- Colorshemes
     -- use 'mjlbach/onedark.nvim'
     use("navarasu/onedark.nvim")
-    use 'folke/tokyonight.nvim'
+    use("folke/tokyonight.nvim")
 
     -- use 'Db-dev2002/dbfox.nvim'
     -- use 'Db-dev2002/sonokai'
@@ -200,23 +204,21 @@ vim.o.completeopt = "menuone,noselect"
 vim.wo.cursorline = true
 
 -- Enable cursorline for active window only
-vim.api.nvim_exec([[
+vim.api.nvim_exec(
+    [[
   augroup CursorLine
     autocmd!
     autocmd WinEnter,BufEnter * setlocal cursorline
     autocmd WinLeave,BufLeave * setlocal nocursorline
   augroup END
-]], false)
-
-
+]],
+    false
+)
 
 -- vim.g['guicursor']= 'n-i-v-c:ver100-iCursor'
 -- only replace o-pending is a block, !TODO set it as a beam on terminal mode
 vim.opt.guicursor = "a:ver100-iCursor"
 -- vim.opt.guicursor = "n-v-c:ver100,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
-
-
-
 
 -- vim.cmd[[ let g:completion_enable_auto_paren = 1 ]]
 -- vim.cmd([[ let g:rustfmt_autosave = 1 ]])
@@ -230,6 +232,16 @@ vim.cmd([[ nnoremap <C-H> <C-W><C-H> ]])
 
 -- Make windows to be basically the same size
 vim.cmd([[ nnoremap <leader>= <C-w>= ]])
+
+-- Example: Change cycle forward to <Leader>n
+
+vim.api.nvim_set_keymap("i", "<C-l>", 'copilot#Accept("<CR>")', { expr = true, silent = true })
+vim.cmd([[
+  imap <C-s> <Plug>(copilot-next)
+]])
+
+-- Example: Disable Tab for triggering suggestions
+vim.g.copilot_no_tab_map = true
 
 -- vim.cmd([[
 --     augroup c| au!
@@ -332,27 +344,26 @@ nvim_keymap("n", ";qq", ":qa!<CR>", {})
 -- quick save with <leader> w
 -- vim.cmd[[ nmap <leader>w :w<CR> ]]
 
-vim.cmd [[
+vim.cmd([[
     let g:tex_flavor = 'latex'
     " let g:vimtex_view_method = 'general'
-]]
+]])
 
-vim.api.nvim_create_autocmd('FileType', {
-    pattern = 'tex',
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "tex",
     callback = function()
-        vim.api.nvim_set_keymap('n', '<leader>lc', ':VimtexCompile<CR>', {noremap = true, silent = true})
-        vim.api.nvim_set_keymap('n', '<leader>lf', ':VimtexForwardSearch<CR>', {noremap = true, silent = true})
-        vim.api.nvim_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', {noremap = true, silent = true})
-        vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
-        vim.api.nvim_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true, silent = true})
-        vim.api.nvim_set_keymap('n', '<leader>ll', ':VimtexCompile<CR>', {noremap = true, silent = true})  
-    end
+        vim.api.nvim_set_keymap("n", "<leader>lc", ":VimtexCompile<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap("n", "<leader>lf", ":VimtexForwardSearch<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap("n", "<leader>k", "<cmd>lua vim.lsp.buf.hover()<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap("n", "<leader>ll", ":VimtexCompile<CR>", { noremap = true, silent = true })
+    end,
 })
-
 
 require("telescope").setup({
     defaults = {
-        file_ignore_patterns = { "node_modules", "/dist", "/venv","/migrations", "/build", "__pycache__" },
+        file_ignore_patterns = { "node_modules", "/dist", "/venv", "/migrations", "/build", "__pycache__" },
         layout_strategy = "horizontal",
         layout_config = {
             height = 0.8,
@@ -388,7 +399,8 @@ require("nvim-treesitter.configs").setup({
             "latex",
             -- disable for large buffers, it can cause performance issues on some ft's...
             function(lang, bufnr)
-                return lang == "rust" and vim.api.nvim_buf_line_count(bufnr) > 1200 -- i like things fast!(...) true rustacean :)
+                return lang == "rust" and
+                vim.api.nvim_buf_line_count(bufnr) > 1200               -- i like things fast!(...) true rustacean :)
                 -- !TODO
             end,
         },
@@ -530,136 +542,136 @@ local on_attach = function(_, bufnr)
 
     vim.diagnostic.config({
         virtual_text = {
-            prefix = "◈",  -- Change this to whatever prefix you prefer.
-        }
+            prefix = "◈", -- Change this to whatever prefix you prefer.
+        },
     })
 end
 
 -- nvim-cmp supports additional completion capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities);
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 -- Enable the following language servers, quick setup default settings
 -- local servers = { "pyright" }
 -- for _, lsp in ipairs(servers) do
 --     lspconfig[lsp].setup({
-    --         on_attach = on_attach,
-    --         capabilities = capabilities,
-    --     })
-    -- end
+--         on_attach = on_attach,
+--         capabilities = capabilities,
+--     })
+-- end
 
-    lspconfig.clangd.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
-        filetypes = { "c", "cpp", "cuda" },
-    })
+lspconfig.clangd.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "c", "cpp", "cuda" },
+})
 
-    -- CSS, intall vscode css language server with bins
-    lspconfig.cssls.setup({
-        cmd = { 'css-languageserver', '--stdio' };
-        on_attach = on_attach,
-        capabilities = capabilities,
-        filetypes = { "css", "scss", "less" },
-        root_dir = lspconfig.util.root_pattern("package.json", ".git"),
-    })
+-- CSS, intall vscode css language server with bins
+lspconfig.cssls.setup({
+    cmd = { "css-languageserver", "--stdio" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "css", "scss", "less" },
+    root_dir = lspconfig.util.root_pattern("package.json", ".git"),
+})
 
-    lspconfig.texlab.setup({
-        -- cmd = { 'texlab' },
-        on_attach = on_attach,
-        capabilities = capabilities,
-        -- filetypes = { 'tex', 'plaintex', 'bib' },
-        -- root_dir = lspconfig.util.root_pattern('main.tex'),
-        -- single_file_support = true,
-        settings = {
-            texlab = {
-                rootDirectory = nil,
-                build = {
-                    executable = 'latexmk',
-                    args = { '-pdf', '-interaction=nonstopmode', '-synctex=1', '%f' },
-                    onSave = false,
-                    forwardSearchAfter = false,
-                },
-                auxDirectory = '.',
-                forwardSearch = {
-                    executable = nil,
-                    args = {},
-                },
-                chktex = {
-                    onOpenAndSave = false,
-                    onEdit = false,
-                },
-                diagnosticsDelay = 300,
-                latexFormatter = 'latexindent',
-                latexindent = {
-                    ['local'] = nil, -- local is a reserved keyword
-                    modifyLineBreaks = false,
-                },
-                bibtexFormatter = 'texlab',
-                formatterLineLength = 100,
+lspconfig.texlab.setup({
+    -- cmd = { 'texlab' },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    -- filetypes = { 'tex', 'plaintex', 'bib' },
+    -- root_dir = lspconfig.util.root_pattern('main.tex'),
+    -- single_file_support = true,
+    settings = {
+        texlab = {
+            rootDirectory = nil,
+            build = {
+                executable = "latexmk",
+                args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+                onSave = false,
+                forwardSearchAfter = false,
+            },
+            auxDirectory = ".",
+            forwardSearch = {
+                executable = nil,
+                args = {},
+            },
+            chktex = {
+                onOpenAndSave = false,
+                onEdit = false,
+            },
+            diagnosticsDelay = 300,
+            latexFormatter = "latexindent",
+            latexindent = {
+                ["local"] = nil, -- local is a reserved keyword
+                modifyLineBreaks = false,
+            },
+            bibtexFormatter = "texlab",
+            formatterLineLength = 100,
+        },
+    },
+})
+
+lspconfig.html.setup({
+    cmd = { "html-languageserver", "--stdio" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "html" },
+    init_options = {
+        configurationSection = { "html", "css", "javascript" },
+        embeddedLanguages = {
+            css = true,
+            javascript = true,
+        },
+        provideFormatter = true,
+    },
+    root_dir = lspconfig.util.root_pattern("package.json", ".git"),
+})
+
+-- lspconfig.pyright.setup({
+--     -- cmd = { 'pyright-langserver', '--stdio', '--skipunannotated' };
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+--     root_dir = lspconfig.util.root_pattern('package.json', 'package-lock.json', 'manage.py', 'pyrightconfig.json');
+-- })
+lspconfig.pyright.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    cmd = { "pyright-langserver", "--stdio" },
+    filetypes = { "python" },
+    settings = {
+        python = {
+            analysis = {
+                typeCheckingMode = "basic", -- Change to "basic" or "strict" as per your requirements
+                -- You can add more settings here based on your requirements
             },
         },
-    })
+    },
+})
 
-    lspconfig.html.setup({
-        cmd = { "html-languageserver", "--stdio" },
-        on_attach = on_attach,
-        capabilities = capabilities,
-        filetypes = { "html" },
-        init_options = {
-            configurationSection = { "html", "css", "javascript" },
-            embeddedLanguages = {
-                css = true,
-                javascript = true
-            },
-            provideFormatter = true
-        },
-        root_dir = lspconfig.util.root_pattern("package.json", ".git"),
-    })
+lspconfig.tsserver.setup({
+    cmd = { "typescript-language-server", "--stdio" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+    root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", "jsconfig.json"),
+    settings = {},
+})
 
-    -- lspconfig.pyright.setup({
-    --     -- cmd = { 'pyright-langserver', '--stdio', '--skipunannotated' };
-    --     on_attach = on_attach,
-    --     capabilities = capabilities,
-    --     root_dir = lspconfig.util.root_pattern('package.json', 'package-lock.json', 'manage.py', 'pyrightconfig.json');
-    -- })
-    lspconfig.pyright.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
-        cmd = { "pyright-langserver", "--stdio" },
-        filetypes = { "python" },
-        settings = {
-            python = {
-                analysis = {
-                    typeCheckingMode = "basic", -- Change to "basic" or "strict" as per your requirements
-                    -- You can add more settings here based on your requirements
-                }
-            }
-        }
-    })
+local pid = vim.fn.getpid()
+local omnisharp_path
 
-    lspconfig.tsserver.setup({
-        cmd = { 'typescript-language-server', '--stdio' };
-        on_attach = on_attach,
-        capabilities = capabilities,
-        filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx' };
-        root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json');
-        settings = {};
-    })
+if is_linux then
+    omnisharp_path = "/home/db/.local/bin/omnisharp/OmniSharp"
+elseif is_darwin then
+    omnisharp_path = "/Users/db/.local/bin/omnisharp/OmniSharp"
+end
 
-    local pid = vim.fn.getpid()
-    local omnisharp_path
-
-    if is_linux then
-        omnisharp_path = "/home/db/.local/bin/omnisharp/OmniSharp"
-    elseif is_darwin then
-        omnisharp_path = "/Users/db/.local/bin/omnisharp/OmniSharp"
-    end
-
-    lspconfig.omnisharp.setup({
-        cmd = { omnisharp_path, "--languageserver", "--hostPID", tostring(pid) },
-        on_attach = on_attach,
-        capabilities = capabilities,
-    })
+lspconfig.omnisharp.setup({
+    cmd = { omnisharp_path, "--languageserver", "--hostPID", tostring(pid) },
+    on_attach = on_attach,
+    capabilities = capabilities,
+})
 
 -- Rust
 -- lspconfig.rust_analyzer.setup {
@@ -839,7 +851,7 @@ require("toggleterm").setup({
     persist_size = true,
     direction = "vertical",
     size = 80,
-    close_on_exit = true, -- close the terminal window when the process exits
+    close_on_exit = true,     -- close the terminal window when the process exits
     shell = "/usr/bin/env fish", -- change the default shell
 })
 
@@ -902,7 +914,7 @@ vim.cmd("set laststatus=3")
 -- vim.cmd[[colorscheme tokyonight]]
 require("onedark").setup({
     -- Main options --
-    style = "dark", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+    style = "dark",     -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
     transparent = true, -- Show/hide background
     term_colors = true, -- Change terminal color as per the selected theme style
     ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
@@ -929,7 +941,7 @@ require("onedark").setup({
         TelescopeBorder = { fg = "#61afef" },
         TelescopePromptBorder = { fg = "#000000" },
         TelescopeResultsBorder = { fg = "#000000" },
-        TelescopePreviewBorder = { fg = "#000000" },
+        TelescopePreviewBorder = { fg = "#000001" },
     }, -- Override highlight groups
 
     -- Plugins Config --
@@ -940,6 +952,20 @@ require("onedark").setup({
     },
 })
 require("onedark").load()
+
+-- vim.api.nvim_create_autocmd("ColorScheme", {
+--     callback = function()
+--         vim.api.nvim_set_hl(0, "CopilotSuggestion", { guifg = "#000000", ctermfg = 8 })
+--     end,
+-- })
+
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        vim.defer_fn(function()
+            vim.cmd([[highlight CopilotSuggestion guifg=#000000 ctermfg=8]])
+        end, 100) -- Delay in milliseconds
+    end,
+})
 
 -- require("tokyonight").setup({
 --     -- your configuration comes here
@@ -964,7 +990,7 @@ require("onedark").load()
 --     hide_inactive_statusline = false, -- Enabling this option, will hide inactive statuslines and replace them with a thin border instead. Should work with the standard **StatusLine** and **LuaLine**.
 --     dim_inactive = 0.1, -- dims inactive windows
 --     lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
--- 
+--
 --     --- You can override specific color groups to use other groups or a hex color
 --     --- function will be called with a ColorScheme table
 --     ---@param colors ColorScheme
@@ -1014,7 +1040,7 @@ require("onedark").load()
 --         colors.bg_popup = colors.bg_dark
 --         colors.bg_statusline = colors.bg_dark
 --         colors.git = { change = "#4a88ff", add = "#79c3a0", delete = "#e06c75" }
--- 
+--
 --         -- black:   '##282828'
 --         -- red:     '##cc241d'
 --         -- green:   '##98971a'
@@ -1023,9 +1049,9 @@ require("onedark").load()
 --         -- magenta: '##b16286'
 --         -- cyan:    '##689d6a'
 --         -- white:   '##a89984'
--- 
+--
 --     end,
--- 
+--
 --     --- You can override specific highlights to use other groups or a hex color
 --     --- function will be called with a Highlights and ColorScheme table
 --     ---@param highlights Highlights
@@ -1059,18 +1085,18 @@ require("onedark").load()
 --             bg = c.bg_dark,
 --             fg = c.bg_dark,
 --         }
--- 
+--
 --         hl.DiagnosticVirtualTextError = { bg = "NONE",italic = true, fg = "#1f0000" }
 --         hl.DiagnosticVirtualTextWarn = { bg = "NONE",italic = true, fg = "#00001f" }
---         hl.DiagnosticVirtualTextInfo = { bg = "NONE",italic = true, fg = "#00001f" } 
+--         hl.DiagnosticVirtualTextInfo = { bg = "NONE",italic = true, fg = "#00001f" }
 --         hl.DiagnosticVirtualTextHint = { bg = "NONE",italic = true, fg = "#00001f" }
--- 
+--
 --         hl.NormalFloat = { fg = c.fg_float, bg = c.dark3 }
--- 
+--
 --         hl.LineNr = { fg = "#000008" }
 --         hl.CursorLine = { bg = c.bg_visual }
 --         hl.CursorLineNr = {fg = c.blue, italic = true }
--- 
+--
 --         hl.SignColumn = { bg = c.bg_highlight, fg = c.fg_gutter }
 --         hl.GitSignsAdd = { bg = c.bg_highlight , fg = c.gitSigns.add }
 --         hl.GitSignsChange = { bg = c.bg_highlight, fg = c.gitSigns.change }
@@ -1124,7 +1150,7 @@ require("gitsigns").setup({
         changedelete = { hl = "GitSignsChange", text = "~", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
     },
     signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-    numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+    numhl = false,  -- Toggle with `:Gitsigns toggle_numhl`
     linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
     word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
     watch_gitdir = {
